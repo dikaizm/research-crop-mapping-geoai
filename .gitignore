@@ -1,1 +1,5 @@
 .venv/
+notebooks/buildings/
+data/
+models/
+.DS_Store
