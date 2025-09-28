@@ -3,3 +3,6 @@ notebooks/buildings/
 data/
 models/
 .DS_Store
+notebooks/naip_rgb_train.tif
+notebooks/naip_test.tif
+notebooks/naip_train_buildings.geojson
