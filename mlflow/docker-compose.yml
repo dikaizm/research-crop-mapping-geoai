@@ -1,0 +1,24 @@
+services:
+  mlflow:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - MLFLOW_VERSION=2.14.3
+    container_name: mlflow-server
+    restart: unless-stopped
+    environment:
+      - BACKEND_STORE_URI=sqlite:////home/mlflow/mlruns/mlflow.db
+      - ARTIFACT_ROOT=/home/mlflow/mlruns/artifacts
+      - MLFLOW_HOST=0.0.0.0
+      - MLFLOW_PORT=8080
+    ports:
+      - "8088:8080"
+    volumes:
+      # Persist mlruns (DB + artifacts) on the host (path relative to this compose file)
+      - ./mlruns:/home/mlflow/mlruns
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
