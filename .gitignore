@@ -8,3 +8,4 @@ notebooks/naip_test.tif
 notebooks/naip_train_buildings.geojson
 utils/__pycache__/
 mlflow/mlruns/
+ssh/
