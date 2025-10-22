@@ -19,17 +19,19 @@ def download_from_gdrive(file_id: str, output_path: str = None, overwrite: bool 
     str
         Path to the downloaded file.
     """
-    # Construct the direct download URL
     url = f"https://drive.google.com/uc?id={file_id}"
 
-    # If no output path is given, let gdown determine filename from headers
-    if output_path is None:
-        output_path = gdown.download(url, quiet=False)
-    else:
-        if not overwrite and os.path.exists(output_path):
-            print(f"✅ File already exists: {output_path}")
-            return output_path
-        gdown.download(url, output_path=output_path, quiet=False)
+    # Ensure target directory exists
+    if output_path is not None:
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    # Handle existing file
+    if output_path and not overwrite and os.path.exists(output_path):
+        print(f"✅ File already exists: {output_path}")
+        return output_path
+
+    # Download file
+    output_path = gdown.download(url=url, output=output_path, quiet=False)
 
     print(f"✅ Downloaded: {output_path}")
     return output_path
