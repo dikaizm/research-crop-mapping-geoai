@@ -1,0 +1,9 @@
+\babel@toc {bahasa}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Arsitektur DeepLabV3+ \citep {chen2018}.}}{13}{figure.caption.7}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Arsitektur SegFormer.}}{13}{figure.caption.8}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Distribusi kelas CDL dan strategi seleksi kelas untuk pelatihan model. Kelas dengan cakupan $\geq 1\%$ dipilih sebagai kelas target (hijau), kelas 0{,}5--1\% sebagai kandidat eksperimen lanjutan (oranye), dan kelas $<0{,}5\%$ dikecualikan (abu-abu).}}{20}{figure.caption.15}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

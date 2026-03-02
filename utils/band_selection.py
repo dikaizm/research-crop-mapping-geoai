@@ -1,14 +1,15 @@
 """
-Band Selection using Global Separation Index (GSI)
-and Cluster-based Band Selection for Crop Classification (from Raster)
+3-Stage Band Selection for Semantic Segmentation
 ----------------------------------------------------------------------------
-Author: <your name>
-Description:
-  1. Read multi-band raster (e.g., Sentinel-2 stack) and class label raster.
-  2. Sample reflectance values per pixel per band and assign crop class.
-  3. Compute GSI per band based on class separability.
-  4. Cluster correlated bands and select top representatives per cluster.
-  5. Evaluate candidate band combinations using RandomForest (proxy model).
+Stage 1 — Filter Preselection (cheap):
+  Compute GSI + RF importance per band, rank by joint score, keep top K.
+
+Stage 2 — CNN Forward Selection (wrapper):
+  Iteratively add bands guided by a lightweight segmentation model's mIoU.
+
+Stage 3 — Full Model Validation:
+  Train full models (U-Net, DeepLabV3+, SegFormer) on each band subset
+  and compare mIoU, training time, and GPU memory.
 """
 
 import numpy as np
@@ -91,6 +92,63 @@ def calculate_gsi(data: pd.DataFrame, class_col: str) -> pd.DataFrame:
     gsi_df = pd.DataFrame(gsi_results).T
     gsi_df.index = bands
     return gsi_df
+
+
+# ============================================================
+# STAGE 1 — RF Importance & Joint Score
+# ============================================================
+
+def compute_rf_importance(df: pd.DataFrame, class_col: str, n_estimators: int = 200) -> pd.Series:
+    """
+    Compute Random Forest feature importance (mean decrease in impurity)
+    for each spectral band.
+
+    Returns a Series indexed by band name, normalized to [0, 1].
+    """
+    bands = [col for col in df.columns if col != class_col]
+    X = df[bands].values
+    y = df[class_col].values
+
+    clf = RandomForestClassifier(n_estimators=n_estimators, random_state=42, n_jobs=-1)
+    clf.fit(X, y)
+
+    importance = pd.Series(clf.feature_importances_, index=bands)
+    importance = (importance - importance.min()) / (importance.max() - importance.min() + 1e-9)
+    return importance.sort_values(ascending=False)
+
+
+def compute_joint_score(gsi_mean: pd.Series, rf_importance: pd.Series,
+                        alpha: float = 0.5) -> pd.Series:
+    """
+    Compute a joint ranking score combining GSI and RF importance:
+
+        Score = alpha * GSI_norm + (1 - alpha) * RF_importance_norm
+
+    Both inputs are normalized to [0, 1] before combining.
+
+    Parameters
+    ----------
+    gsi_mean      : Series indexed by band name (mean GSI across classes)
+    rf_importance : Series indexed by band name (normalized RF importance)
+    alpha         : weight for GSI (default 0.5 = equal weighting)
+
+    Returns
+    -------
+    Series indexed by band name, sorted descending by joint score.
+    """
+    gsi_norm = (gsi_mean - gsi_mean.min()) / (gsi_mean.max() - gsi_mean.min() + 1e-9)
+
+    all_bands = gsi_norm.index.union(rf_importance.index)
+    gsi_norm = gsi_norm.reindex(all_bands, fill_value=0.0)
+    rf_norm  = rf_importance.reindex(all_bands, fill_value=0.0)
+
+    joint = alpha * gsi_norm + (1 - alpha) * rf_norm
+    return joint.sort_values(ascending=False)
+
+
+def select_top_k(joint_score: pd.Series, k: int = 25) -> list:
+    """Return the top K band names by joint score."""
+    return joint_score.head(k).index.tolist()
 
 
 # ============================================================

@@ -1,0 +1,128 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[bahasa]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\graphicspath{{figures/}}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+
+% Geometry setup
+\geometry{
+    top=3cm,
+    bottom=3cm,
+    left=4cm,
+    right=3cm
+}
+
+% Title format
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\centering}{\chaptertitlename\ \thechapter}{20pt}{\Large}
+\titleformat{\section}
+  {\normalfont\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\bfseries}{\thesubsection}{1em}{}
+
+% Spacing
+\onehalfspacing
+
+\begin{document}
+
+% Title Page
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    {\Large \textbf{Pemetaan Tanaman Pertanian Berbasis Citra Multi-Temporal Sentinel-2 dengan Pendekatan Kombinasi Band Spektral dan Model Semantic Segmentation}}
+    
+    \vspace{1.5cm}
+    
+    \textbf{TUGAS AKHIR}
+    
+    \vspace{1.5cm}
+    
+    Diajukan sebagai salah satu syarat untuk memperoleh gelar Sarjana Sains Data pada\\
+    Program Studi Sarjana Sains Data\\
+    Fakultas Informatika Universitas Telkom
+    
+    \vspace{1.5cm}
+    
+    \textbf{Oleh:}\\
+    \textbf{IZZULHAQ MAHARDIKA}\\
+    \textbf{1305220010}
+    
+    \vspace{1.5cm}
+    
+    \textbf{Pembimbing:}\\
+    Dr. Gamma Kosala, S.Si\\
+    NIP. 21920013
+    
+    \vspace{2cm}
+    
+    \textbf{PROGRAM STUDI SARJANA SAINS DATA}\\
+    \textbf{FAKULTAS INFORMATIKA}\\
+    \textbf{UNIVERSITAS TELKOM}\\
+    \textbf{BANDUNG}\\
+    \textbf{2025}
+    
+\end{titlepage}
+
+\chapter*{Lembar Persetujuan}
+\begin{center}
+    \textbf{Pemetaan Tanaman Pertanian Berbasis Citra Multi-Temporal Sentinel-2 dengan Pendekatan Kombinasi Band Spektral dan Model Semantic Segmentation}
+    \\
+    \textit{Crop Mapping Based on Multi-Temporal Sentinel-2 Imagery with Spectral Band Combination and Semantic Segmentation Models}
+    \vspace{1cm}
+    
+    \textbf{Izzulhaq Mahardika}\\
+    NIM: 1305220010
+    \vspace{1cm}
+    
+    Tugas Akhir ini diajukan sebagai salah satu syarat untuk memperoleh gelar Sarjana Sains Data pada\\
+    Program Studi Sarjana Sains Data\\
+    Fakultas Informatika Universitas Telkom\\
+    Bandung, 13 Oktober 2025
+    \vspace{1cm}
+    
+    Menyetujui,\\
+    Pembimbing
+    \vspace{2cm}
+    
+    \underline{Dr. Gamma Kosala, S.Si}\\
+    NIP. 21920013
+\end{center}
+
+\chapter*{Abstrak}
+\input{chapters/abstract}
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+\chapter{PENDAHULUAN}
+\input{chapters/introduction}
+
+\chapter{KAJIAN PUSTAKA}
+\input{chapters/literature_review}
+
+\chapter{METODOLOGI DAN DESAIN SISTEM}
+\input{chapters/methodology}
+
+\chapter{HASIL DAN PEMBAHASAN}
+\input{chapters/results}
+
+\chapter{KESIMPULAN DAN SARAN}
+\input{chapters/conclusion}
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\end{document}

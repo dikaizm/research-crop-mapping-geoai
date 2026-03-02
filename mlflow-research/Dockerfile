@@ -15,17 +15,16 @@ USER mlflow
 
 WORKDIR /home/mlflow
 
-# Default environment variables for MLflow server
+# Default environment variables for MLflow
 ENV BACKEND_STORE_URI=sqlite:////home/mlflow/mlruns/mlflow.db \
 	ARTIFACT_ROOT=/home/mlflow/mlruns/artifacts \
 	MLFLOW_HOST=0.0.0.0 \
 	MLFLOW_PORT=8080
 
-# Create directories used by MLflow
+# Create directories used by MLflow server
 RUN mkdir -p /home/mlflow/mlruns /home/mlflow/mlruns/artifacts
 
 EXPOSE 8080
 
 # Default command; using shell form so ENV vars are expanded
 CMD ["sh", "-c", "mlflow server --backend-store-uri \"$BACKEND_STORE_URI\" --default-artifact-root \"$ARTIFACT_ROOT\" --host \"$MLFLOW_HOST\" --port \"$MLFLOW_PORT\""]
-

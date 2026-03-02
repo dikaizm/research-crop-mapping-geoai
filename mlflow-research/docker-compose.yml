@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         - MLFLOW_VERSION=2.14.3
-    container_name: mlflow-server
+    container_name: mlflow-research
     restart: unless-stopped
     environment:
       - BACKEND_STORE_URI=sqlite:////home/mlflow/mlruns/mlflow.db

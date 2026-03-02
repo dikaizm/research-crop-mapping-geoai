@@ -1,0 +1,15 @@
+Pemetaan tanaman pertanian berperan penting dalam mendukung ketahanan pangan, perencanaan pola tanam, serta pengelolaan sumber daya agrikultur. 
+Citra satelit Sentinel-2 dengan resolusi tinggi spasial dan temporal telah banyak dimanfaatkan dalam klasifikasi tutupan lahan, termasuk untuk identifikasi jenis tanaman. 
+Penelitian ini mengadopsi pendekatan \textit{semantic segmentation} berbasis \textit{deep learning}, yaitu DeepLabV3+ dan SegFormer, untuk mengklasifikasikan tanaman pertanian berdasarkan citra multi-temporal Sentinel-2 dan label dari \textit{Cropland Data Layer} (CDL) milik USDA. 
+
+Studi literatur menunjukkan bahwa pendekatan multi-temporal dan kombinasi band spektral dapat meningkatkan akurasi klasifikasi karena mampu menangkap dinamika spektral dan fenologi tanaman. 
+Area studi terletak di Sacramento Valley, California, yang merupakan salah satu kawasan agrikultur paling produktif di Amerika Serikat. 
+Data Sentinel-2 dikumpulkan setiap 15 hari selama periode 2022--2024 dan diproses melalui tahapan \textit{masking} awan, \textit{histogram matching}, \textit{resampling} spasial, normalisasi, dan \textit{patching}. 
+
+Evaluasi dilakukan menggunakan metrik \textit{Overall Accuracy}, \textit{Mean Intersection over Union} (mIoU), dan F1-score, serta dilengkapi analisis kesalahan dan waktu inferensi. 
+Penelitian ini juga mengimplementasikan \textit{attention mechanism} pada masing-masing model untuk meningkatkan performa segmentasi. 
+Eksperimen dilakukan dalam beberapa skenario yang menguji pengaruh data multi-temporal dan kombinasi spektral terhadap hasil klasifikasi tanaman. 
+Hasil dari studi ini diharapkan dapat memberikan kontribusi terhadap pengembangan model segmentasi citra multispektral yang lebih akurat dan adaptif terhadap variasi spasial dan temporal tutupan lahan pertanian.
+
+\vspace{0.5cm}
+\textbf{Kata Kunci:} Pemetaan Pertanian, Multi-temporal, Band Spektral, Semantic Segmentation

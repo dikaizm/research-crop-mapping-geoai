@@ -1,0 +1,93 @@
+\section{Latar Belakang}
+Pertumbuhan penduduk dunia dan meningkatnya standar hidup telah mendorong perluasan serta intensifikasi pemanfaatan lahan pertanian secara global untuk memenuhi permintaan pangan dan komoditas yang terus meningkat \citep{potapov2022}. 
+Pengembangan peta sebaran tanaman secara akurat dan skala besar menjadi penting untuk memastikan ketahanan pangan dan merencakanan pola tanam di masa depan \citep{gao2023}. 
+Informasi spasial mengenai sebaran dan jenis tanaman pertanian sangat dibutuhkan untuk estimasi hasil panen, mengelola irigasi, serta merencanakan distribusi komoditas \citep{yi2020}. 
+
+Satelit penginderaan jauh menyediakan citra resolusi tinggi yang dapat dimanfaatkan untuk pemetaan lahan pertanian secara luas dan otomatis, sebagai alternatif metode survei lapangan konvensional yang memakan waktu dan biaya tinggi \citep{li2023}. 
+Satelit Sentinel-2 digunakan untuk pemetaan lahan pertanian karena menyediakan citra dengan resolusi tinggi hingga 10 meter dan resolusi temporal pada 5 hari \citep{phiri2020}. 
+Sentinel-2 memiliki hingga 13 band spektral yang dapat dimanfaatkan untuk fitur pada klasifikasi lahan pertanian \citep{yi2020}. 
+Penggunaan Cropland Data Layer (CDL) yang disediakan oleh United States Department of Agriculture (USDA) sebagai data label dapat meningkatkan validitas pemetaan tanaman karena menyediakan label hingga tingkat piksel dengan resolusi 30 meter dan cakupan spasial yang luas \citep{maleki2024}. 
+
+Kemajuan dalam bidang \textit{computer vision} (CV) dan \textit{deep learning} menciptakan pergeseran dalam analisis penginderaan jauh menuju metode \textit{semantic segmentation} \citep{luo2024}. 
+Berbeda dengan klasifikasi piksel-per-piksel biasa, \textit{semantic segmentation} mengelompokkan piksel dengan kelas tutupan lahan tertentu secara bersamaan \citep{ajibola2024}. 
+Algoritma \textit{semantic segmentation} seperti DeepLabV3+ dan SegFormer mulai diadopsi untuk klasifikasi tanaman pertanian \citep{li2023}. 
+Model segmentasi lainnya seperti DeepLabV3+ dan SegFormer juga telah diterapkan, salah satunya oleh Li (2023), yang menunjukkan bahwa kedua model tersebut mampu menghasilkan akurasi segmentasi tinggi \citep{li2023, hsu2022, chang2023}. 
+
+Meskipun demikian, beberapa penelitian fokus pada penggunaan citra indeks vegetasi (NDVI, EVI) tanpa mempertimbangkan keunggulan seluruh band spektral \citep{gao2023, thorp2021, seydi2022}. 
+Padahal, kombinasi fitur spektral yang dipilih dengan metode \textit{feature selection} dapat meningkatkan pemisahan kelas tanaman \citep{yi2020}. 
+Oleh karena itu, diperlukan eksperimen untuk menentukan kombinasi band dan multi-spektral yang optimal, sehingga proses pemetaan tanaman pertanian dapat lebih akurat. 
+
+Pengembangan model \textit{semantic segmentation} berbasis citra satelit memerlukan data label yang akurat hingga level piksel. 
+Namun, di Indonesia belum tersedia dataset publik untuk identifikasi jenis tanaman pertanian. 
+Untuk mengatasi masalah tersebut, area studi pada penelitian ini difokuskan di kawasan Sacramento Valley, California di Amerika Serikat yang didukung oleh ketersediaan dataset publik Cropland Data Layer (CDL). 
+
+\section{Perumusan Masalah}
+Berikut adalah rumusan masalah pada penelitian ini:
+\begin{enumerate}
+    \item Bagaimana pengaruh dari data multi-temporal pada akurasi pemetaan tanaman?
+    \item Bagaimana pengaruh dari kombinasi band spektral yang berbeda pada kinerja model \textit{semantic segmentation}?
+    \item Bagaimana kinerja dari beberapa model \textit{semantic segmentation}, DeepLabV3+, dan SegFormer untuk klasifikasi tanaman pertanian?
+\end{enumerate}
+
+\section{Tujuan}
+Berdasarkan rumusan masalah yang telah disebutkan, tujuan penelitian ini adalah sebagai berikut:
+\begin{enumerate}
+    \item Mengevaluasi pengaruh dari data multi-temporal pada akurasi pemetaan tanaman.
+    \item Menilai pengaruh dari kombinasi band spektral yang berbeda pada kinerja model \textit{semantic segmentation}.
+    \item Membandingkan kinerja dari tiga model \textit{semantic segmentation}, DeepLabV3+, dan SegFormer, untuk mengklasifikasikan tanaman pertanian pada citra Sentinel-2.
+\end{enumerate}
+
+\section{Batasan Masalah}
+Batasan masalah pada penelitian ini adalah sebagai berikut:
+\begin{enumerate}
+    \item Penelitian ini menggunakan data sekunder dari platform Google Earth Engine (GEE). Dataset terdiri dari atas citra Sentinel-2 sebagai input dan Cropland Data Layer (CDL) sebagai data label, dengan periode pengambilan antara tahun 2022 hingga 2024.
+    \item Area studi terletak di kawasan Sacramento Valley, California pada koordinat geografis ($122^{\circ}18'36''$ BB hingga $121^{\circ}20'26''$ BB, $38^{\circ}41'7''$ LU hingga $39^{\circ}49'47''$ LU) dengan total luas area 10.629,25 km$^2$.
+\end{enumerate}
+
+\section{Hipotesis}
+Berdasarkan temuan studi terdahulu, hipotesis yang diajukan dalam penelitian ini adalah sebagai berikut:
+\begin{itemize}
+    \item Penggunaan citra multi-temporal dengan kombinasi band spektral menghasilkan dataset yang kaya akan fitur, sehingga akan menghasilkan akurasi pemetaan pertanian yang lebih tinggi dibandingkan penggunaan citra \textit{single-date} atau hanya menggunakan indeks vegetasi.
+    \item Model \textit{semantic segmentation} dengan \textit{attention mechanism} dihipotesiskan memiliki performa lebih baik daripada model tanpa attention (\textit{baseline}), karena kemampuannya dalam memfokuskan pada fitur-fitur penting.
+\end{itemize}
+
+\section{Rencana Kegiatan}
+Untuk mencapai tujuan yang telah ditentukan, penelitian ini akan dilaksanakan melalui tahapan kegiatan sebagai berikut:
+\begin{enumerate}
+    \item \textbf{Studi Literatur dan Perumusan Metode}\\
+    Melakukan kajian pustaka yang relevan terkait pemetaan tanaman pertanian dengan citra satelit, pemanfaatan citra multi-temporal, pemilihan dan kombinasi band spektral Sentinel-2, dan model \textit{semantic segmentation} khususnya DeepLabV3+, dan SegFormer. Berdasarkan kajian ini, dirumuskan kesenjangan penelitian dan kerangka metodologi penelitian.
+    
+    \item \textbf{Pengumpulan Data}\\
+    Mengambil data citra multi-temporal Sentinel-2 untuk area studi di Sacramento Valley dengan spektral band B2, B3, B4, B5, B7, B8, B11, dan B12 dengan interval komposit 15 hari selama setahun penuh pada tahun 2022, 2023, dan 2024. Selain itu, data label diambil dari Cropland Data Layer (CDL) yang disediakan oleh USDA NASS.
+    
+    \item \textbf{Preprocessing Data}\\
+    Melakukan tahap preprocessing citra yang mencakup \textit{cloud masking} dan \textit{shadow masking}, \textit{resampling} dan projection citra Sentinel-2 dan CDL, normalisasi nilai reflectance, pemilihan kombinasi band spektral optimal menggunakan metode \textit{feature selection} berbasis global separation index, dan patching citra dan label menjadi patch berukuran $256\times256$ piksel serta filter labeling untuk patch selain jenis tanaman pertanian.
+    
+    \item \textbf{Pelatihan Model Semantic Segmentation}\\
+    Melatih dan membangingkan performa tiga arsitektur \textit{semantic segmentation}, yaitu DeepLabV3+, dan SegFormer pada dataset yang telah diproses. Beberapa skenario training akan dilakukan untuk membandingkan pengaruh konfigurasi band dan temporal terhadap hasil segmentasi. Untuk setiap model, akan ditambahkan juga \textit{attention mechanism} untuk meningkatkan kemampuan model dalam menyoroti fitur penting.
+    
+    \item \textbf{Evaluasi dan Analisis Hasil}\\
+    Evaluasi utama dilakukan menggunakan metrik evaluasi segmentasi seperti \textit{mean Intersection over Union} (mIoU), \textit{Overall Accuracy} (OA), dan F1-score. Selain evaluasi utama, akan dilakukan evaluasi tambahan berupa \textit{error analysis} dan pengukuran \textit{inference time}. Analisis hasil mencakup perbandingan antar model, pengaruh kombinasi band, serta pengaruh penggunaan data multi-temporal. Visualisasi segmentasi dan distribusi prediksi kelas juga dianalisis untuk mendukung interpretasi hasil kuantitatif.
+    
+    \item \textbf{Penyusunan Laporan Akhir}\\
+    Menyusun laporan akhir tugas akhir yang berisi latar belakang, metodologi, implementasi teknis, hasil eksperimen, analisis, serta simpulan dan rekomendasi berdasarkan hasil penelitian.
+\end{enumerate}
+
+\section{Jadwal Kegiatan}
+Jadwal pelaksanaan seluruh kegiatan penelitian dapat dilihat pada Tabel \ref{tab:jadwal_kegiatan}.
+
+\begin{table}[H]
+    \centering
+    \caption{Jadwal Kegiatan Penelitian}
+    \label{tab:jadwal_kegiatan}
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+    \hline
+    \textbf{Kegiatan} & \textbf{Bulan 1} & \textbf{Bulan 2} & \textbf{Bulan 3} & \textbf{Bulan 4} & \textbf{Bulan 5} & \textbf{Bulan 6} \\ \hline
+    Studi Literatur dan Perumusan Metode & \checkmark & & & & & \\ \hline
+    Pengumpulan Data & \checkmark & \checkmark & & & & \\ \hline
+    Preprocessing Data & & \checkmark & \checkmark & & & \\ \hline
+    Pelatihan Model Semantic Segmentation & & & \checkmark & \checkmark & & \\ \hline
+    Evaluasi dan Analisis Hasil & & & & \checkmark & \checkmark & \\ \hline
+    Penyusunan Laporan Akhir & & & & & \checkmark & \checkmark \\ \hline
+    \end{tabular}
+\end{table}
