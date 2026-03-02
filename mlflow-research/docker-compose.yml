@@ -1,4 +1,20 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mlflow-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mlflow
+      POSTGRES_PASSWORD: mlflow
+      POSTGRES_DB: mlflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mlflow -d mlflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   mlflow:
     build:
       context: ./
@@ -7,18 +23,24 @@ services:
         - MLFLOW_VERSION=2.14.3
     container_name: mlflow-research
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
-      - BACKEND_STORE_URI=sqlite:////home/mlflow/mlruns/mlflow.db
+      - BACKEND_STORE_URI=postgresql://mlflow:mlflow@postgres:5432/mlflow
       - ARTIFACT_ROOT=/home/mlflow/mlruns/artifacts
       - MLFLOW_HOST=0.0.0.0
       - MLFLOW_PORT=8080
     ports:
       - "8088:8080"
     volumes:
-      # Persist mlruns (DB + artifacts) on the host (path relative to this compose file)
-      - ./mlruns:/home/mlflow/mlruns
+      # Artifacts persist on the host; DB is now in PostgreSQL
+      - ./mlruns/artifacts:/home/mlflow/mlruns/artifacts
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080" ]
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+volumes:
+  postgres_data:
