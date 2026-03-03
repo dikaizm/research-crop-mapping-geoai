@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.9)  3 MAR 2026 01:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.9)  3 MAR 2026 21:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -453,19 +453,26 @@ l.103 \chapter
 
 [5
 
-] (./main.lof)
-\tf@lof=\write6
-\openout6 = `main.lof'.
+] (./main.lof
+Overfull \hbox (3.36131pt too wide) in paragraph at lines 12--12
+ \OT1/cmr/m/n/12 ke-las ta-nam-an tar-get ($\OMS/cmsy/m/n/12 ^^U$\OT1/cmr/m/n/12 1% ca-kup-an) dan ke-las \OT1/cmr/m/it/12 bac-kgro-und \OT1/cmr/m/n/12 (abu- 
+ []
 
 
 
 [6
 
-]
+])
+\tf@lof=\write6
+\openout6 = `main.lof'.
+
+
+
+[7]
 Bab 1.
 (./chapters/introduction.tex
 
-[7
+[8
 
 ]
 Overfull \hbox (1.32681pt too wide) in paragraph at lines 16--19
@@ -473,36 +480,53 @@ Overfull \hbox (1.32681pt too wide) in paragraph at lines 16--19
  []
 
 
+Overfull \hbox (1.43895pt too wide) in paragraph at lines 29--30
+\OT1/cmr/m/n/12 mer pa-da ti-ga kon-fi-gu-ra-si in-put yang ber-be-da: \OT1/cmr/m/it/12 single-date\OT1/cmr/m/n/12 , \OT1/cmr/m/it/12 multi-temporal
+ []
 
-[8]
 
-[9{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+
+[9]
+Overfull \hbox (5.33891pt too wide) in paragraph at lines 35--36
+\OT1/cmr/m/n/12 nam-an de-ngan mem-ban-dingk-an kon-fi-gu-ra-si \OT1/cmr/m/it/12 single-date \OT1/cmr/m/n/12 dan \OT1/cmr/m/it/12 multi-temporal
+ []
+
+
+Overfull \hbox (0.82703pt too wide) in paragraph at lines 43--44
+[]\OT1/cmr/bx/n/12 Data\OT1/cmr/m/n/12 : Pe-ne-li-ti-an meng-gu-nak-an ci-tra Sentinel-2 Sur-fa-ce Re-fle-ctan-ce (CO-
+ []
+
+
 
 [10]
-Overfull \hbox (171.33717pt too wide) in paragraph at lines 83--93
+
+[11{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+Overfull \hbox (171.33717pt too wide) in paragraph at lines 87--97
  [][] 
  []
 
 )
 
-[11]
+[12]
+
+[13]
 Bab 2.
 (./chapters/literature_review.tex
 
-[12
+[14
 
 ]
 
-[13]
+[15]
 Overfull \hbox (185.90297pt too wide) in paragraph at lines 58--71
  [][] 
  []
 
 
 
-[14]
+[16]
 
-[15]
+[17]
 Underfull \hbox (badness 10000) in paragraph at lines 109--109
 []\OT1/cmr/m/n/10 Improv. Seg-Net
  []
@@ -524,90 +548,183 @@ Underfull \hbox (badness 8056) in paragraph at lines 111--111
 
 )
 
-[16]
+[18]
 Bab 3.
 (./chapters/methodology.tex
 
-[17
+[19
 
 ]
-Overfull \hbox (85.37529pt too wide) in paragraph at lines 89--100
- [][] 
+
+[20]
+<figures/s2_rgb_temporal.png, id=590, 1140.4206pt x 731.73375pt>
+File: figures/s2_rgb_temporal.png Graphic file (type png)
+<use figures/s2_rgb_temporal.png>
+Package pdftex.def Info: figures/s2_rgb_temporal.png  used on input line 69.
+(pdftex.def)             Requested size: 398.3386pt x 255.58588pt.
+<figures/s2_band_grid.png, id=593, 1148.3703pt x 782.6841pt>
+File: figures/s2_band_grid.png Graphic file (type png)
+<use figures/s2_band_grid.png>
+Package pdftex.def Info: figures/s2_band_grid.png  used on input line 81.
+(pdftex.def)             Requested size: 398.3386pt x 271.49527pt.
+
+
+[21 <./figures/s2_rgb_temporal.png>]
+
+[22 <./figures/s2_band_grid.png>]
+<figures/s2_ndvi_temporal.png, id=607, 1004.19165pt x 389.17395pt>
+File: figures/s2_ndvi_temporal.png Graphic file (type png)
+<use figures/s2_ndvi_temporal.png>
+Package pdftex.def Info: figures/s2_ndvi_temporal.png  used on input line 101.
+(pdftex.def)             Requested size: 398.3386pt x 154.37227pt.
+
+Overfull \hbox (0.7156pt too wide) in paragraph at lines 107--111
+\OT1/cmr/m/n/12 Gambar []3.4[] me-nam-pilk-an rata-rata ni-lai re-flek-tan-si un-tuk se-ti-ap band Sentinel-
  []
 
 
 
-[18]
+[23 <./figures/s2_ndvi_temporal.png>]
+<figures/s2_spectral_profile.png, id=617, 786.2976pt x 386.28316pt>
+File: figures/s2_spectral_profile.png Graphic file (type png)
+<use figures/s2_spectral_profile.png>
+Package pdftex.def Info: figures/s2_spectral_profile.png  used on input line 114.
+(pdftex.def)             Requested size: 398.3386pt x 195.69328pt.
+<figures/s2_data_coverage.png, id=619, 1004.19165pt x 279.6849pt>
+File: figures/s2_data_coverage.png Graphic file (type png)
+<use figures/s2_data_coverage.png>
+Package pdftex.def Info: figures/s2_data_coverage.png  used on input line 127.
+(pdftex.def)             Requested size: 398.3386pt x 110.94162pt.
 
-[19]
-<figures/cdl_class_selection_strategy.png, id=530, 1239.6714pt x 761.244pt>
+
+[24 <./figures/s2_spectral_profile.png>]
+<figures/cdl_label_map.png, id=628, 632.3625pt x 562.2606pt>
+File: figures/cdl_label_map.png Graphic file (type png)
+<use figures/cdl_label_map.png>
+Package pdftex.def Info: figures/cdl_label_map.png  used on input line 147.
+(pdftex.def)             Requested size: 398.3386pt x 354.18315pt.
+
+
+[25 <./figures/s2_data_coverage.png>]
+
+[26 <./figures/cdl_label_map.png>]
+Overfull \hbox (85.37529pt too wide) in paragraph at lines 210--221
+ [][] 
+ []
+
+<figures/cdl_class_distribution_area.png, id=643, 787.38165pt x 570.933pt>
+File: figures/cdl_class_distribution_area.png Graphic file (type png)
+<use figures/cdl_class_distribution_area.png>
+Package pdftex.def Info: figures/cdl_class_distribution_area.png  used on input line 227.
+(pdftex.def)             Requested size: 398.3386pt x 288.83723pt.
+
+
+[27]
+
+[28 <./figures/cdl_class_distribution_area.png>]
+<figures/cdl_class_selection_strategy.png, id=654, 1239.6714pt x 761.244pt>
 File: figures/cdl_class_selection_strategy.png Graphic file (type png)
 <use figures/cdl_class_selection_strategy.png>
-Package pdftex.def Info: figures/cdl_class_selection_strategy.png  used on input line 109.
+Package pdftex.def Info: figures/cdl_class_selection_strategy.png  used on input line 239.
 (pdftex.def)             Requested size: 398.3386pt x 244.602pt.
 
-Overfull \hbox (26.11292pt too wide) in paragraph at lines 120--140
+Overfull \hbox (26.11292pt too wide) in paragraph at lines 250--270
  [][] 
  []
 
 
 
-[20 <./figures/cdl_class_selection_strategy.png>]
+[29 <./figures/cdl_class_selection_strategy.png>]
 
-[21]
-Overfull \hbox (6.88829pt too wide) in paragraph at lines 187--188
-\OT1/cmr/m/n/12 Metode \OT1/cmr/m/it/12 his-to-gram ma-tching \OT1/cmr/m/n/12 di-te-rapk-an pa-da masing-masing band ci-tra Sentinel-
+[30]
+Overfull \hbox (1.89491pt too wide) in paragraph at lines 305--307
+\OT1/cmr/m/n/12 Citra di-kom-po-sitk-an se-ca-ra tem-po-ral meng-gu-nak-an fung-si \OT1/cmr/m/it/12 me-di-an re-du-cer \OT1/cmr/m/n/12 GEE
  []
 
 
 
-[22]
+[31]
 
-[23]
+[32]
 
-[24])
+[33]
 
-[25]
+[34]
+
+Package natbib Warning: Citation `chen2018deeplabv3' on page 35 undefined on input line 421.
+
+
+
+[35]
+Overfull \hbox (0.74907pt too wide) in paragraph at lines 440--441
+\OT1/cmr/m/n/12 SegFormer meng-gu-nak-an ar-si-tek-tur \OT1/cmr/m/it/12 encoder-decoder \OT1/cmr/m/n/12 ber-ba-sis \OT1/cmr/m/it/12 Tran-sfor-mer \OT1/cmr/m/n/12 tan-
+ []
+
+
+Overfull \hbox (8.19681pt too wide) in paragraph at lines 444--445
+\OT1/cmr/m/it/12 llow/Idle Cro-pland \OT1/cmr/m/n/12 dan \OT1/cmr/m/it/12 Gra-pes\OT1/cmr/m/n/12 ) di-ta-nga-ni meng-gu-nak-an \OT1/cmr/m/it/12 we-i-ghted Cross-Entropy
+ []
+
+
+LaTeX Warning: Reference `subsec:band_selection' on page 36 undefined on input line 460.
+
+
+
+[36]
+
+[37]
+
+[38])
+
+[39]
 Bab 4.
 (./chapters/results.tex)
 
-[26
+[40
 
 ]
 Bab 5.
 (./chapters/conclusion.tex) (./main.bbl
 
-[27
+[41
 
 ]
 
-[28
+[42
 
 ]
 
-[29])
+[43])
 
-[30] (./main.aux)
+Package natbib Warning: There were undefined citations.
+
+
+
+[44] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
+
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 46F16210469FEAC8BCFA7C74D15679BC;7895.
+(rerunfilecheck)             Checksum: 4B3A128F0C37C0BE7AE81C5E8266FF91;8354.
  ) 
 Here is how much of TeX's memory you used:
- 13803 strings out of 473190
- 218551 string characters out of 5715800
- 647112 words of memory out of 5000000
- 36708 multiletter control sequences out of 15000+600000
- 567445 words of font info for 69 fonts, out of 8000000 for 9000
+ 13915 strings out of 473190
+ 221171 string characters out of 5715800
+ 651206 words of memory out of 5000000
+ 36775 multiletter control sequences out of 15000+600000
+ 569470 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,10n,79p,729b,606s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on main.pdf (31 pages, 504694 bytes).
+ 75i,10n,79p,783b,606s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on main.pdf (45 pages, 22405202 bytes).
 PDF statistics:
- 732 PDF objects out of 1000 (max. 8388607)
- 658 compressed objects within 7 object streams
- 158 named destinations out of 1000 (max. 500000)
- 406 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 899 PDF objects out of 1000 (max. 8388607)
+ 794 compressed objects within 8 object streams
+ 202 named destinations out of 1000 (max. 500000)
+ 457 words of extra memory for PDF output out of 10000 (max. 10000000)
 

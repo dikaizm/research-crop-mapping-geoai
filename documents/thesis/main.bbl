@@ -100,11 +100,6 @@ Tran, K.~H. et~al. (2022).
 \newblock 10 m crop type mapping using sentinel-2 reflectance and 30 m cropland data layer product.
 \newblock {\em Int. J. Appl. Earth Obs. Geoinf.}, 107:102692.
 
-\bibitem[Wang et~al., 2023]{wang2023}
-Wang, L. et~al. (2023).
-\newblock Histogram matching-based semantic segmentation model for crop classification with sentinel-2 satellite imagery.
-\newblock {\em GIsci Remote Sens}, 60(1).
-
 \bibitem[Weiss et~al., 2020]{weiss2020}
 Weiss, M., Jacob, F., and Duveiller, G. (2020).
 \newblock Remote sensing for agricultural applications: A meta-review.

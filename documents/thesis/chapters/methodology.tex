@@ -10,23 +10,144 @@ Citra dikumpulkan secara multi-temporal sepanjang tahun 2022, 2023, dan 2024 den
 Periode akuisisi mencakup satu tahun penuh, menghasilkan total 72 citra komposit yang terdiri dari 24 citra pada 2022, 23 citra pada 2023, dan 25 citra pada 2024. 
 Terdapat tiga interval citra yang melebihi batas persentase awan, sehingga tidak digunakan sebagai dataset. 
 
-Untuk mendapatkan citra multispektral, dipilih sembilan band (B2, B3, B4, B5, B6, B7, B8, B11, B12) yang relevan terhadap karakteristik vegetasi. 
+Untuk mendapatkan citra multispektral, dipilih sembilan band (B2, B3, B4, B5, B6, B7, B8, B11, B12) yang relevan terhadap karakteristik vegetasi.
 Sementara itu, data label diperoleh dari dataset CDL tahun 2022, 2023, dan 2024 yang diunduh melalui situs resmi USDA NASS yang terdiri dari 134 kelas dengan resolusi spasial 30 meter per piksel.
+
+Tabel~\ref{tab:acquisition_dates} menampilkan seluruh tanggal akuisisi citra Sentinel-2 untuk ketiga tahun dataset yang digunakan dalam penelitian ini.
+
+\begin{table}[htbp]
+\centering
+\caption{Tanggal akuisisi citra Sentinel-2 per tahun (interval 15 hari). Tanda $^\dagger$ menandai citra yang dikecualikan karena cakupan awan $\geq$100\%.}
+\label{tab:acquisition_dates}
+\small
+\begin{tabular}{clll}
+\hline
+\textbf{No.} & \textbf{2022} & \textbf{2023} & \textbf{2024} \\
+\hline
+1  & 1 Januari   & 1 Januari   & 1 Januari   \\
+2  & 16 Januari  & 16 Januari  & 16 Januari  \\
+3  & 31 Januari  & 31 Januari  & 31 Januari  \\
+4  & 15 Februari & 15 Februari & 15 Februari \\
+5  & 2 Maret     & 2 Maret     & 1 Maret     \\
+6  & 17 Maret    & 17 Maret    & 16 Maret    \\
+7  & 1 April     & 1 April     & 31 Maret    \\
+8  & 16 April    & 16 April    & 15 April    \\
+9  & 1 Mei       & 1 Mei       & 30 April    \\
+10 & 16 Mei      & 16 Mei      & 15 Mei      \\
+11 & 31 Mei      & 31 Mei      & 30 Mei      \\
+12 & 15 Juni     & 15 Juni     & 14 Juni     \\
+13 & 30 Juni     & 30 Juni     & 29 Juni     \\
+14 & 15 Juli     & 15 Juli     & 14 Juli     \\
+15 & 30 Juli     & 30 Juli     & 29 Juli     \\
+16 & 14 Agustus  & 14 Agustus  & 13 Agustus  \\
+17 & 29 Agustus  & 29 Agustus  & 28 Agustus  \\
+18 & 13 September & 13 September & 12 September \\
+19 & 28 September & 28 September & 27 September \\
+20 & 13 Oktober  & 13 Oktober  & 12 Oktober  \\
+21 & 28 Oktober  & 28 Oktober  & 27 Oktober  \\
+22 & 12 November & 12 November & 11 November \\
+23 & 27 November & 27 November & 26 November \\
+24 & 12 Desember & 12 Desember & 11 Desember \\
+25 & 27 Desember$^\dagger$ & 27 Desember & 26 Desember \\
+\hline
+\textbf{Total valid} & \textbf{24} & \textbf{23} & \textbf{25} \\
+\hline
+\end{tabular}
+\end{table}
 
 \section{Eksplorasi Data}
 \subsection{Visualisasi Citra}
-Visualisasi citra Sentinel-2 mencakup citra True Color (RGB) yang merupakan representasi visual yang tampak pada mata manusia berdasarkan Band B4 (Red), Band B3 (Green), dan Band B2 (Blue). 
-Selain itu, ditampilkan juga band multispektral yang digunakan untuk menyoroti perbedaan pantulan (\textit{reflectance}) pada panjang gelombang tertentu.
+Visualisasi citra Sentinel-2 dilakukan secara representatif menggunakan beberapa tanggal akuisisi yang mencerminkan fase pertumbuhan tanaman yang berbeda sepanjang tahun 2022.
+Tujuan visualisasi adalah untuk memverifikasi kualitas data, memahami karakteristik spektral masing-masing band, dan menunjukkan dinamika temporal yang menjadi dasar pendekatan \textit{multi-temporal} pada penelitian ini.
+
+\subsubsection{Citra True Color (RGB)}
+Citra \textit{True Color} menggunakan kombinasi Band B4 (\textit{Red}), Band B3 (\textit{Green}), dan Band B2 (\textit{Blue}) untuk menghasilkan representasi visual yang tampak pada mata manusia.
+Gambar~\ref{fig:s2_rgb_temporal} menampilkan enam tanggal representatif yang dipilih untuk mencerminkan fase fenologi tanaman: masa dorman (Januari), persiapan lahan (Maret), pertumbuhan awal (Mei), puncak vegetasi (Juli), pematangan (September), dan masa panen (Oktober).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_rgb_temporal.png}
+    \caption{Citra Sentinel-2 True Color (B4--B3--B2) pada enam tanggal representatif sepanjang tahun 2022 di Sacramento Valley, menunjukkan perubahan kondisi vegetasi dari masa dorman hingga masa panen.}
+    \label{fig:s2_rgb_temporal}
+\end{figure}
+
+\subsubsection{Komposit Band Spektral}
+Dataset Sentinel-2 yang digunakan mencakup 11 band spektral hasil ekspor dari Google Earth Engine: B1 (Coastal Aerosol, 443 nm), B2--B4 (Visible), B5--B7 dan B8A (\textit{Red Edge}), B8 (NIR), serta B11 dan B12 (SWIR).
+Gambar~\ref{fig:s2_band_grid} menampilkan seluruh 11 band pada tanggal puncak musim tanam (30 Juli 2022) untuk mengilustrasikan karakteristik pantulan (\textit{reflectance}) pada setiap panjang gelombang.
+Band \textit{Red Edge} dan NIR menunjukkan kontras tertinggi antara area bervegetasi dan non-vegetasi, mengonfirmasi relevansinya untuk klasifikasi tanaman.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_band_grid.png}
+    \caption{Komposit 11 band spektral Sentinel-2 pada tanggal puncak musim tanam (30 Juli 2022). Setiap panel menampilkan satu band dalam skala abu-abu ternormalisasi. Band NIR (B8) dan \textit{Red Edge} (B5--B7) menunjukkan kontras tertinggi untuk vegetasi.}
+    \label{fig:s2_band_grid}
+\end{figure}
+
+\subsubsection{Perubahan Indeks Vegetasi Temporal}
+Normalized Difference Vegetation Index (NDVI) dihitung dari seluruh 24 tanggal akuisisi yang tersedia pada tahun 2022 menggunakan formula:
+\begin{equation}
+    \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}} = \frac{B8 - B4}{B8 + B4}
+\end{equation}
+
+Gambar~\ref{fig:s2_ndvi_temporal} menampilkan profil rata-rata NDVI seluruh area studi sepanjang 24 tanggal akuisisi yang tersedia pada tahun 2022.
+Pola temporal yang terlihat mencerminkan sistem pertanian ganda (\textit{dual cropping}) Sacramento Valley:
+NDVI bernilai tinggi pada bulan Januari--Februari ($\approx$0,43) karena tanaman musim dingin seperti \textit{Winter Wheat} dan \textit{Alfalfa} sedang aktif tumbuh.
+NDVI kemudian menurun pada Maret--Mei ($\approx$0,33--0,34) seiring masa persiapan lahan untuk tanaman musim panas (\textit{Rice}, \textit{Tomatoes}, \textit{Sunflower}) yang meninggalkan lahan dalam kondisi bera.
+Pada Juni--Oktober, NDVI kembali meningkat secara bertahap seiring pertumbuhan tanaman musim panas.
+Pola dua puncak ini memvalidasi pendekatan \textit{multi-temporal} karena setiap jenis tanaman memiliki trajektori NDVI yang khas dan berbeda dari tanaman lainnya.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_ndvi_temporal.png}
+    \caption{Profil rata-rata NDVI temporal Sacramento Valley 2022 (24 tanggal akuisisi). NDVI tinggi di awal tahun ($\approx$0,43) mencerminkan tanaman musim dingin (\textit{Winter Wheat}, \textit{Alfalfa}), sedangkan penurunan pada Maret--Mei menunjukkan persiapan lahan untuk tanaman musim panas.}
+    \label{fig:s2_ndvi_temporal}
+\end{figure}
+
+\subsubsection{Profil Spektral per Band}
+Gambar~\ref{fig:s2_spectral_profile} menampilkan rata-rata nilai reflektansi untuk setiap band Sentinel-2 pada tiga tanggal representatif yang mewakili tiga fase musim berbeda: Januari (musim dingin, tanaman aktif), Mei (persiapan lahan, biomassa rendah), dan Juli (puncak musim panas, tanaman aktif).
+Perbedaan antar musim terlihat jelas terutama pada band NIR (B8) yang menunjukkan nilai reflektansi tertinggi pada Januari, mencerminkan biomassa tanaman musim dingin yang sedang tumbuh.
+Pada band SWIR (B11, B12), nilai relatif lebih tinggi di bulan Mei berkaitan dengan kelembaban tanah yang lebih rendah dan lahan bera.
+Profil spektral yang khas per musim ini memvalidasi keunggulan pendekatan \textit{multi-temporal}: setiap tanggal akuisisi memberikan informasi spektral yang berbeda dan saling melengkapi untuk membedakan jenis tanaman.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_spectral_profile.png}
+    \caption{Profil rata-rata reflektansi per band Sentinel-2 pada tiga fase musim tahun 2022: Januari (musim dingin), Mei (persiapan lahan), dan Juli (puncak musim panas). Band NIR (B8) menunjukkan nilai tertinggi pada Januari, mengonfirmasi adanya biomassa tanaman musim dingin yang aktif.}
+    \label{fig:s2_spectral_profile}
+\end{figure}
+
+\subsubsection{Kualitas Data dan Cakupan Valid}
+Gambar~\ref{fig:s2_data_coverage} menampilkan persentase piksel valid (bebas dari awan dan \textit{nodata}) untuk setiap tanggal akuisisi pada tahun 2022.
+Dari total 25 citra yang dikumpulkan, sebanyak 24 citra memiliki cakupan valid $\geq 70\%$ dan digunakan dalam analisis, sedangkan satu citra pada 27 Desember 2022 sepenuhnya tertutup awan (0\% valid) dan dikecualikan.
+Rata-rata cakupan valid keseluruhan mencapai 95,1\%, dengan nilai tertinggi pada 30 Juli 2022 (99,6\%) dan terendah pada 27 November 2022 (71,3\%).
+Distribusi kualitas data yang tinggi ini mengonfirmasi bahwa dataset 2022 memiliki keandalan yang memadai untuk pelatihan model.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_data_coverage.png}
+    \caption{Persentase piksel valid per tanggal akuisisi Sentinel-2 tahun 2022. Rata-rata cakupan valid mencapai 95,1\%. Satu citra pada 27 Desember 2022 dikecualikan karena tertutup awan sepenuhnya.}
+    \label{fig:s2_data_coverage}
+\end{figure}
 
 \subsection{Statistik Deskriptif}
-Setiap citra mencakup sekitar 11.810.282 piksel. 
-Pada data preprocessing, akan dilakukan pembagian patch berukuran $256\times256$ piksel, sehingga setiap citra akan menghasilkan sekitar 180 patch. 
-Total citra yang diambil dari tahun 2022--2024 adalah 72 citra, sehingga akan diperoleh total 12.960 patch.
+Setiap citra mencakup 26.211.664 piksel ($5.596 \times 4.684$).
+Pada data preprocessing, akan dilakukan pembagian patch berukuran $256\times256$ piksel dengan langkah (\textit{stride}) seukuran patch, sehingga setiap citra akan menghasilkan sekitar 378 patch ($\lfloor5.596/256\rfloor \times \lfloor4.684/256\rfloor = 21 \times 18$).
+Total citra yang diambil dari tahun 2022--2024 adalah 72 citra, sehingga akan diperoleh total sekitar 27.216 patch.
 
 \subsection{Data Label CDL}
 Dataset CDL tahun 2022 pada area studi memiliki 72 kelas aktif yang terbagi menjadi 48 kelas tanaman (\textit{cropland}) dan 16 kelas non-tanaman (permukiman, perairan, lahan basah, semak, dan lainnya).
 Lahan pertanian (\textit{cropland}) mencakup 83,8\% dari total area studi, sedangkan sisanya (16,2\%) merupakan lahan non-pertanian.
 Label CDL menggunakan proyeksi EPSG:5070 (NAD83/Conus Albers) dengan resolusi spasial 30 meter per piksel, sedangkan Sentinel-2 menggunakan proyeksi EPSG:4326 (WGS84) dengan resolusi spasial $\approx$10 meter per piksel, sehingga diperlukan proses reprojektion dan \textit{resampling} sebelum digunakan sebagai label pelatihan.
+
+Gambar~\ref{fig:cdl_label_map} menampilkan peta label CDL 2022 pada area studi setelah proses seleksi kelas, menunjukkan distribusi spasial 11 kelas tanaman target yang digunakan untuk pelatihan model beserta kelas \textit{background}.
+Setiap kelas diwakili oleh warna resmi USDA CDL untuk memudahkan identifikasi visual.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/cdl_label_map.png}
+    \caption{Peta label USDA Cropland Data Layer (CDL) 2022 pada area studi Sacramento Valley setelah seleksi kelas. Ditampilkan 11 kelas tanaman target ($\geq$1\% cakupan) dan kelas \textit{background} (abu-abu). Warna mengikuti standar warna resmi USDA CDL.}
+    \label{fig:cdl_label_map}
+\end{figure}
 
 \subsubsection{Distribusi Kelas CDL di Area Studi}
 
@@ -99,6 +220,15 @@ Non-pertanian (permukiman, air, lahan basah, semak) & $\approx$43.000 & $\approx
 \end{tabular}
 \end{table}
 
+Gambar~\ref{fig:cdl_class_distribution_area} menampilkan distribusi cakupan area (dalam hektar) untuk 20 kelas CDL teratas di area studi, menggunakan warna resmi USDA CDL untuk memudahkan identifikasi visual.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/cdl_class_distribution_area.png}
+    \caption{Distribusi cakupan area (hektar) untuk 20 kelas CDL teratas di area studi Sacramento Valley tahun 2022. Kelas \textit{Fallow/Idle Cropland} mendominasi dengan $\approx$57.742 ha (33,8\% dari total cropland). Warna batang mengikuti standar warna resmi USDA CDL.}
+    \label{fig:cdl_class_distribution_area}
+\end{figure}
+
 \subsubsection{Seleksi Kelas Optimal untuk Pelatihan Model}
 \label{subsec:class_selection}
 
@@ -162,33 +292,35 @@ Terdapat tiga justifikasi ilmiah untuk ambang batas $\geq 1\%$ yang digunakan:
 
 Dua kelas tambahan, yaitu \textit{Safflower} (ID 33, 0{,}92\%) dan \textit{Pistachios} (ID 204, 0{,}78\%), berada di batas ambang dan akan dievaluasi dalam eksperimen lanjutan dengan 13 kelas untuk menilai apakah fenologi khasnya dapat mengompensasi jumlah sampel yang lebih kecil.
 
-\subsection{Histogram per Band dan Korelasi}
-Distribusi nilai reflectance dari band B2, B3, dan B4 terkonsentrasi di bawah 2000. 
-Band \textit{red edge} (B5, B6, B7) memiliki distribusi lebih besar. 
-Band NIR (B8) menunjukkan reflectance tinggi dengan distribusi yang lebih merata.
-Korelasi antar band cahaya tampak (B2, B3, B4) sangat tinggi ($\ge 0,94$).
-
-\subsection{Perubahan Indeks Vegetasi}
-NDVI meningkat pada bulan April dan Juli yang menandakan awal musim tanam, lalu turun kembali menjelang akhir tahun yang mengindikasikan masa panen.
-
 \section{Data Preprocessing}
-Tahap preprocessing data bertujuan untuk memastikan citra satelit dan data label tutupan lahan memiliki kualitas spasial dan spektral yang konsisten.
+Tahap \textit{preprocessing} data bertujuan untuk memastikan citra satelit dan data label tutupan lahan memiliki kualitas spasial dan spektral yang konsisten sebelum digunakan untuk pelatihan model.
+Alur preprocessing diterapkan secara berurutan sebagaimana dijelaskan pada subbagian berikut.
 
 \subsection{Cloud Masking dan Shadow Masking}
-Tahap awal adalah \textit{cloud masking} dan \textit{shadow masking} pada citra Sentinel-2 menggunakan fungsi bawaan GEE berdasarkan persentase tutupan awan (CLOUDY\_PIXEL\_PERCENTAGE) yang rendah ($\le 10\%$).
+Tahap awal dilakukan sebelum data diunduh, yaitu \textit{cloud masking} dan \textit{shadow masking} pada citra Sentinel-2 menggunakan fungsi bawaan GEE.
+Citra dengan persentase tutupan awan (CLOUDY\_PIXEL\_PERCENTAGE) melebihi 10\% dikecualikan dari dataset.
+Penggunaan ambang batas ini menghasilkan 24 citra valid pada tahun 2022 dari 25 citra yang dikumpulkan.
 
 \subsection{Citra Komposit Temporal}
-Citra dikompositkan secara temporal menggunakan fungsi \textit{median reducer} untuk menghasilkan satu citra per interval 15 hari.
+Citra dikompositkan secara temporal menggunakan fungsi \textit{median reducer} GEE untuk menghasilkan satu citra komposit per interval 15 hari.
+Penggunaan median meredam pengaruh piksel berawanan sisa yang lolos dari masker awan, tanpa memerlukan interpolasi yang dapat mengubah nilai reflektansi asli.
 
-\subsection{Resampling Citra}
-Dilakukan proses \textit{resampling} spasial menggunakan metode \textit{nearest neighbour} untuk menyamakan resolusi dan sistem proyeksi antara citra Sentinel-2 (10m) dan data label CDL (30m).
+\subsection{Reprojeksi dan Resampling CDL}
+Data label CDL menggunakan proyeksi EPSG:5070 (NAD83/Conus Albers) dengan resolusi spasial 30 meter, sedangkan citra Sentinel-2 menggunakan proyeksi EPSG:4326 (WGS84) dengan resolusi $\approx$10 meter per piksel.
+Proses reprojeksi dan \textit{resampling} dilakukan dalam satu langkah menggunakan grid Sentinel-2 sebagai referensi, sehingga kedua data memiliki sistem koordinat, batas area, dan dimensi piksel yang identik.
+Metode \textit{nearest neighbour} digunakan untuk menjaga integritas nilai label kelas integer (tanpa interpolasi yang dapat menciptakan nilai kelas baru yang tidak valid).
 
-\subsection{Histogram Matching}
-Metode \textit{histogram matching} diterapkan pada masing-masing band citra Sentinel-2 untuk menyamakan kontras warna piksel dengan label sama \citep{wang2023}.
+\subsection{Penanganan Nilai NoData}
+Piksel yang tidak valid pada citra Sentinel-2---bernilai negatif, NaN, atau tak terhingga---ditetapkan nilai sentinel \texttt{-9999} sebagai penanda \textit{nodata}, kemudian seluruh citra dikonversi ke tipe data \texttt{float32}.
+Langkah ini memastikan bahwa piksel tidak valid tidak berkontribusi pada perhitungan statistik maupun gradien pelatihan.
+
+\subsection{Label Filtering}
+Berdasarkan seleksi kelas yang dijelaskan pada Subbagian~\ref{subsec:class_selection}, diterapkan proses \textit{label filtering} pada data CDL.
+Sebelas kelas tanaman dengan cakupan $\geq 1\%$ (ID: 3, 6, 24, 36, 37, 54, 61, 69, 75, 76, 220) dipertahankan sebagai kelas target, sedangkan seluruh kelas lainnya---termasuk perairan, permukiman, lahan basah, dan kelas tanaman minor---diubah menjadi kelas \textit{background} (nilai 0).
 
 \subsection{Patching dan Normalisasi Citra}
-Citra dan data label dipotong menjadi patch berukuran $256\times256$ piksel. 
-Setiap patch dinormalisasi menggunakan \textit{min-max normalization} ke rentang 0 hingga 1:
+Citra dan data label dipotong menjadi patch berukuran $256\times256$ piksel dengan langkah (\textit{stride}) seukuran patch sehingga tidak terjadi tumpang tindih.
+Setiap patch dinormalisasi menggunakan \textit{min-max normalization} ke rentang $[0, 1]$:
 \begin{equation}
     x_{norm} = \frac{x - x_{min}}{x_{max} - x_{min}}
 \end{equation}
@@ -223,53 +355,189 @@ dengan $\alpha = 0{,}5$ (bobot seimbang). Band dengan skor $\text{Score}_b$ tert
 
 \subsubsection{Tahap 2 — CNN Forward Selection}
 
-Tahap kedua menggunakan model segmentasi ringan (U-Net dengan encoder ResNet-18) sebagai \textit{oracle} seleksi. Algoritma \textit{sequential forward selection} secara greedy menambahkan band satu per satu berdasarkan urutan \textit{joint score} dari Tahap 1, dan mempertahankan band tersebut hanya apabila mIoU validasi meningkat melebihi ambang batas $\delta$:
+Tahap kedua menggunakan model segmentasi ringan (U-Net dengan encoder ResNet-18) sebagai \textit{oracle} seleksi untuk menentukan jumlah optimal band $K^*$ dari daftar peringkat yang dihasilkan Tahap 1.
+
+\textbf{Hubungan dengan Tahap 1.}
+Tahap 1 dan Tahap 2 merupakan dua komponen yang saling bergantung dan tidak dapat dipisahkan.
+Tahap 1 menghasilkan daftar fitur yang telah diurutkan berdasarkan \textit{joint score} dari yang paling diskriminatif hingga yang paling redundan.
+Tahap 2 menggunakan urutan tersebut sebagai panduan penambahan fitur secara sekuensial: band dengan peringkat tertinggi ditambahkan terlebih dahulu, kemudian band berikutnya, dan seterusnya.
+Dengan demikian, Tahap 1 menentukan \textbf{urutan} penambahan fitur, sedangkan Tahap 2 menentukan \textbf{titik potong} optimal $K^*$ — yaitu di mana penambahan band selanjutnya tidak lagi meningkatkan performa secara signifikan.
+
+\textbf{Efisiensi komputasi.}
+Pendekatan ini secara kritis menghindari pencarian kombinasi yang bersifat kombinatorial.
+\textit{Forward selection} murni tanpa panduan peringkat membutuhkan evaluasi $O(N^2)$ model (memilih fitur terbaik dari semua sisa fitur di setiap langkah), yang untuk $N = 648$ fitur setara dengan $\sim$210.000 evaluasi.
+Dengan urutan yang sudah ditentukan oleh Tahap 1, Tahap 2 hanya membutuhkan evaluasi $O(N)$ secara berurutan — yaitu evaluasi ke-$k$ menggunakan $k$ band teratas dari daftar peringkat Tahap 1.
+
+Band ditambahkan dan dipertahankan hanya apabila mIoU validasi meningkat melebihi ambang batas $\delta$:
 
 \begin{equation}
-    \text{terima band } b \iff \text{mIoU}_{t+1} > \text{mIoU}_{t} + \delta
+    \text{terima band } b_k \iff \text{mIoU}(b_1, \ldots, b_k) > \text{mIoU}(b_1, \ldots, b_{k-1}) + \delta
 \end{equation}
 
-dengan $\delta = 0{,}005$. Proses dihentikan apabila tidak terjadi peningkatan selama tiga penambahan berturut-turut, atau jumlah band mencapai batas maksimum. Setiap iterasi melatih model selama 15 epoch dengan \textit{early stopping} (patience = 5) untuk efisiensi komputasi.
+dengan $\delta = 0{,}005$ dan $b_1, b_2, \ldots, b_N$ adalah urutan band berdasarkan peringkat Tahap 1.
+Proses dihentikan apabila tidak terjadi peningkatan selama tiga penambahan berturut-turut (\textit{early stopping}).
+Titik ini mendefinisikan $K^*$ — jumlah band optimal yang digunakan pada Tahap 3.
+Setiap iterasi melatih model selama 15 epoch dengan \textit{early stopping} (patience = 5) untuk efisiensi komputasi.
 
 Metode ini merupakan kontribusi baru yang membedakan penelitian ini dari pendekatan sebelumnya. Pada studi terdahulu \citep{li2023hetao}, seleksi band dilakukan menggunakan GSI dan eliminasi fitur berbasis Random Forest sebagai \textit{filter} statis, di mana model segmentasi hanya digunakan setelah proses seleksi selesai. Dalam penelitian ini, model segmentasi sendiri bertindak sebagai \textit{oracle} dalam loop seleksi, sehingga kriteria pemilihan fitur sepenuhnya dioptimalkan terhadap metrik segmentasi (mIoU) daripada metrik klasifikasi piksel.
 
 \subsubsection{Tahap 3 — Validasi Model Penuh}
 
-Tiga himpunan band dilatih menggunakan tiga arsitektur segmentasi penuh untuk mengevaluasi dampak seleksi:
+Tahap ketiga mengevaluasi dampak pendekatan \textit{multi-temporal} dan seleksi band menggunakan model segmentasi penuh.
+Tiga konfigurasi input dirancang untuk menjawab dua pertanyaan penelitian secara bertahap:
+(1) apakah pendekatan \textit{multi-temporal} memberikan keunggulan atas citra tanggal tunggal (\textit{single-date})?
+(2) apakah seleksi band menghasilkan subset yang lebih efisien tanpa mengorbankan akurasi?
 
 \begin{enumerate}
-    \item \textbf{Eksperimen A} — semua band (baseline)
-    \item \textbf{Eksperimen B} — band pilihan Tahap 1 (filter saja)
-    \item \textbf{Eksperimen C} — band pilihan Tahap 2 (CNN forward selection)
+    \item \textbf{Eksperimen A — Single-Date Baseline}:
+    Menggunakan semua 9 band spektral dari satu tanggal terbaik (puncak musim tanam, 30 Juli) sebagai \textit{baseline} tanggal tunggal.
+    Konfigurasi ini merepresentasikan pendekatan konvensional tanpa informasi temporal.
+    Total: \textbf{9 channel}.
+
+    \item \textbf{Eksperimen B — Multi-Temporal Baseline}:
+    Menggunakan semua 9 band dari empat tanggal representatif yang mencakup fase fenologi utama: musim dingin (Januari), musim semi (Maret), puncak musim panas (Juli), dan musim gugur (November).
+    Tanggal dipilih berdasarkan kalender fenologi, bukan algoritma seleksi, sehingga berfungsi sebagai \textit{baseline} temporal naif.
+    Total: \textbf{36 channel} (4 tanggal $\times$ 9 band).
+
+    \item \textbf{Eksperimen C — Multi-Temporal Seleksi (Metode Usulan)}:
+    Menggunakan $K^*$ band hasil Tahap 2 (\textit{CNN forward selection}).
+    Subset ini merupakan output optimal dari pipeline seleksi tiga tahap yang diusulkan, di mana urutan penambahan ditentukan oleh Tahap 1 dan jumlah band $K^*$ ditentukan oleh titik \textit{elbow} kurva akurasi Tahap 2.
+    Total: \textbf{$K^*$ channel} ($K^* < 36$, ditentukan dari kurva seleksi Tahap 2).
 \end{enumerate}
 
-Setiap eksperimen dilatih dengan U-Net, DeepLabV3+, dan SegFormer selama 100 epoch. Metrik yang dibandingkan meliputi mIoU, IoU per kelas, F1-score, waktu pelatihan per epoch, dan penggunaan memori GPU.
-
-\subsection{Label Filtering}
-Berdasarkan seleksi kelas yang dijelaskan pada Subbagian~\ref{subsec:class_selection}, diterapkan proses \textit{label filtering} pada data CDL.
-Sebelas kelas tanaman dengan cakupan $\geq 1\%$ (ID: 3, 6, 24, 36, 37, 54, 61, 69, 75, 76, 220) dipertahankan sebagai kelas target, sedangkan seluruh kelas lainnya---termasuk perairan, permukiman, lahan basah, dan kelas tanaman minor---diubah menjadi kelas \textit{background} (nilai 0).
+Setiap eksperimen dilatih menggunakan dua arsitektur segmentasi, DeepLabV3+CBAM dan SegFormer, selama 100 epoch.
+Perbandingan A $\to$ B mengukur \textbf{nilai informasi temporal}, sedangkan perbandingan B $\to$ C mengukur \textbf{efisiensi seleksi band}.
+Metrik yang dibandingkan meliputi mIoU, IoU per kelas, F1-score, waktu pelatihan per epoch, dan penggunaan memori GPU.
+Kombinasi tiga konfigurasi input dan dua arsitektur menghasilkan \textbf{enam konfigurasi model} secara total.
 
 \section{Pelatihan Model}
-\subsection{Penerapan Attention Mechanism}
-Pelatihan model \textit{semantic segmentation} menggunakan DeepLabV3+ dan SegFormer.
-Untuk DeepLabV3+, ditambahkan \textit{Convolutional Block Attention Module} (CBAM) setelah ASPP \citep{hsu2022}.
-SegFormer menggunakan \textit{Self-Attention} bawaan \citep{xie2021}.
 
-\subsection{Skenario Pelatihan}
-Skenario pelatihan meliputi:
+\subsection{Arsitektur Model}
+
+Penelitian ini membandingkan dua arsitektur \textit{semantic segmentation} yang merepresentasikan dua paradigma berbeda: \textbf{DeepLabV3+} berbasis CNN konvolusional dengan modul \textit{attention} tambahan, dan \textbf{SegFormer} berbasis \textit{Vision Transformer} dengan \textit{self-attention} bawaan.
+
+\subsubsection{DeepLabV3+ dengan CBAM}
+
+DeepLabV3+ terdiri dari tiga komponen utama \citep{chen2018deeplabv3}:
+
 \begin{enumerate}
-    \item \textbf{Single Band Single date}: Setiap band dilatih terpisah pada tanggal tertentu.
-    \item \textbf{Kombinasi Band Spektral Multi-temporal}: Menggunakan kombinasi GSI tertinggi dan data temporal.
+    \item \textbf{Encoder (Backbone)}: ResNet-50 yang telah dilatih pada ImageNet digunakan sebagai ekstraktor fitur hierarkis. Fitur \textit{low-level} dari lapisan awal (stride 4) dan fitur \textit{high-level} dari lapisan akhir (stride 16) diekstrak untuk digunakan pada decoder.
+
+    \item \textbf{Atrous Spatial Pyramid Pooling (ASPP)}: Modul ASPP menerapkan konvolusi \textit{atrous} (dilated) dengan laju dilatasi $r \in \{6, 12, 18\}$ secara paralel untuk menangkap konteks multi-skala tanpa mengurangi resolusi spasial.
+
+    \item \textbf{Decoder}: Fitur dari ASPP digabungkan dengan fitur \textit{low-level} dari encoder melalui operasi \textit{bilinear upsampling} dan konvolusi $1\times1$, menghasilkan peta segmentasi beresolusi penuh.
 \end{enumerate}
 
-\subsection{Hyperparameter Tuning}
-Dilakukan penyesuaian \textit{learning rate}, \textit{batch size}, dan \textit{epoch}.
+Sebagai kontribusi tambahan, diterapkan \textit{Convolutional Block Attention Module} (CBAM) setelah lapisan ASPP \citep{hsu2022}. CBAM terdiri dari dua submodul berurutan:
+
+\begin{itemize}
+    \item \textbf{Channel Attention}: menghitung bobot kepentingan per channel menggunakan \textit{global average pooling} dan \textit{global max pooling} yang dimasukkan ke \textit{shared MLP}, sehingga model dapat fokus pada band spektral yang paling informatif.
+    \item \textbf{Spatial Attention}: menghitung bobot kepentingan per posisi spasial menggunakan konvolusi $7\times7$ atas gabungan channel-wise average dan max, sehingga model dapat fokus pada region spasial yang relevan.
+\end{itemize}
+
+\subsubsection{SegFormer}
+
+SegFormer menggunakan arsitektur \textit{encoder-decoder} berbasis \textit{Transformer} tanpa \textit{positional encoding} yang kaku \citep{xie2021}. Encoder menggunakan \textit{Mix Transformer} (MiT-B2) yang menghasilkan representasi fitur hierarkis pada empat skala resolusi. Setiap tahap encoder menggunakan \textit{Efficient Self-Attention} dengan pengurangan sekuens (\textit{sequence reduction ratio} $R$) untuk menjaga efisiensi komputasi. Decoder menggunakan modul \textit{All-MLP} yang menggabungkan fitur dari keempat tahap encoder tanpa konvolusi tambahan, menghasilkan prediksi segmentasi final.
+
+\subsection{Fungsi \textit{Loss} dan Penanganan Ketidakseimbangan Kelas}
+
+Ketidakseimbangan kelas pada dataset (rasio maksimum 22,6:1 antara \textit{Fallow/Idle Cropland} dan \textit{Grapes}) ditangani menggunakan \textit{weighted Cross-Entropy Loss}:
+
+\begin{equation}
+    \mathcal{L} = -\sum_{c=0}^{C-1} w_c \cdot y_c \cdot \log(\hat{y}_c)
+\end{equation}
+
+di mana bobot per kelas $w_c$ dihitung sebagai invers frekuensi relatif:
+
+\begin{equation}
+    w_c = \frac{1 / f_c}{\sum_{c'} 1 / f_{c'}}
+\end{equation}
+
+dengan $f_c$ adalah frekuensi piksel kelas $c$ pada set pelatihan. Pendekatan ini memberikan penalti lebih besar untuk kesalahan prediksi pada kelas minoritas.
+
+\subsection{Skenario Eksperimen}
+
+Skenario pelatihan dirancang selaras dengan tiga konfigurasi input yang didefinisikan pada Tahap 3 seleksi band (Subbagian~\ref{subsec:band_selection}):
+
+\begin{enumerate}
+    \item \textbf{Eksperimen A — Single-Date Baseline}: Menggunakan 9 band spektral dari satu tanggal puncak musim tanam (30 Juli). Merepresentasikan pendekatan konvensional tanpa informasi temporal (9 channel).
+
+    \item \textbf{Eksperimen B — Multi-Temporal Baseline}: Menggunakan 9 band dari empat tanggal fenologi (Januari, Maret, Juli, November) yang dipilih berdasarkan kalender fenologi tanpa algoritma seleksi. Berfungsi sebagai \textit{baseline} temporal naif (36 channel).
+
+    \item \textbf{Eksperimen C — Multi-Temporal Seleksi}: Menggunakan $K^*$ band hasil Tahap 2 (\textit{CNN forward selection}) yang merupakan output metode seleksi tiga tahap yang diusulkan ($K^* < 36$ channel).
+\end{enumerate}
+
+Setiap eksperimen dijalankan pada kedua arsitektur (DeepLabV3+CBAM dan SegFormer), menghasilkan \textbf{enam konfigurasi model} secara total.
+Perbandingan A $\to$ B mengukur nilai informasi temporal, sedangkan perbandingan B $\to$ C mengukur efisiensi metode seleksi yang diusulkan.
+
+\subsection{Konfigurasi \textit{Hyperparameter}}
+
+Konfigurasi \textit{hyperparameter} yang digunakan pada seluruh eksperimen disajikan pada Tabel~\ref{tab:hyperparams}.
+
+\begin{table}[htbp]
+\centering
+\caption{Konfigurasi \textit{hyperparameter} pelatihan model}
+\label{tab:hyperparams}
+\begin{tabular}{lll}
+\hline
+\textbf{Parameter} & \textbf{DeepLabV3+} & \textbf{SegFormer} \\
+\hline
+Optimizer          & AdamW               & AdamW \\
+\textit{Learning rate} & $1 \times 10^{-4}$ & $6 \times 10^{-5}$ \\
+\textit{Weight decay}  & $1 \times 10^{-4}$ & $1 \times 10^{-2}$ \\
+\textit{LR Scheduler}  & \textit{PolynomialLR} (power=0.9) & \textit{PolynomialLR} (power=0.9) \\
+\textit{Batch size}    & 8                  & 8 \\
+Ukuran patch       & $256\times256$      & $256\times256$ \\
+Maks. epoch        & 100                 & 100 \\
+\textit{Early stopping} & patience = 10   & patience = 10 \\
+\textit{Backbone}      & ResNet-50          & MiT-B2 \\
+\textit{Pretrained}    & ImageNet-1K        & ImageNet-1K \\
+\hline
+\end{tabular}
+\end{table}
+
+Data dibagi menjadi set pelatihan (70\%), validasi (15\%), dan pengujian (15\%) secara stratifikasi berdasarkan kelas untuk memastikan distribusi kelas yang representatif pada setiap subset.
 
 \section{Evaluasi}
-Metrik evaluasi yang digunakan:
+
+\subsection{Metrik Segmentasi}
+
+Evaluasi model menggunakan empat metrik utama yang umum digunakan pada tugas \textit{semantic segmentation} \citep{thomasramos2024}:
+
+\textbf{Mean Intersection over Union (mIoU)} merupakan metrik utama yang mengukur tumpang tindih antara prediksi dan label acuan pada level kelas:
+\begin{equation}
+    \text{IoU}_c = \frac{TP_c}{TP_c + FP_c + FN_c}, \qquad
+    \text{mIoU} = \frac{1}{C} \sum_{c=0}^{C-1} \text{IoU}_c
+\end{equation}
+
+\textbf{Overall Accuracy (OA)} mengukur proporsi piksel yang diprediksi dengan benar dari seluruh piksel:
+\begin{equation}
+    \text{OA} = \frac{\sum_{c} TP_c}{N}
+\end{equation}
+di mana $N$ adalah total piksel pada set pengujian.
+
+\textbf{F1-Score} per kelas dan rata-rata makro (\textit{macro-averaged}) dihitung sebagai rata-rata harmonik \textit{precision} dan \textit{recall}:
+\begin{equation}
+    F1_c = \frac{2 \cdot \text{Precision}_c \cdot \text{Recall}_c}{\text{Precision}_c + \text{Recall}_c}, \qquad
+    \overline{F1} = \frac{1}{C} \sum_{c} F1_c
+\end{equation}
+
+\textbf{IoU per Kelas} dilaporkan secara individual untuk mengidentifikasi kelas yang paling sulit diprediksi, memungkinkan analisis mendalam terhadap kelas dengan ketidakseimbangan tinggi.
+
+\subsection{Analisis Efisiensi Komputasi}
+
+Selain metrik akurasi, dilakukan pengukuran efisiensi komputasi untuk mengevaluasi kelayakan penerapan model:
 \begin{itemize}
-    \item \textbf{Overall Accuracy (OA)}: Mengukur proporsi piksel yang benar \citep{thomasramos2024}.
-    \item \textbf{Mean Intersection over Union (mIoU)}: Rata-rata IoU seluruh kelas.
-    \item \textbf{F1-score}: Rata-rata harmonik precision dan recall.
+    \item \textbf{Jumlah parameter model} (juta parameter) untuk mengukur kompleksitas arsitektur.
+    \item \textbf{Waktu pelatihan per epoch} (detik) pada GPU yang digunakan.
+    \item \textbf{\textit{Inference throughput}} (patch/detik) untuk mengukur kecepatan prediksi pada data baru.
+    \item \textbf{Penggunaan memori GPU} (GB) selama pelatihan.
 \end{itemize}
-Dilakukan juga \textit{error analysis} dan pengukuran \textit{inference time}.
+
+\subsection{Analisis Error}
+
+Untuk memahami pola kesalahan model secara kualitatif dan kuantitatif, dilakukan:
+\begin{itemize}
+    \item \textbf{\textit{Confusion matrix}} antar kelas untuk mengidentifikasi pasangan kelas yang paling sering tertukar (misalnya \textit{Alfalfa} vs.\ \textit{Other Hay}, atau \textit{Almonds} vs.\ \textit{Walnuts}).
+    \item \textbf{Visualisasi prediksi spasial} dengan membandingkan peta prediksi model terhadap label CDL pada beberapa patch representatif.
+\end{itemize}

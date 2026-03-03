@@ -24,31 +24,35 @@ Untuk mengatasi masalah tersebut, area studi pada penelitian ini difokuskan di k
 \section{Perumusan Masalah}
 Berikut adalah rumusan masalah pada penelitian ini:
 \begin{enumerate}
-    \item Bagaimana pengaruh dari data multi-temporal pada akurasi pemetaan tanaman?
-    \item Bagaimana pengaruh dari kombinasi band spektral yang berbeda pada kinerja model \textit{semantic segmentation}?
-    \item Bagaimana kinerja dari beberapa model \textit{semantic segmentation}, DeepLabV3+, dan SegFormer untuk klasifikasi tanaman pertanian?
+    \item Seberapa besar perbedaan akurasi pemetaan tanaman antara pendekatan \textit{single-date} dan \textit{multi-temporal} pada citra Sentinel-2?
+    \item Bagaimana metode seleksi band tiga tahap berbasis \textit{Global Separation Index} (GSI), \textit{Random Forest}, dan \textit{CNN forward selection} dapat mengidentifikasi subset band optimal dari ruang fitur multi-temporal Sentinel-2?
+    \item Bagaimana kinerja komparatif antara DeepLabV3+CBAM dan SegFormer pada tiga konfigurasi input yang berbeda: \textit{single-date}, \textit{multi-temporal} naif, dan \textit{multi-temporal} dengan seleksi band?
 \end{enumerate}
 
 \section{Tujuan}
 Berdasarkan rumusan masalah yang telah disebutkan, tujuan penelitian ini adalah sebagai berikut:
 \begin{enumerate}
-    \item Mengevaluasi pengaruh dari data multi-temporal pada akurasi pemetaan tanaman.
-    \item Menilai pengaruh dari kombinasi band spektral yang berbeda pada kinerja model \textit{semantic segmentation}.
-    \item Membandingkan kinerja dari tiga model \textit{semantic segmentation}, DeepLabV3+, dan SegFormer, untuk mengklasifikasikan tanaman pertanian pada citra Sentinel-2.
+    \item Mengukur kontribusi informasi temporal terhadap akurasi pemetaan tanaman dengan membandingkan konfigurasi \textit{single-date} dan \textit{multi-temporal} pada model \textit{semantic segmentation}.
+    \item Mengembangkan dan mengevaluasi pipeline seleksi band tiga tahap yang secara progresif mereduksi ruang fitur multi-temporal dari seluruh kombinasi band-tanggal menuju subset optimal menggunakan kriteria berbasis mIoU segmentasi.
+    \item Membandingkan kinerja dua arsitektur \textit{semantic segmentation}, DeepLabV3+CBAM dan SegFormer, pada tiga skenario input untuk menentukan arsitektur yang paling efektif dalam konteks pemetaan tanaman pertanian multi-temporal.
 \end{enumerate}
 
 \section{Batasan Masalah}
 Batasan masalah pada penelitian ini adalah sebagai berikut:
 \begin{enumerate}
-    \item Penelitian ini menggunakan data sekunder dari platform Google Earth Engine (GEE). Dataset terdiri dari atas citra Sentinel-2 sebagai input dan Cropland Data Layer (CDL) sebagai data label, dengan periode pengambilan antara tahun 2022 hingga 2024.
-    \item Area studi terletak di kawasan Sacramento Valley, California pada koordinat geografis ($122^{\circ}18'36''$ BB hingga $121^{\circ}20'26''$ BB, $38^{\circ}41'7''$ LU hingga $39^{\circ}49'47''$ LU) dengan total luas area 10.629,25 km$^2$.
+    \item \textbf{Data}: Penelitian menggunakan citra Sentinel-2 Surface Reflectance (COPERNICUS/S2\_SR\_HARMONIZED) dari Google Earth Engine dengan interval komposit 15 hari dan data label Cropland Data Layer (CDL) dari USDA NASS, untuk periode tahun 2022, 2023, dan 2024.
+    \item \textbf{Area studi}: Penelitian dibatasi pada kawasan Sacramento Valley, California pada koordinat ($122^{\circ}4'41''$ BB hingga $121^{\circ}34'31''$ BB, $38^{\circ}45'14''$ LU hingga $39^{\circ}10'29''$ LU) seluas 2.038,08 km$^2$. Generalisasi hasil ke area studi lain di luar Sacramento Valley tidak diklaim dalam penelitian ini.
+    \item \textbf{Kelas tanaman}: Label CDL yang terdiri dari 134 kelas diremajakan menjadi 11 kelas tanaman target dengan cakupan area $\geq 1\%$ dari total area studi, ditambah satu kelas \textit{background}.
+    \item \textbf{Arsitektur model}: Penelitian membandingkan dua arsitektur \textit{semantic segmentation}, yaitu DeepLabV3+ dengan tambahan CBAM (\textit{attention}) dan SegFormer dengan MiT-B2 \textit{encoder}. Arsitektur lain di luar kedua model tersebut tidak dievaluasi.
+    \item \textbf{Metode seleksi band}: Pipeline seleksi fitur dibatasi pada kombinasi GSI, \textit{Random Forest feature importance}, dan \textit{CNN forward selection} menggunakan model \textit{oracle} ringan (U-Net ResNet-18). Metode seleksi lain seperti \textit{recursive feature elimination} atau \textit{mutual information} tidak dibandingkan secara langsung.
 \end{enumerate}
 
 \section{Hipotesis}
 Berdasarkan temuan studi terdahulu, hipotesis yang diajukan dalam penelitian ini adalah sebagai berikut:
 \begin{itemize}
-    \item Penggunaan citra multi-temporal dengan kombinasi band spektral menghasilkan dataset yang kaya akan fitur, sehingga akan menghasilkan akurasi pemetaan pertanian yang lebih tinggi dibandingkan penggunaan citra \textit{single-date} atau hanya menggunakan indeks vegetasi.
-    \item Model \textit{semantic segmentation} dengan \textit{attention mechanism} dihipotesiskan memiliki performa lebih baik daripada model tanpa attention (\textit{baseline}), karena kemampuannya dalam memfokuskan pada fitur-fitur penting.
+    \item Pendekatan \textit{multi-temporal} akan menghasilkan akurasi pemetaan tanaman yang lebih tinggi dibandingkan pendekatan \textit{single-date}, karena informasi fenologi temporal memberikan diskriminasi antar jenis tanaman yang tidak tersedia pada satu tanggal akuisisi.
+    \item Subset band hasil seleksi tiga tahap akan mempertahankan akurasi yang sebanding dengan \textit{multi-temporal} naif (seluruh band dari seluruh tanggal) dengan jumlah channel yang lebih sedikit, sehingga mengurangi beban komputasi pelatihan model.
+    \item SegFormer dengan \textit{Efficient Self-Attention} bawaan akan menunjukkan keunggulan pada konteks spasial yang lebih luas, sedangkan DeepLabV3+CBAM akan lebih unggul dalam menangkap pola konvolusi lokal yang relevan untuk tekstur pertanian.
 \end{itemize}
 
 \section{Rencana Kegiatan}
@@ -64,7 +68,7 @@ Untuk mencapai tujuan yang telah ditentukan, penelitian ini akan dilaksanakan me
     Melakukan tahap preprocessing citra yang mencakup \textit{cloud masking} dan \textit{shadow masking}, \textit{resampling} dan projection citra Sentinel-2 dan CDL, normalisasi nilai reflectance, pemilihan kombinasi band spektral optimal menggunakan metode \textit{feature selection} berbasis global separation index, dan patching citra dan label menjadi patch berukuran $256\times256$ piksel serta filter labeling untuk patch selain jenis tanaman pertanian.
     
     \item \textbf{Pelatihan Model Semantic Segmentation}\\
-    Melatih dan membangingkan performa tiga arsitektur \textit{semantic segmentation}, yaitu DeepLabV3+, dan SegFormer pada dataset yang telah diproses. Beberapa skenario training akan dilakukan untuk membandingkan pengaruh konfigurasi band dan temporal terhadap hasil segmentasi. Untuk setiap model, akan ditambahkan juga \textit{attention mechanism} untuk meningkatkan kemampuan model dalam menyoroti fitur penting.
+    Melatih dan membandingkan performa dua arsitektur \textit{semantic segmentation}, yaitu DeepLabV3+CBAM dan SegFormer, pada dataset yang telah diproses. Tiga skenario eksperimen dilakukan untuk membandingkan pengaruh konfigurasi input (\textit{single-date}, \textit{multi-temporal} naif, dan \textit{multi-temporal} dengan seleksi band) terhadap hasil segmentasi.
     
     \item \textbf{Evaluasi dan Analisis Hasil}\\
     Evaluasi utama dilakukan menggunakan metrik evaluasi segmentasi seperti \textit{mean Intersection over Union} (mIoU), \textit{Overall Accuracy} (OA), dan F1-score. Selain evaluasi utama, akan dilakukan evaluasi tambahan berupa \textit{error analysis} dan pengukuran \textit{inference time}. Analisis hasil mencakup perbandingan antar model, pengaruh kombinasi band, serta pengaruh penggunaan data multi-temporal. Visualisasi segmentasi dan distribusi prediksi kelas juga dianalisis untuk mendukung interpretasi hasil kuantitatif.

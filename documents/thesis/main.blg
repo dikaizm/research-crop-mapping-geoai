@@ -3,44 +3,46 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 The style file: apalike.bst
 Database file #1: references.bib
-You've used 27 entries,
+Warning--I didn't find a database entry for "chen2018deeplabv3"
+You've used 26 entries,
             1935 wiz_defined-function locations,
-            619 strings with 7628 characters,
-and the built_in function-call counts, 10065 in all, are:
-= -- 986
-> -- 386
-< -- 20
-+ -- 132
-- -- 122
-* -- 870
-:= -- 1789
-add.period$ -- 81
-call.type$ -- 27
-change.case$ -- 180
-chr.to.int$ -- 25
-cite$ -- 27
-duplicate$ -- 375
-empty$ -- 727
-format.name$ -- 173
-if$ -- 1958
+            615 strings with 7489 characters,
+and the built_in function-call counts, 9750 in all, are:
+= -- 955
+> -- 373
+< -- 19
++ -- 128
+- -- 118
+* -- 845
+:= -- 1730
+add.period$ -- 78
+call.type$ -- 26
+change.case$ -- 174
+chr.to.int$ -- 24
+cite$ -- 26
+duplicate$ -- 362
+empty$ -- 706
+format.name$ -- 167
+if$ -- 1897
 int.to.chr$ -- 3
 int.to.str$ -- 0
-missing$ -- 27
-newline$ -- 138
-num.names$ -- 81
-pop$ -- 110
+missing$ -- 26
+newline$ -- 133
+num.names$ -- 78
+pop$ -- 107
 preamble$ -- 1
-purify$ -- 180
+purify$ -- 174
 quote$ -- 0
-skip$ -- 307
+skip$ -- 294
 stack$ -- 0
-substring$ -- 716
-swap$ -- 27
+substring$ -- 704
+swap$ -- 26
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 162
+type$ -- 156
 warning$ -- 0
-while$ -- 84
+while$ -- 82
 width$ -- 0
-write$ -- 351
+write$ -- 338
+(There was 1 warning)
