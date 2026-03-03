@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1772563562.75942 "main.aux" "main.bbl" "main" 1772563565.76418 0
+["bibtex main"] 1772568805.48833 "main.aux" "main.bbl" "main" 1772568808.88922 0
   "./references.bib" 1772563490.85633 7547 ce763588450fb7a37b1681921171b4b6 ""
   "/usr/local/texlive/2025/texmf-dist/bibtex/bst/base/apalike.bst" 1292289607 24635 604dafcc79f521a11ea73e506e1fbd98 ""
-  "main.aux" 1772563565.55603 21423 849a77a735186db5d1cfb298718e959b "pdflatex"
+  "main.aux" 1772568808.61228 21215 b06a9ce921b673dd331dd30898ef0fb4 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1772563562.83013 "/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis/main.tex" "main.pdf" "main" 1772563565.76432 0
+["pdflatex"] 1772568805.5867 "/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis/main.tex" "main.pdf" "main" 1772568808.88943 0
   "/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis/main.tex" 1772474712.82604 2956 033e095d8adc64ce84cc5c8dd0fd0970 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -126,7 +126,7 @@
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
   "chapters/abstract.tex" 1765273939.74809 1933 833ec3fe9a29a53447e7d9c510ff8895 ""
   "chapters/conclusion.tex" 1765275532.49687 416 46cde1946c038a5d0ce3348fb3ed70fb ""
-  "chapters/introduction.tex" 1772546517.66101 10900 e93f4139114bd9b3f3d11cd2db466442 ""
+  "chapters/introduction.tex" 1772568797.78514 11156 758a436f4709ccdac5d9f969d838e927 ""
   "chapters/literature_review.tex" 1772563505.21529 22041 8f5702a1a5a985a96b361bb2c5ab0add ""
   "chapters/methodology.tex" 1772546372.51325 38365 d3b8688ee59d93ff1cc2427b8baf0b16 ""
   "chapters/results.tex" 1765275530.29605 866 74a4c8b4a537765144f52f2495040e5e ""
@@ -138,13 +138,13 @@
   "figures/s2_ndvi_temporal.png" 1772519149.25012 255739 a95d5bfed672758d9983e8ab4606de05 ""
   "figures/s2_rgb_temporal.png" 1772519145.7614 11393384 57913f6a40d72fcce6b694b5610294d0 ""
   "figures/s2_spectral_profile.png" 1772519149.67302 210252 1520af03551fe173c523793dec9b1fd8 ""
-  "main.aux" 1772563565.55603 21423 849a77a735186db5d1cfb298718e959b "pdflatex"
-  "main.bbl" 1772563562.82818 6215 195bb0c3004df0b513d95a7ca8816163 "bibtex main"
-  "main.lof" 1772563565.55834 2975 f692e322c380288aac4fd277d11b8ba5 "pdflatex"
-  "main.lot" 1772563565.55832 1272 f3962c1c00b93a50f97c93525e03428a "pdflatex"
-  "main.out" 1772563565.5578 10638 323af583029600758763d17f27f0f83a "pdflatex"
+  "main.aux" 1772568808.61228 21215 b06a9ce921b673dd331dd30898ef0fb4 "pdflatex"
+  "main.bbl" 1772568805.58432 5700 4b051e4752bd29832fc0b7d620ffd31b "bibtex main"
+  "main.lof" 1772568808.61574 2975 f692e322c380288aac4fd277d11b8ba5 "pdflatex"
+  "main.lot" 1772568808.61571 1272 f3962c1c00b93a50f97c93525e03428a "pdflatex"
+  "main.out" 1772568808.61538 10638 323af583029600758763d17f27f0f83a "pdflatex"
   "main.tex" 1772474712.82604 2956 033e095d8adc64ce84cc5c8dd0fd0970 ""
-  "main.toc" 1772563565.55828 6335 8e3420b399207b70875e265711377354 "pdflatex"
+  "main.toc" 1772568808.61562 6334 e1ceb5e644e8c0e6324d1855fc20c5a5 "pdflatex"
   (generated)
   "main.aux"
   "main.lof"

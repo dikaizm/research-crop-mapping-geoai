@@ -1,25 +1,20 @@
 \section{Latar Belakang}
-Pertumbuhan penduduk dunia dan meningkatnya standar hidup telah mendorong perluasan serta intensifikasi pemanfaatan lahan pertanian secara global untuk memenuhi permintaan pangan dan komoditas yang terus meningkat \citep{potapov2022}. 
-Pengembangan peta sebaran tanaman secara akurat dan skala besar menjadi penting untuk memastikan ketahanan pangan dan merencakanan pola tanam di masa depan \citep{gao2023}. 
-Informasi spasial mengenai sebaran dan jenis tanaman pertanian sangat dibutuhkan untuk estimasi hasil panen, mengelola irigasi, serta merencanakan distribusi komoditas \citep{yi2020}. 
+Pemetaan jenis tanaman pertanian secara akurat dan terkini menjadi fondasi penting bagi pengelolaan ketahanan pangan, estimasi produksi, dan perencanaan irigasi berskala regional \citep{potapov2022, yi2020}.
+Satelit Sentinel-2 menawarkan solusi yang efisien melalui resolusi spasial 10 meter, 9 hingga 13 band spektral, serta interval pengulangan 5 hari, menjadikannya platform yang dominan untuk pemetaan lahan pertanian skala besar \citep{phiri2020}.
+Kemampuan \textit{multi-temporal} Sentinel-2 memungkinkan perekaman siklus fenologi tanaman secara lengkap sepanjang musim tanam, sehingga jenis tanaman dengan karakteristik spektral serupa namun pola pertumbuhan berbeda — seperti padi dan gandum — dapat dibedakan dengan lebih andal dibandingkan pendekatan citra tanggal tunggal (\textit{single-date}).
 
-Satelit penginderaan jauh menyediakan citra resolusi tinggi yang dapat dimanfaatkan untuk pemetaan lahan pertanian secara luas dan otomatis, sebagai alternatif metode survei lapangan konvensional yang memakan waktu dan biaya tinggi \citep{li2023}. 
-Satelit Sentinel-2 digunakan untuk pemetaan lahan pertanian karena menyediakan citra dengan resolusi tinggi hingga 10 meter dan resolusi temporal pada 5 hari \citep{phiri2020}. 
-Sentinel-2 memiliki hingga 13 band spektral yang dapat dimanfaatkan untuk fitur pada klasifikasi lahan pertanian \citep{yi2020}. 
-Penggunaan Cropland Data Layer (CDL) yang disediakan oleh United States Department of Agriculture (USDA) sebagai data label dapat meningkatkan validitas pemetaan tanaman karena menyediakan label hingga tingkat piksel dengan resolusi 30 meter dan cakupan spasial yang luas \citep{maleki2024}. 
+Pemanfaatan citra \textit{multi-temporal} secara penuh menghasilkan ruang fitur yang sangat besar.
+Untuk satu tahun akuisisi dengan interval 15 hari dan 9 band spektral, terdapat hingga 648 kombinasi band-tanggal.
+Tidak semua kombinasi tersebut memberikan kontribusi informatif yang setara; terdapat redundansi spektral antar band berkorelasi tinggi dan redundansi temporal antar tanggal yang berdekatan \citep{li2023}.
+Penggunaan seluruh fitur tanpa seleksi akan meningkatkan beban komputasi pelatihan secara signifikan dan berpotensi menurunkan performa model akibat dimensi yang berlebihan, sehingga diperlukan metode seleksi fitur yang efektif untuk mengidentifikasi subset band-tanggal yang paling informatif.
 
-Kemajuan dalam bidang \textit{computer vision} (CV) dan \textit{deep learning} menciptakan pergeseran dalam analisis penginderaan jauh menuju metode \textit{semantic segmentation} \citep{luo2024}. 
-Berbeda dengan klasifikasi piksel-per-piksel biasa, \textit{semantic segmentation} mengelompokkan piksel dengan kelas tutupan lahan tertentu secara bersamaan \citep{ajibola2024}. 
-Algoritma \textit{semantic segmentation} seperti DeepLabV3+ dan SegFormer mulai diadopsi untuk klasifikasi tanaman pertanian \citep{li2023}. 
-Model segmentasi lainnya seperti DeepLabV3+ dan SegFormer juga telah diterapkan, salah satunya oleh Li (2023), yang menunjukkan bahwa kedua model tersebut mampu menghasilkan akurasi segmentasi tinggi \citep{li2023, hsu2022, chang2023}. 
+Kemajuan \textit{deep learning} telah menggeser paradigma analisis citra pertanian menuju \textit{semantic segmentation}, yang secara bersamaan menetapkan label kelas untuk setiap piksel dengan mempertimbangkan konteks spasial di sekitarnya \citep{luo2024, ajibola2024}.
+Arsitektur seperti DeepLabV3+ dengan mekanisme \textit{attention} tambahan dan SegFormer berbasis \textit{Vision Transformer} telah menunjukkan akurasi segmentasi tinggi pada pemetaan tutupan lahan \citep{chen2018deeplabv3, xie2021, hsu2022}.
+Cropland Data Layer (CDL) dari USDA NASS menyediakan label piksel-level dengan resolusi 30 meter dan cakupan spasial yang luas, memungkinkan pelatihan model \textit{semantic segmentation} dengan supervisi yang kuat \citep{maleki2024}.
 
-Meskipun demikian, beberapa penelitian fokus pada penggunaan citra indeks vegetasi (NDVI, EVI) tanpa mempertimbangkan keunggulan seluruh band spektral \citep{gao2023, thorp2021, seydi2022}. 
-Padahal, kombinasi fitur spektral yang dipilih dengan metode \textit{feature selection} dapat meningkatkan pemisahan kelas tanaman \citep{yi2020}. 
-Oleh karena itu, diperlukan eksperimen untuk menentukan kombinasi band dan multi-spektral yang optimal, sehingga proses pemetaan tanaman pertanian dapat lebih akurat. 
-
-Pengembangan model \textit{semantic segmentation} berbasis citra satelit memerlukan data label yang akurat hingga level piksel. 
-Namun, di Indonesia belum tersedia dataset publik untuk identifikasi jenis tanaman pertanian. 
-Untuk mengatasi masalah tersebut, area studi pada penelitian ini difokuskan di kawasan Sacramento Valley, California di Amerika Serikat yang didukung oleh ketersediaan dataset publik Cropland Data Layer (CDL). 
+Meskipun sejumlah penelitian telah menggabungkan metode seleksi fitur seperti \textit{Global Separation Index} (GSI) dan \textit{Random Forest feature importance} untuk menyaring band Sentinel-2 sebelum pelatihan \citep{gao2023, yi2020}, pendekatan tersebut bersifat statis — kriteria seleksi tidak dioptimalkan terhadap performa model segmentasi yang sesungguhnya.
+Belum ada studi yang menggunakan model segmentasi CNN sebagai \textit{oracle} dalam \textit{sequential forward selection} untuk citra \textit{multi-temporal}, sehingga terdapat kesenjangan antara proses seleksi fitur dan tujuan akhir optimasi segmentasi.
+Penelitian ini mengusulkan \textit{pipeline} seleksi band tiga tahap yang menggabungkan GSI dan \textit{Random Forest} sebagai filter awal dengan \textit{CNN forward selection} berbasis mIoU sebagai penentu subset optimal, kemudian membandingkan kinerja DeepLabV3+CBAM dan SegFormer pada tiga konfigurasi input (\textit{single-date}, \textit{multi-temporal} naif, dan \textit{multi-temporal} dengan seleksi band) di area studi Sacramento Valley, California yang didukung ketersediaan label CDL publik. 
 
 \section{Perumusan Masalah}
 Berikut adalah rumusan masalah pada penelitian ini:

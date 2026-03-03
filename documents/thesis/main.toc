@@ -2,7 +2,7 @@
 \contentsline {chapter}{\numberline {1}PENDAHULUAN}{8}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Latar Belakang}{8}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Perumusan Masalah}{9}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Tujuan}{10}{section.1.3}%
+\contentsline {section}{\numberline {1.3}Tujuan}{9}{section.1.3}%
 \contentsline {section}{\numberline {1.4}Batasan Masalah}{10}{section.1.4}%
 \contentsline {section}{\numberline {1.5}Hipotesis}{11}{section.1.5}%
 \contentsline {section}{\numberline {1.6}Rencana Kegiatan}{11}{section.1.6}%

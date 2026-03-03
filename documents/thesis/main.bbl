@@ -85,20 +85,10 @@ Potapov, P. et~al. (2022).
 \newblock Global maps of cropland extent and change show accelerated cropland expansion in the twenty-first century.
 \newblock {\em Nature Food}, 3(1):19--28.
 
-\bibitem[Seydi et~al., 2022]{seydi2022}
-Seydi, S.~T., Amani, M., and Ghorbanian, A. (2022).
-\newblock A dual attention convolutional neural network for crop classification using time-series sentinel-2 imagery.
-\newblock {\em Remote Sens (Basel)}, 14(3):498.
-
 \bibitem[Thomas~Ramos and Sappa, 2024]{thomasramos2024}
 Thomas~Ramos, L. and Sappa, A.~D. (2024).
 \newblock Multispectral semantic segmentation for land cover classification: An overview.
 \newblock {\em IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens.}, 17:14295--14336.
-
-\bibitem[Thorp and Drajat, 2021]{thorp2021}
-Thorp, K.~R. and Drajat, D. (2021).
-\newblock Deep machine learning with sentinel satellite data to map paddy rice production stages across west java, indonesia.
-\newblock {\em Remote Sens Environ}, 265:112679.
 
 \bibitem[Tran et~al., 2022]{tran2022}
 Tran, K.~H. et~al. (2022).
