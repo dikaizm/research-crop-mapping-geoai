@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1772546500.9484 "main.aux" "main.bbl" "main" 1772546520.97285 0
-  "./references.bib" 1772447957.97543 7299 25a6ab37a8a3a4b2a6428fe43c7d5e0e ""
+["bibtex main"] 1772563562.75942 "main.aux" "main.bbl" "main" 1772563565.76418 0
+  "./references.bib" 1772563490.85633 7547 ce763588450fb7a37b1681921171b4b6 ""
   "/usr/local/texlive/2025/texmf-dist/bibtex/bst/base/apalike.bst" 1292289607 24635 604dafcc79f521a11ea73e506e1fbd98 ""
-  "main.aux" 1772546520.70468 19928 2fc54ccab9535a438441ae807532bf0c "pdflatex"
+  "main.aux" 1772563565.55603 21423 849a77a735186db5d1cfb298718e959b "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1772546517.88441 "/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis/main.tex" "main.pdf" "main" 1772546520.97304 0
+["pdflatex"] 1772563562.83013 "/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis/main.tex" "main.pdf" "main" 1772563565.76432 0
   "/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis/main.tex" 1772474712.82604 2956 033e095d8adc64ce84cc5c8dd0fd0970 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -36,6 +36,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmti12.tfm" 1136768653 1484 ed72f8f5cf654cda15ecc8e32bfcbee5 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm" 1136768653 772 9a936b7f5e2ff0557fce0f62822f0bbf ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
@@ -50,6 +51,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1248133631 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1248133631 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb" 1248133631 36118 fad905eba93cff5bce1e185fe980a177 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb" 1248133631 24252 1e4e051947e12dfb50fee0b7f4e26e3a ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1248133631 31764 459c573c03a4949a528c2cc7f557e217 ""
@@ -125,7 +127,7 @@
   "chapters/abstract.tex" 1765273939.74809 1933 833ec3fe9a29a53447e7d9c510ff8895 ""
   "chapters/conclusion.tex" 1765275532.49687 416 46cde1946c038a5d0ce3348fb3ed70fb ""
   "chapters/introduction.tex" 1772546517.66101 10900 e93f4139114bd9b3f3d11cd2db466442 ""
-  "chapters/literature_review.tex" 1765274002.53162 10614 7afeeeb88c9a6d72ab19c8973e342703 ""
+  "chapters/literature_review.tex" 1772563505.21529 22041 8f5702a1a5a985a96b361bb2c5ab0add ""
   "chapters/methodology.tex" 1772546372.51325 38365 d3b8688ee59d93ff1cc2427b8baf0b16 ""
   "chapters/results.tex" 1765275530.29605 866 74a4c8b4a537765144f52f2495040e5e ""
   "figures/cdl_class_distribution_area.png" 1772542576.85354 159378 1072c9c58175fa455b8bd8ceb0b26a08 ""
@@ -136,13 +138,13 @@
   "figures/s2_ndvi_temporal.png" 1772519149.25012 255739 a95d5bfed672758d9983e8ab4606de05 ""
   "figures/s2_rgb_temporal.png" 1772519145.7614 11393384 57913f6a40d72fcce6b694b5610294d0 ""
   "figures/s2_spectral_profile.png" 1772519149.67302 210252 1520af03551fe173c523793dec9b1fd8 ""
-  "main.aux" 1772546520.70468 19928 2fc54ccab9535a438441ae807532bf0c "pdflatex"
-  "main.bbl" 1772546501.0471 6027 5069ac7ea7c7dbb7a22a4bd8e6f47ce1 "bibtex main"
-  "main.lof" 1772546520.70684 2958 e4af477cf409ffa5661db0e338956584 "pdflatex"
-  "main.lot" 1772546520.7068 1298 5ccaf08cfebca33e5f6327088c96639e "pdflatex"
-  "main.out" 1772546520.70653 8354 4b3a128f0c37c0be7ae81c5e8266ff91 "pdflatex"
+  "main.aux" 1772563565.55603 21423 849a77a735186db5d1cfb298718e959b "pdflatex"
+  "main.bbl" 1772563562.82818 6215 195bb0c3004df0b513d95a7ca8816163 "bibtex main"
+  "main.lof" 1772563565.55834 2975 f692e322c380288aac4fd277d11b8ba5 "pdflatex"
+  "main.lot" 1772563565.55832 1272 f3962c1c00b93a50f97c93525e03428a "pdflatex"
+  "main.out" 1772563565.5578 10638 323af583029600758763d17f27f0f83a "pdflatex"
   "main.tex" 1772474712.82604 2956 033e095d8adc64ce84cc5c8dd0fd0970 ""
-  "main.toc" 1772546520.70677 5494 514d7e7e417cc4a5c8fe8b25d9352003 "pdflatex"
+  "main.toc" 1772563565.55828 6335 8e3420b399207b70875e265711377354 "pdflatex"
   (generated)
   "main.aux"
   "main.lof"

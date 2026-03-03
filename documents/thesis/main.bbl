@@ -30,6 +30,16 @@ Copenhaver, K. et~al. (2021).
 \newblock Examining the characteristics of the cropland data layer in the context of estimating land cover change.
 \newblock {\em ISPRS Int. J. Geo-Inf.}, 10(5):281.
 
+\bibitem[others, 2020]{rs12010162}
+others (2020).
+\newblock Optimizing feature selection of individual crop types for improved crop mapping.
+\newblock {\em Remote Sensing}, 12(1):162.
+
+\bibitem[others, 2023]{rs15215203}
+others (2023).
+\newblock Feature importance ranking of random forest-based end-to-end learning algorithm.
+\newblock {\em Remote Sensing}, 15(21):5203.
+
 \bibitem[Gao et~al., 2023]{gao2023}
 Gao, M., Lu, T., and Wang, L. (2023).
 \newblock Crop mapping based on sentinel-2 images using semantic segmentation model of attention mechanism.
@@ -64,11 +74,6 @@ Luo, Z. et~al. (2024).
 Maleki, R. et~al. (2024).
 \newblock Refinement of cropland data layer with effective confidence layer interval and image filtering.
 \newblock {\em Agriculture}, 14(8):1285.
-
-\bibitem[Niu et~al., 2021]{niu2021}
-Niu, Z., Zhong, G., and Yu, H. (2021).
-\newblock A review on the attention mechanism of deep learning.
-\newblock {\em Neurocomputing}, 452:48--62.
 
 \bibitem[Phiri et~al., 2020]{phiri2020}
 Phiri, D. et~al. (2020).

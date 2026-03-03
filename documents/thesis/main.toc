@@ -8,58 +8,65 @@
 \contentsline {section}{\numberline {1.6}Rencana Kegiatan}{11}{section.1.6}%
 \contentsline {section}{\numberline {1.7}Jadwal Kegiatan}{12}{section.1.7}%
 \contentsline {chapter}{\numberline {2}KAJIAN PUSTAKA}{14}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Pemetaan Tanaman Pertanian}{14}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Semantic Segmentation}{14}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}DeepLabV3+}{15}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}SegFormer}{15}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.2.3}Attention Mechanism}{15}{subsection.2.2.3}%
-\contentsline {section}{\numberline {2.3}Citra Sentinel-2 dan Cropland Data Layer (CDL)}{16}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Citra Spektral Sentinel-2}{16}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Pendekatan Multi-Temporal}{16}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Crop Data Layer (CDL)}{17}{subsection.2.3.3}%
-\contentsline {section}{\numberline {2.4}Penelitian Terkait}{17}{section.2.4}%
-\contentsline {chapter}{\numberline {3}METODOLOGI DAN DESAIN SISTEM}{19}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Area Studi Sacramento Valley}{19}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Pengumpulan Data}{19}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Eksplorasi Data}{20}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Visualisasi Citra}{20}{subsection.3.3.1}%
-\contentsline {subsubsection}{Citra True Color (RGB)}{21}{subsubsection*.12}%
-\contentsline {subsubsection}{Komposit Band Spektral}{21}{subsubsection*.14}%
-\contentsline {subsubsection}{Perubahan Indeks Vegetasi Temporal}{23}{subsubsection*.16}%
-\contentsline {subsubsection}{Profil Spektral per Band}{23}{subsubsection*.18}%
-\contentsline {subsubsection}{Kualitas Data dan Cakupan Valid}{24}{subsubsection*.20}%
-\contentsline {subsection}{\numberline {3.3.2}Statistik Deskriptif}{25}{subsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.3.3}Data Label CDL}{25}{subsection.3.3.3}%
-\contentsline {subsubsection}{Distribusi Kelas CDL di Area Studi}{25}{subsubsection*.23}%
-\contentsline {subsubsection}{Seleksi Kelas Optimal untuk Pelatihan Model}{29}{subsubsection*.27}%
-\contentsline {section}{\numberline {3.4}Data Preprocessing}{31}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Cloud Masking dan Shadow Masking}{31}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Citra Komposit Temporal}{31}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}Reprojeksi dan Resampling CDL}{31}{subsection.3.4.3}%
-\contentsline {subsection}{\numberline {3.4.4}Penanganan Nilai NoData}{31}{subsection.3.4.4}%
-\contentsline {subsection}{\numberline {3.4.5}Label Filtering}{32}{subsection.3.4.5}%
-\contentsline {subsection}{\numberline {3.4.6}Patching dan Normalisasi Citra}{32}{subsection.3.4.6}%
-\contentsline {subsection}{\numberline {3.4.7}Seleksi Band Spektral--Temporal}{32}{subsection.3.4.7}%
-\contentsline {subsubsection}{Tahap 1 — Filter Preselection}{32}{subsubsection*.30}%
-\contentsline {subsubsection}{Tahap 2 — CNN Forward Selection}{33}{subsubsection*.31}%
-\contentsline {subsubsection}{Tahap 3 — Validasi Model Penuh}{34}{subsubsection*.32}%
-\contentsline {section}{\numberline {3.5}Pelatihan Model}{35}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Arsitektur Model}{35}{subsection.3.5.1}%
-\contentsline {subsubsection}{DeepLabV3+ dengan CBAM}{35}{subsubsection*.33}%
-\contentsline {subsubsection}{SegFormer}{36}{subsubsection*.34}%
-\contentsline {subsection}{\numberline {3.5.2}Fungsi \textit {Loss} dan Penanganan Ketidakseimbangan Kelas}{36}{subsection.3.5.2}%
-\contentsline {subsection}{\numberline {3.5.3}Skenario Eksperimen}{36}{subsection.3.5.3}%
-\contentsline {subsection}{\numberline {3.5.4}Konfigurasi \textit {Hyperparameter}}{37}{subsection.3.5.4}%
-\contentsline {section}{\numberline {3.6}Evaluasi}{38}{section.3.6}%
-\contentsline {subsection}{\numberline {3.6.1}Metrik Segmentasi}{38}{subsection.3.6.1}%
-\contentsline {subsection}{\numberline {3.6.2}Analisis Efisiensi Komputasi}{38}{subsection.3.6.2}%
-\contentsline {subsection}{\numberline {3.6.3}Analisis Error}{39}{subsection.3.6.3}%
-\contentsline {chapter}{\numberline {4}HASIL DAN PEMBAHASAN}{40}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Hasil Eksperimen}{40}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Analisis Hasil}{40}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Perbandingan Performa Model}{40}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Pengaruh Data Multi-Temporal}{40}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Analisis Kesalahan}{40}{subsection.4.2.3}%
-\contentsline {chapter}{\numberline {5}KESIMPULAN DAN SARAN}{41}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Kesimpulan}{41}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Saran}{41}{section.5.2}%
+\contentsline {section}{\numberline {2.1}Pemetaan Tanaman Pertanian dengan Penginderaan Jauh}{14}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Citra Sentinel-2 Multi-Temporal}{15}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Karakteristik Spektral Sentinel-2}{15}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Pendekatan Multi-Temporal untuk Klasifikasi Tanaman}{15}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Cropland Data Layer (CDL)}{16}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Seleksi Fitur Spektral-Temporal}{16}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Tantangan Dimensionalitas Data Multi-Temporal}{16}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Metode Filter Berbasis Statistik}{17}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Metode Wrapper Berbasis Model}{18}{subsection.2.3.3}%
+\contentsline {section}{\numberline {2.4}Semantic Segmentation untuk Pemetaan Pertanian}{18}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}DeepLabV3+}{18}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}SegFormer}{19}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Convolutional Block Attention Module (CBAM)}{20}{subsection.2.4.3}%
+\contentsline {section}{\numberline {2.5}Penelitian Terkait}{20}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Seleksi Fitur untuk Klasifikasi Tanaman Multi-Temporal}{20}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Semantic Segmentation untuk Pemetaan Tanaman}{21}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}Kesenjangan Penelitian}{21}{subsection.2.5.3}%
+\contentsline {chapter}{\numberline {3}METODOLOGI DAN DESAIN SISTEM}{24}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Area Studi Sacramento Valley}{24}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Pengumpulan Data}{24}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Eksplorasi Data}{25}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Visualisasi Citra}{25}{subsection.3.3.1}%
+\contentsline {subsubsection}{Citra True Color (RGB)}{26}{subsubsection*.12}%
+\contentsline {subsubsection}{Komposit Band Spektral}{26}{subsubsection*.14}%
+\contentsline {subsubsection}{Perubahan Indeks Vegetasi Temporal}{28}{subsubsection*.16}%
+\contentsline {subsubsection}{Profil Spektral per Band}{28}{subsubsection*.18}%
+\contentsline {subsubsection}{Kualitas Data dan Cakupan Valid}{29}{subsubsection*.20}%
+\contentsline {subsection}{\numberline {3.3.2}Statistik Deskriptif}{30}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Data Label CDL}{30}{subsection.3.3.3}%
+\contentsline {subsubsection}{Distribusi Kelas CDL di Area Studi}{30}{subsubsection*.23}%
+\contentsline {subsubsection}{Seleksi Kelas Optimal untuk Pelatihan Model}{34}{subsubsection*.27}%
+\contentsline {section}{\numberline {3.4}Data Preprocessing}{36}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Cloud Masking dan Shadow Masking}{36}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Citra Komposit Temporal}{36}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Reprojeksi dan Resampling CDL}{36}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.4}Penanganan Nilai NoData}{36}{subsection.3.4.4}%
+\contentsline {subsection}{\numberline {3.4.5}Label Filtering}{37}{subsection.3.4.5}%
+\contentsline {subsection}{\numberline {3.4.6}Patching dan Normalisasi Citra}{37}{subsection.3.4.6}%
+\contentsline {subsection}{\numberline {3.4.7}Seleksi Band Spektral--Temporal}{37}{subsection.3.4.7}%
+\contentsline {subsubsection}{Tahap 1 — Filter Preselection}{37}{subsubsection*.30}%
+\contentsline {subsubsection}{Tahap 2 — CNN Forward Selection}{38}{subsubsection*.31}%
+\contentsline {subsubsection}{Tahap 3 — Validasi Model Penuh}{39}{subsubsection*.32}%
+\contentsline {section}{\numberline {3.5}Pelatihan Model}{40}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Arsitektur Model}{40}{subsection.3.5.1}%
+\contentsline {subsubsection}{DeepLabV3+ dengan CBAM}{40}{subsubsection*.33}%
+\contentsline {subsubsection}{SegFormer}{41}{subsubsection*.34}%
+\contentsline {subsection}{\numberline {3.5.2}Fungsi \textit {Loss} dan Penanganan Ketidakseimbangan Kelas}{41}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Skenario Eksperimen}{41}{subsection.3.5.3}%
+\contentsline {subsection}{\numberline {3.5.4}Konfigurasi \textit {Hyperparameter}}{42}{subsection.3.5.4}%
+\contentsline {section}{\numberline {3.6}Evaluasi}{43}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Metrik Segmentasi}{43}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Analisis Efisiensi Komputasi}{43}{subsection.3.6.2}%
+\contentsline {subsection}{\numberline {3.6.3}Analisis Error}{44}{subsection.3.6.3}%
+\contentsline {chapter}{\numberline {4}HASIL DAN PEMBAHASAN}{45}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Hasil Eksperimen}{45}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Analisis Hasil}{45}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Perbandingan Performa Model}{45}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Pengaruh Data Multi-Temporal}{45}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Analisis Kesalahan}{45}{subsection.4.2.3}%
+\contentsline {chapter}{\numberline {5}KESIMPULAN DAN SARAN}{46}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Kesimpulan}{46}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Saran}{46}{section.5.2}%

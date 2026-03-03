@@ -1,23 +1,111 @@
-\section{Pemetaan Tanaman Pertanian}
-Pemetaan tanaman pertanian adalah proses mengidentifikasi dan memetakan sebaran lahan pertanian dengan berbagai jenis komoditas, seperti padi, jagung, dan kedelai hingga varietas dan intensitas tanam \citep{alamimachichi2023}. 
-Tujuan pemetaan ini adalah untuk menyediakan informasi spasial dalam perencaan produksi, estimasi hasil, maupun kebijakan pengelolaan lahan. 
-Pemetaan dapat berbentuk klasifikasi banyak jenis tanaman, pemetaan varietas spesifik, pemetaan biner \textit{cropland} dan \textit{non-cropland}, atau analisis khusus seperti fase pertumbuhan \citep{alamimachichi2023}. 
+\section{Pemetaan Tanaman Pertanian dengan Penginderaan Jauh}
+Pemetaan tanaman pertanian adalah proses mengidentifikasi dan memetakan sebaran jenis komoditas di lahan pertanian menggunakan data spasial, mencakup berbagai bentuk seperti klasifikasi multi-kelas, pemetaan biner \textit{cropland/non-cropland}, hingga analisis fase pertumbuhan \citep{alamimachichi2023}.
+Informasi spasial yang akurat mengenai distribusi jenis tanaman sangat dibutuhkan untuk estimasi hasil panen, pengelolaan irigasi, dan perencanaan distribusi komoditas \citep{gao2023}.
 
-Selama dua dekade terakhir, riset tentang pemetaan tanaman dengan penginderaan jauh berbasis citra satelit semakin meningkat \citep{weiss2020}. 
-Beragam model \textit{supervised machine learning} seperti Random Forest, SVM, hingga \textit{neural network} menunjukkan kinerja yang tinggi dalam mengidentifikasi komoditas pada citra resolusi tinggi \citep{zhao2020}. 
-Kemunculan metode ini membuat proses pembuatan peta lahan lebih cepat dan efisien dibanding metode lapangan konvensional \citep{alamimachichi2023}. 
+Selama dua dekade terakhir, pemetaan tanaman berbasis citra satelit mengalami kemajuan pesat seiring berkembangnya metode \textit{supervised machine learning} \citep{weiss2020}.
+Model seperti \textit{Random Forest} (RF), \textit{Support Vector Machine} (SVM), hingga \textit{deep neural network} menunjukkan akurasi yang kompetitif untuk klasifikasi lahan pertanian \citep{zhao2020}.
+Penggunaan citra satelit resolusi tinggi dan metode otomatis telah menjadikan pemetaan tanaman jauh lebih efisien dibandingkan survei lapangan konvensional \citep{alamimachichi2023}.
 
-\section{Semantic Segmentation}
-\textit{Semantic segmentation} adalah teknik dalam pemrosesan citra yang mengelompokkan piksel pada gambar ke dalam kelas tertentu yang bermakna secara semantik. 
-Setiap piksel dalam gambar dibeli label yang menunjukkan kategori tertentu yang menghasilkan peta segmentasi yang detail \citep{luo2024}. 
-Dalam penginderaan jauh untuk pertanian presisi, \textit{semantic segmentation} digunakan untuk pemetaan tanaman pertanian, klasifikasi, dan pemantauan lahan \citep{ajibola2024}. 
-Terdapat metode \textit{semantic segmentation} tradisional sebelum \textit{neural network} diciptakan, yaitu metode \textit{threshold}, \textit{clustering}, \textit{wavelet transform}, dan \textit{random forest} \citep{luo2024}, setelah itu muncul metode-metode berbasis \textit{deep learning} seperti DeepLabV3+, dan SegFormer.
+Salah satu tantangan utama dalam pemetaan tanaman adalah \textbf{kemiripan spektral antar kelas tanaman} pada tanggal akuisisi tertentu, di mana jenis tanaman yang berbeda dapat memiliki nilai reflektansi serupa pada satu waktu pengamatan.
+Tantangan ini mendorong pemanfaatan data \textit{multi-temporal} yang menangkap dinamika fenologi tanaman sepanjang musim tanam.
+Namun, pendekatan \textit{multi-temporal} memunculkan tantangan baru berupa \textbf{dimensionalitas tinggi}: jumlah fitur yang tersedia meningkat secara linier seiring bertambahnya jumlah tanggal akuisisi dan band spektral, sehingga diperlukan metode seleksi fitur yang efektif untuk mengidentifikasi kombinasi band-tanggal yang paling diskriminatif.
 
+\section{Citra Sentinel-2 Multi-Temporal}
+\subsection{Karakteristik Spektral Sentinel-2}
+Sentinel-2 adalah misi satelit penginderaan jauh dari program Copernicus (ESA) yang menyediakan citra multispektral dengan resolusi spasial 10--20 meter dan resolusi temporal 5 hari \citep{phiri2020}.
+Satelit ini dilengkapi dengan 13 band spektral yang mencakup rentang panjang gelombang dari \textit{visible} hingga \textit{short-wave infrared} (SWIR), memungkinkan karakterisasi detail vegetasi dan kondisi lahan.
+Tabel~\ref{tab:band_sentinel} merangkum band spektral yang digunakan dalam penelitian ini beserta fungsi utamanya untuk analisis vegetasi.
+
+\begin{table}[H]
+    \centering
+    \caption{Band Spektral Sentinel-2 yang Digunakan dalam Penelitian}
+    \label{tab:band_sentinel}
+    \begin{tabular}{|c|l|c|c|l|}
+    \hline
+    \textbf{Band} & \textbf{Nama} & \textbf{$\lambda$ (nm)} & \textbf{Res. (m)} & \textbf{Fungsi Utama} \\ \hline
+    B2 & Blue & 490 & 10 & Deteksi air, koreksi atmosferik \\ \hline
+    B3 & Green & 560 & 10 & Kesehatan vegetasi, reflektansi daun \\ \hline
+    B4 & Red & 665 & 10 & Deteksi klorofil; dasar NDVI \\ \hline
+    B5 & Red Edge 1 & 705 & 20 & Stres tanaman awal, pertumbuhan \\ \hline
+    B6 & Red Edge 2 & 740 & 20 & Klorofil tinggi, pemantauan kanopi \\ \hline
+    B7 & Red Edge 3 & 783 & 20 & Vegetasi padat, diskriminasi jenis \\ \hline
+    B8 & NIR & 842 & 10 & Biomassa, struktur vegetasi, NDVI \\ \hline
+    B11 & SWIR 1 & 1610 & 20 & Kelembaban tanah, stres air \\ \hline
+    B12 & SWIR 2 & 2190 & 20 & Kandungan air tanaman, klasifikasi \\ \hline
+    \end{tabular}
+\end{table}
+
+Band \textit{Red Edge} (B5--B7) dan NIR (B8) sangat sensitif terhadap kandungan klorofil dan struktur kanopi, menjadikannya sangat relevan untuk diskriminasi jenis tanaman \citep{yi2020}.
+Sementara itu, band SWIR (B11, B12) memberikan informasi tentang kandungan air pada vegetasi dan tanah yang berguna untuk membedakan kondisi lahan bera, irigasi, dan tanaman aktif.
+
+\subsection{Pendekatan Multi-Temporal untuk Klasifikasi Tanaman}
+Pendekatan \textit{multi-temporal} memanfaatkan serangkaian citra yang diambil secara berkala untuk menangkap dinamika spektral tanaman sepanjang siklus pertumbuhannya.
+Setiap jenis tanaman memiliki trajektori fenologi yang unik — pola perubahan nilai reflektansi dari tahap vegetatif, berbunga, hingga panen — yang menjadi sinyal diskriminatif antar kelas \citep{li2023agri}.
+Dengan menggabungkan informasi dari beberapa tanggal akuisisi, model dapat memanfaatkan perbedaan fenologi ini untuk klasifikasi yang lebih akurat dibandingkan citra tunggal.
+
+Yi et al. (2020) menunjukkan bahwa kombinasi fitur spektral dan temporal dari citra Sentinel-2 pada model RF menghasilkan OA sebesar 94\% untuk klasifikasi tanaman di Shiyang, China — melampaui kinerja citra tunggal secara signifikan \citep{yi2020}.
+Li et al. (2023) mengonfirmasi bahwa penggabungan informasi temporal pada model \textit{deep learning} (DeepLabV3+, SegFormer) meningkatkan akurasi segmentasi multi-kelas di Hetao, China \citep{li2023}.
+
+Namun, pendekatan \textit{multi-temporal} menghadirkan tantangan dimensionalitas: dengan 9 band spektral dan interval 15 hari selama satu tahun penuh, ruang fitur yang tersedia mencapai $25 \times 9 = 225$ dimensi per tahun, atau $75 \times 9 = 675$ dimensi untuk tiga tahun data.
+Tidak semua band-tanggal dalam ruang fitur ini berkontribusi setara terhadap akurasi segmentasi; banyak di antaranya mengandung informasi yang redundan atau tidak relevan.
+Tanpa seleksi fitur, penggunaan seluruh dimensi meningkatkan kompleksitas komputasi dan risiko \textit{overfitting} tanpa jaminan peningkatan akurasi.
+
+\subsection{Cropland Data Layer (CDL)}
+Cropland Data Layer (CDL) adalah produk klasifikasi tutupan lahan yang dikembangkan oleh USDA NASS untuk pemetaan lahan pertanian Amerika Serikat.
+Dataset ini mencakup hingga 134 kelas tutupan lahan dengan resolusi spasial 30 meter dan diperbarui setiap tahun \citep{copenhaver2021}.
+Dalam penelitian pemetaan tanaman berbasis \textit{deep learning}, CDL berperan sebagai \textit{ground truth} label untuk pelatihan dan evaluasi model \citep{tran2022, maleki2024}.
+Resolusi 30 meter CDL perlu diresampling ke resolusi citra Sentinel-2 ($\approx$10 meter) menggunakan \textit{nearest-neighbor interpolation} untuk mempertahankan integritas label kategoris.
+
+\section{Seleksi Fitur Spektral-Temporal}
+\subsection{Tantangan Dimensionalitas Data Multi-Temporal}
+Data \textit{multi-temporal} Sentinel-2 menghasilkan ruang fitur berdimensi tinggi yang mengandung redundansi spektral dan temporal.
+Redundansi spektral terjadi ketika band-band yang berdekatan (misalnya B5, B6, B7) memiliki korelasi tinggi dan memberikan informasi yang tumpang tindih.
+Redundansi temporal terjadi ketika citra dari tanggal yang berdekatan menangkap kondisi vegetasi yang hampir identik, terutama selama periode pertumbuhan yang lambat.
+
+Seleksi fitur pada data \textit{multi-temporal} bertujuan mengidentifikasi subset band-tanggal yang paling diskriminatif untuk tugas klasifikasi, sehingga mengurangi redundansi tanpa mengorbankan akurasi \citep{rs12010162}.
+Metode seleksi fitur umumnya dikategorikan menjadi dua pendekatan: \textbf{metode filter} yang mengevaluasi fitur secara independen dari model, dan \textbf{metode \textit{wrapper}} yang menggunakan model sebagai evaluator kualitas subset fitur.
+
+\subsection{Metode Filter Berbasis Statistik}
+Metode filter mengevaluasi setiap fitur berdasarkan ukuran statistik separabilitas kelas atau kepentingan fitur, tanpa melibatkan model klasifikasi secara langsung.
+
+\textbf{Global Separation Index (GSI)} adalah metrik separabilitas yang mengukur seberapa baik suatu fitur (band-tanggal) dapat memisahkan distribusi antar kelas \citep{rs12010162}.
+GSI dihitung sebagai rata-rata indeks separabilitas atas seluruh pasangan kelas, di mana separabilitas setiap pasangan diukur berdasarkan jarak antar rata-rata relatif terhadap penyebaran distribusi.
+Fitur dengan GSI tinggi berarti memiliki separabilitas antar kelas yang baik secara rata-rata di seluruh kelas target.
+Yi et al. (2020) menggunakan GSI untuk memilih kombinasi band-tanggal optimal dari citra Sentinel-2 untuk klasifikasi tiga jenis tanaman (padi, jagung, kedelai) dan menunjukkan bahwa subset fitur berbasis GSI mampu mempertahankan akurasi setara dengan seluruh fitur \citep{rs12010162}.
+
+\textbf{Random Forest Feature Importance} merupakan metrik kepentingan fitur yang diperoleh dari model RF berdasarkan penurunan rata-rata \textit{impurity} (Gini atau entropi) akibat pemisahan pada setiap fitur \citep{yi2020}.
+Keunggulan RF adalah kemampuannya menangkap interaksi non-linear antar fitur yang tidak tertangkap oleh metrik statistik univariat seperti GSI.
+Namun, kepentingan fitur RF bersifat agregat terhadap seluruh kelas dan tidak mempertimbangkan konteks spasial dalam segmentasi.
+
+Li et al. (2023) mengombinasikan GSI untuk seleksi tanggal kunci dan \textit{Feature Recursive Elimination} (FRE) berbasis RF untuk seleksi band, kemudian melatih model DeepLabV3+ dan SegFormer pada subset terpilih \citep{li2023hetao}.
+Pendekatan dua-tahap ini menunjukkan bahwa seleksi tanggal berbasis GSI dapat mereduksi jumlah citra input secara signifikan tanpa penurunan akurasi segmentasi yang berarti.
+
+\textbf{Keterbatasan metode filter}: Meskipun komputasional efisien, metode filter memiliki kelemahan mendasar — seleksi dilakukan secara \textbf{terpisah} dari model segmentasi akhir.
+Fitur yang dinilai baik berdasarkan GSI atau RF importance (kriteria berbasis distribusi piksel atau akurasi klasifikasi) belum tentu optimal untuk tugas segmentasi semantik yang mempertimbangkan konteks spasial dan dioptimalkan terhadap mIoU.
+
+\subsection{Metode Wrapper Berbasis Model}
+Metode \textit{wrapper} menggunakan model sebagai \textit{oracle} evaluasi kualitas subset fitur, sehingga proses seleksi secara langsung dioptimalkan terhadap metrik tugas akhir.
+
+\textbf{Sequential Forward Selection} (SFS) adalah algoritma \textit{wrapper} yang membangun subset fitur secara inkremental dengan menambahkan fitur terbaik satu per satu berdasarkan peningkatan kinerja model \citep{rs15215203}.
+Pada setiap langkah, semua fitur yang belum dipilih dievaluasi satu per satu dengan melatih model menggunakan subset yang ada ditambah kandidat fitur baru; fitur yang memberikan peningkatan tertinggi ditambahkan ke dalam subset.
+Proses ini diulang hingga tidak ada peningkatan signifikan yang dapat diperoleh.
+
+Keunggulan SFS dibandingkan metode filter adalah kemampuannya mempertimbangkan \textbf{interaksi antar fitur} secara implisit — fitur yang secara individual tidak menonjol namun saling melengkapi dalam kombinasi dapat terdeteksi oleh SFS namun tidak oleh metode filter.
+Tantangan utama SFS adalah biaya komputasi yang tinggi: SFS murni membutuhkan evaluasi $O(N^2)$ model untuk $N$ fitur karena pada setiap langkah semua sisa fitur dievaluasi secara menyeluruh.
+
+Untuk mengatasi biaya komputasi SFS murni, SFS dapat digabungkan dengan pra-pemeringkatan dari metode filter: fitur ditambahkan dalam \textbf{urutan yang sudah ditentukan} oleh metode filter, sehingga SFS hanya perlu mengevaluasi $O(N)$ subset secara berurutan.
+Pendekatan hibrida ini menggabungkan efisiensi metode filter (sebagai pra-pemeringkat) dengan keunggulan metode \textit{wrapper} (evaluasi berbasis kinerja model segmentasi).
+
+\section{Semantic Segmentation untuk Pemetaan Pertanian}
 \subsection{DeepLabV3+}
-DeepLabV3+ merupakan model segmentasi berbasis CNN yang diperkenalkan oleh Chen et al. (2018). 
-Arsitektur DeepLabV3+ menambahkan modul Atrous Spatial Pyramid Pooling (ASPP) yang menggunakan konvolusi atrous (dilated) dengan skala berbeda untuk menangkap konteks dari berbagai ukuran objek tanpa kehilangan resolusi. 
-Model ini juga dilengkapi dengan modul decoder untuk mengembalikan detail spasial yang hilang dalam proses ekstraksi fitur, sehingga hasil segmentasi piksel lebih halus dan akurat \citep{chen2018}. 
-Model DeepLabV3+ telah digunakan dalam beberapa penelitian pemetaan lahan pertanian dengan metode \textit{semantic segmentation} \citep{chang2023, li2023, cheng2023}. 
+DeepLabV3+ adalah arsitektur \textit{semantic segmentation} berbasis CNN yang diperkenalkan oleh Chen et al. (2018) \citep{chen2018}.
+Komponen utama DeepLabV3+ meliputi:
+\begin{itemize}
+    \item \textbf{Encoder (Backbone)}: jaringan konvolusional dalam (ResNet, Xception) yang mengekstrak representasi fitur hierarkis dari citra input.
+    \item \textbf{Atrous Spatial Pyramid Pooling (ASPP)}: modul yang menerapkan konvolusi \textit{atrous} (dilated) dengan beberapa laju dilatasi secara paralel untuk menangkap konteks multi-skala tanpa mengurangi resolusi spasial.
+    \item \textbf{Decoder}: modul yang menggabungkan fitur \textit{high-level} dari ASPP dengan fitur \textit{low-level} dari encoder melalui \textit{upsampling} untuk menghasilkan peta segmentasi beresolusi penuh.
+\end{itemize}
+DeepLabV3+ telah diterapkan secara luas dalam pemetaan lahan pertanian dan menunjukkan kinerja yang kompetitif \citep{chang2023, li2023, cheng2023}.
 
 \begin{figure}[H]
     \centering
@@ -27,87 +115,87 @@ Model DeepLabV3+ telah digunakan dalam beberapa penelitian pemetaan lahan pertan
 \end{figure}
 
 \subsection{SegFormer}
-SegFormer adalah model segmentasi berbasis transformer yang mengombinasikan kemampuan menangkap konteks global melalui mekanisme \textit{self-attention} dengan desain yang efisien dan sederhana. 
-Berbeda dari arsitektur vision Transformer lain, SegFormer menggunakan encoder Transformer bertingkat (hierarchical) tanpa komponen \textit{positional encoding}, sehingga dapat menerima input citra berukuran arbitrer dan tetap efektif. 
-Decoder SegFormer sangat ringan karena berbasis MLP (\textit{multi-layer perceptron}) yang mengambil fitur multi-level dari encoder untuk menghasilkan peta segmentasi akhir. 
-Beberapa studi pemetaan pertanian telah memanfaatkan SegFormer sebagai metode \textit{semantic segmentation} yang andal dalam mengklasifikasikan kelas tanaman \citep{li2023, wu2025}. 
+SegFormer adalah arsitektur \textit{semantic segmentation} berbasis \textit{Vision Transformer} yang diperkenalkan oleh Xie et al. (2021) \citep{xie2021}.
+Berbeda dari arsitektur Transformer konvensional, SegFormer menggunakan \textit{Mix Transformer} (MiT) sebagai encoder hierarkis tanpa \textit{positional encoding} tetap, sehingga dapat memproses citra berukuran arbitrer.
+Setiap tahap encoder menerapkan \textit{Efficient Self-Attention} dengan pengurangan sekuens (\textit{sequence reduction}) untuk menjaga efisiensi komputasi sambil mempertahankan kemampuan tangkap konteks global.
+Decoder SegFormer menggunakan \textit{All-MLP} yang ringan untuk menggabungkan fitur dari keempat tahap encoder, menghasilkan peta segmentasi akhir.
+
+Keunggulan \textit{self-attention} pada SegFormer adalah kemampuannya menangkap hubungan jarak jauh antar piksel yang tidak dapat dijangkau oleh konvolusi lokal pada CNN.
+Dalam konteks pemetaan pertanian \textit{multi-temporal}, kemampuan ini berpotensi menangkap pola fenologi yang bersifat global di seluruh area lahan \citep{li2023, wu2025}.
 
 \begin{figure}[H]
     \centering
     %\includegraphics[width=0.8\textwidth]{images/segformer_arch.png}
-    \caption{Arsitektur SegFormer.}
+    \caption{Arsitektur SegFormer \citep{xie2021}.}
     \label{fig:segformer}
 \end{figure}
 
-\subsection{Attention Mechanism}
-\textit{Attention mechanism} adalah komponen dalam \textit{deep learning} yang dirancang untuk meningkatkan fokus model terhadap fitur-fitur penting dalam input data. 
-Dalam konteks \textit{semantic segmentation} pada citra satelit, \textit{attention mechanism} memungkinkan model untuk memberikan bobot lebih besar pada area gambar yang relevan, seperti pola spektral khas dari tanaman tertentu, dan mengabaikan area yang kurang informatif seperti awan atau latar belakang \citep{niu2021}. 
+\subsection{Convolutional Block Attention Module (CBAM)}
+\textit{Convolutional Block Attention Module} (CBAM) adalah mekanisme \textit{attention} yang dapat diintegrasikan ke dalam arsitektur CNN untuk secara selektif menonjolkan fitur yang informatif \citep{woo2018}.
+CBAM terdiri dari dua submodul berurutan:
+\begin{enumerate}
+    \item \textbf{Channel Attention}: menghitung bobot kepentingan per channel menggunakan \textit{global average pooling} dan \textit{global max pooling} yang diproses bersama melalui \textit{shared MLP}, kemudian digabungkan dengan fungsi sigmoid. Submodul ini memungkinkan model memfokuskan perhatian pada band spektral yang paling informatif dan mengabaikan band yang redundan.
+    \item \textbf{Spatial Attention}: menghitung bobot kepentingan per posisi spasial menggunakan konvolusi $7\times7$ atas gabungan channel-wise average dan max. Submodul ini memungkinkan model memfokuskan perhatian pada region spasial yang relevan.
+\end{enumerate}
 
-\section{Citra Sentinel-2 dan Cropland Data Layer (CDL)}
-\subsection{Citra Spektral Sentinel-2}
-Sentinel-2 adalah misi satelit penginderaan jauh dari program Copernicus yang diluncurkan oleh European Space Agency (ESA) yang bertujuan untuk menyediakan data resolusi tinggi untuk pemantauan tutupan dan penggunaan lahan, perubahan iklim, dan bencana alam. 
-Satelit ini dilengkapi dengan sensor multispektral untuk merekam 13 band spektral dengan cakupan luas dan resolusi spasial mencapai 10 hingga 20 meter \citep{phiri2020}. 
-Penjelasan masing-masing band spektral dapat dilihat pada Tabel \ref{tab:band_sentinel}. 
-Citra Sentinel-2 telah digunakan pada beberapa penelitian terkait pemetaan lahan pertanian, Yi et al. (2020) melakukan klasifikasi tanaman pada wilayah Shiyang, Tiongkok dengan memanfaatkan citra Sentinel-2 \citep{yi2020}. 
-Selain itu, Li et al. (2023) juga menggunakan citra Sentinel-2 untuk segmentasi lahan pertanian di Hetao, Tiongkok \citep{li2023}. 
-
-\begin{table}[H]
-    \centering
-    \caption{Informasi Band Spektral Sentinel-2 (Earth Engine Data Catalog)}
-    \label{tab:band_sentinel}
-    \begin{tabular}{|c|l|c|c|l|}
-    \hline
-    \textbf{Band} & \textbf{Nama} & \textbf{Panjang Gelombang (nm)} & \textbf{Res. (m)} & \textbf{Fungsi Umum} \\ \hline
-    B2 & Blue & 490 & 10 & Deteksi air, bayangan, koreksi atmosferik \\ \hline
-    B3 & Green & 560 & 10 & Indikasi kesehatan vegetasi, reflektansi daun \\ \hline
-    B4 & Red & 665 & 10 & Deteksi klorofil; dasar NDVI \\ \hline
-    B5 & Red Edge 1 & 705 & 20 & Deteksi awal stres tanaman, pertumbuhan \\ \hline
-    B6 & Red Edge 2 & 740 & 20 & Klorofil tinggi, pemantauan kanopi \\ \hline
-    B7 & Red Edge 3 & 783 & 20 & Pemetaan vegetasi padat, perbedaan jenis \\ \hline
-    B8 & NIR & 842 & 10 & Struktur vegetasi, biomassa, NDVI \\ \hline
-    B11 & SWIR 1 & 1610 & 20 & Kelembaban tanah, deteksi stres air \\ \hline
-    B12 & SWIR 2 & 2190 & 20 & Kandungan air tanaman, klasifikasi lahan \\ \hline
-    \end{tabular}
-\end{table}
-
-\subsection{Pendekatan Multi-Temporal}
-Pendekatan multi-temporal merupakan strategi umum dalam pengolahan citra satelit untuk menangkap dinamika vegetasi sepanjang waktu. 
-Dalam konteks pemetaan tanaman, pendekatan ini dilakukan dengan memanfaatkan serangkaian citra yang diambil secara berkala, biasanya dalam interval tetap seperti setiap 10 hingga 16 hari. 
-Pola pengambilan ini memungkinkan pemantauan perubahan spektral tanaman pada berbagai fase pertumbuhan, mulai dari tahap vegetatif, berbunga, hingga panen. 
-Dengan demikian, variasi fenologis antar jenis tanaman dapat dikenali lebih akurat dibandingkan dengan penggunaan citra pada satu waktu saja. 
-Pendekatan ini terbukti meningkatkan akurasi klasifikasi karena tanaman berbeda menunjukkan respons spektral yang berbeda pula pada setiap tahap pertumbuhannya \citep{li2023, yi2020, li2023agri}.
-
-\subsection{Crop Data Layer (CDL)}
-Cropland Data Layer (CDL) adalah produk klasifikasi tutupan lahan yang dikembangkan oleh United States Department of Agriculture (USDA) melalui National Agricultural Statistics Service (NASS). 
-Dataset ini ditujukan untuk memetakan area pertanian di Amerika Serikat dengan cakupan hingga 149 kelas tutupan lahan, mencakup berbagai jenis tanaman pertanian utama seperti jagung, gandum, dan padi, serta kategori non-pertanian seperti hutan, perairan, dan permukiman \citep{copenhaver2021}. 
-Saat ini, CDL menyediakan data label dengan resolusi spasial 30 meter \citep{tran2022}. 
-Dalam pemetaan lahan pertanian, CDL berperan penting sebagai sumber referensi atau \textit{ground truth} untuk pelatihan dan evaluasi model klasifikasi berbasis citra penginderaan jauh \citep{copenhaver2021}. 
+Dalam konteks pemetaan tanaman multi-temporal, \textit{channel attention} CBAM berpotensi secara adaptif menekankan band spektral dan tanggal akuisisi yang paling diskriminatif untuk setiap region, melengkapi seleksi band statis yang dilakukan sebelum pelatihan \citep{hsu2022, gao2023}.
 
 \section{Penelitian Terkait}
-Terdapat beberapa penelitian sebelumnya yang mengkaji tentang penggunaan citra multi-temporal dan multi-spektral sebagai metode untuk pemetaan lahan pertanian. 
-Yi et al. (2020) memanfaatkan citra Sentinel-2 multi-temporal pada musim tanam 2019 dengan area studi di Shiyang, China \citep{yi2020}. 
-Pengujian dilakukan dengan mengkombinasikan fitur spektral dan temporal pada model Random Forest, yang menunjukkan peningkatan signifikan pada akurasi klasifikasi dengan OA mencapai 0,94. 
-Berdasarkan temuan Li et al. (2023), kombinasi informasi temporal saja tidak cukup untuk mencapai akurasi tinggi, karena cenderung menghasilkan noise yang memengaruhi klasifikasi berbasis piksel. 
-Penambahan fitur spektral terbukti berkontribusi positif pada performa klasifikasi model \textit{deep learning} \citep{li2023agri}. 
 
-Gao et al. (2023) memperkenalkan A2SegNet, model \textit{semantic segmentation} dengan \textit{attention mechanism} untuk memetakan jagung dan kedelai dari citra Sentinel-2. 
-Model ini mampu mengekstraksi fitur spasial-spektral tanaman dan unggul dibanding model baseline SegNet \citep{gao2023}. 
-Model segmentasi lain juga mulai digunakan, seperti DeepLabV3+ dan SegFormer pada penelitian yang dilakukan oleh Li (2023), akurasi segmentasi dari DeepLabV3+ dan SegFormer terbukti baik mencapai 88,28\% \citep{li2023}. 
+\subsection{Seleksi Fitur untuk Klasifikasi Tanaman Multi-Temporal}
+Yi et al. (2020) mengusulkan metode \textit{Automatic Spectro-Temporal Feature Selection} (ASTFS) yang menggabungkan GSI dengan penghapusan fitur redundan secara berurutan untuk klasifikasi tiga jenis tanaman (padi, jagung, kedelai) dari citra Sentinel-2 \citep{rs12010162}.
+Seleksi dilakukan secara \textbf{per kelas} — setiap jenis tanaman mendapatkan subset band-tanggal yang berbeda — kemudian tiga model RF biner dilatih secara terpisah dan hasilnya digabungkan melalui komposisi probabilitas.
+Pendekatan ini menunjukkan bahwa subset fitur berbasis GSI dapat mempertahankan OA 93,94\% setara dengan seluruh fitur, sambil mengurangi jumlah fitur secara signifikan.
+Namun, kerangka per-kelas ini tidak dapat diterapkan langsung pada \textit{semantic segmentation} yang membutuhkan satu set fitur tunggal untuk seluruh kelas.
 
-Penelitian mengenai pemetaan tanaman pertanian menggunakan penginderaan jauh dengan metode \textit{semantic segmentation} sudah beberapa kali dilakukan. 
-Namun, eksplorasi mengenai kombinasi optimal band spektral belum banyak dilakukan. 
-Rincian lebih lanjut terkait kelebihan dan kekurangan penelitian terkait dapat dilihat pada Tabel \ref{tab:penelitian_terkait}.
+Yi et al. (2020) juga menganalisis pentingnya pemilihan tanggal akuisisi berdasarkan fase pertumbuhan tanaman menggunakan RF \textit{feature importance} \citep{yi2020}.
+Hasil menunjukkan bahwa citra pada periode pertengahan musim tanam memiliki kontribusi terbesar terhadap akurasi klasifikasi, mengonfirmasi bahwa tidak semua tanggal berkontribusi setara dalam data \textit{multi-temporal}.
+
+Li et al. (2023) mengusulkan pipeline seleksi dua-tahap untuk pemetaan tanaman dengan \textit{semantic segmentation} di Hetao, China: (1) seleksi tanggal kunci menggunakan GSI dan (2) seleksi band menggunakan \textit{Feature Recursive Elimination} (FRE) berbasis RF \citep{li2023hetao}.
+Pipeline ini diterapkan sebelum melatih DeepLabV3+, U-Net++, dan SegFormer, dan menunjukkan bahwa kombinasi GSI + FRE menghasilkan akurasi segmentasi yang kompetitif dengan subset fitur yang lebih kecil.
+Keterbatasan pendekatan ini adalah seleksi dilakukan menggunakan kriteria berbasis RF (akurasi klasifikasi piksel) yang tidak identik dengan metrik segmentasi (mIoU), sehingga subset yang dipilih belum tentu optimal untuk tugas segmentasi.
+
+\subsection{Semantic Segmentation untuk Pemetaan Tanaman}
+Gao et al. (2023) memperkenalkan A2SegNet, model \textit{semantic segmentation} berbasis SegNet dengan CBAM untuk pemetaan jagung dan kedelai dari citra Sentinel-2 \citep{gao2023}.
+Model ini menunjukkan kemampuan ekstraksi fitur spasial-spektral yang adaptif antar tahun dan mengungguli \textit{baseline} SegNet.
+Namun, studi ini terbatas pada dua kelas tanaman dan tidak mengeksplorasi efek penggunaan data \textit{multi-temporal} dengan seleksi band.
+
+Li et al. (2023) membandingkan empat arsitektur segmentasi (U-Net, U-Net++, DeepLabV3+, SegFormer) pada data Sentinel-2 \textit{multi-temporal} untuk pemetaan empat jenis tanaman di Hetao, China \citep{li2023}.
+Studi ini mengonfirmasi keunggulan data \textit{multi-temporal} dibandingkan \textit{single-date}, dengan mIoU tertinggi dicapai oleh U-Net pada konfigurasi \textit{multi-temporal}.
+Namun, perbandingan antara \textit{single-date} dan \textit{multi-temporal} dilakukan tanpa seleksi band sistematis, sehingga tidak dapat diketahui berapa banyak peningkatan yang berasal dari informasi temporal dan berapa dari redundansi fitur yang tidak terkontrol.
+
+\subsection{Kesenjangan Penelitian}
+Berdasarkan tinjauan literatur yang telah dilakukan, terdapat beberapa kesenjangan penelitian yang menjadi motivasi penelitian ini:
+
+\begin{enumerate}
+    \item \textbf{Seleksi band terpisah dari model segmentasi}: Penelitian terdahulu \citep{rs12010162, rs15040875} menggunakan metode filter statis (GSI, RF) yang dioptimalkan terhadap metrik klasifikasi piksel, bukan metrik segmentasi (mIoU). Akibatnya, subset band yang dipilih belum tentu optimal untuk tugas \textit{semantic segmentation}.
+
+    \item \textbf{Tidak ada evaluasi terintegrasi single-date vs.\ multi-temporal vs.\ seleksi}: Meskipun beberapa studi \citep{li2023, yi2020} membandingkan fitur spektral dan temporal, tidak ada yang secara sistematis membandingkan ketiga konfigurasi — \textit{single-date}, \textit{multi-temporal} naif, dan \textit{multi-temporal} dengan seleksi band — menggunakan model segmentasi yang sama pada dataset yang sama.
+
+    \item \textbf{Seleksi per kelas tidak kompatibel dengan segmentasi}: Pendekatan seleksi per kelas \citep{rs12010162} efektif untuk klasifikasi biner, tetapi tidak dapat diterapkan pada \textit{semantic segmentation} yang membutuhkan satu set fitur tunggal untuk semua kelas.
+
+    \item \textbf{Biaya komputasi SFS murni}: \textit{Sequential forward selection} (SFS) murni membutuhkan evaluasi $O(N^2)$ model, yang tidak praktis untuk ruang fitur berdimensi ratusan. Tidak ada penelitian sebelumnya yang menggabungkan pra-pemeringkatan statistik dengan SFS berbasis model segmentasi untuk mengatasi keterbatasan ini.
+\end{enumerate}
+
+Penelitian ini mengusulkan pipeline seleksi band tiga tahap yang menjembatani kesenjangan-kesenjangan tersebut: (1) \textbf{filter statistik} (GSI + RF \textit{joint score}) sebagai pra-pemeringkat yang efisien, (2) \textbf{SFS berbasis model segmentasi} (U-Net \textit{oracle}) yang menggunakan mIoU sebagai kriteria seleksi dalam urutan yang ditentukan oleh tahap pertama, sehingga mengurangi kompleksitas dari $O(N^2)$ menjadi $O(N)$, dan (3) \textbf{validasi penuh} dengan dua arsitektur (DeepLabV3+CBAM dan SegFormer) pada tiga konfigurasi input yang dirancang untuk mengukur kontribusi temporal dan efisiensi seleksi secara terpisah.
+
+Rincian perbandingan penelitian terkait dan posisi penelitian ini disajikan pada Tabel~\ref{tab:penelitian_terkait}.
 
 \begin{table}[H]
     \centering
-    \caption{Metode, Kekurangan dan Kelebihan Penelitian Terkait}
+    \caption{Perbandingan Penelitian Terkait}
     \label{tab:penelitian_terkait}
     \footnotesize
-    \begin{tabular}{|p{2cm}|p{4cm}|p{6cm}|}
+    \begin{tabular}{|p{2.2cm}|p{2.8cm}|p{2.8cm}|p{2.8cm}|p{2.2cm}|}
     \hline
-    \textbf{Pustaka} & \textbf{Metode} & \textbf{Kelebihan dan Kekurangan} \\ \hline
-    \citep{gao2023} & Improv. SegNet (A2SegNet) + CBAM. 6 Band S2 + NDVI/EVI & (+) Adaptif tangkap spasial thn berbeda. (-) Lingkup 2 kelas (jagung/kedelai). \\ \hline
-    \citep{li2023} & U-Net, DeepLabV3+, SegFormer. Multi-temporal S2. & (+) Multi-temporal kurangi efek awan. (-) Fokus 4 jenis tanaman. \\ \hline
-    \citep{yi2020} & RF Classifier. Multi-band S2. & (+) Akurasi tinggi (95\% OA). (-) Berbasis patch/pixel, bkn segmentasi. \\ \hline
+    \textbf{Pustaka} & \textbf{Metode Seleksi} & \textbf{Model} & \textbf{Keterbatasan} & \textbf{Metrik} \\ \hline
+    \citep{rs12010162} & GSI + ASTFS per kelas & RF biner & Tidak kompatibel dengan segmentasi & OA, Kappa \\ \hline
+    \citep{li2023hetao} & GSI (tanggal) + FRE berbasis RF (band) & DeepLabV3+, SegFormer & Kriteria seleksi berbasis RF, bukan mIoU & mIoU, OA \\ \hline
+    \citep{yi2020} & RF \textit{importance} per tanggal (ablasi) & RF multi-kelas & Berbasis piksel, bukan segmentasi & OA, F1 \\ \hline
+    \citep{rs15215203} & RF importance + ekspansi fitur & LSTM & Berbasis deret waktu, bukan segmentasi & OA \\ \hline
+    \citep{gao2023} & Tidak ada (6 band + NDVI/EVI) & A2SegNet+CBAM & 2 kelas, tidak ada multi-temporal & mIoU \\ \hline
+    \citep{li2023} & Tidak ada seleksi & U-Net, DeepLabV3+, SegFormer & Tidak ada seleksi band sistematis & mIoU, OA \\ \hline
+    \citep{yi2020} & RF importance + ablasi tanggal & RF & Berbasis piksel, bukan segmentasi & OA \\ \hline
+    \textbf{Penelitian ini} & \textbf{GSI+RF (pra-peringkat) + SFS berbasis mIoU segmentasi} & \textbf{DeepLabV3+CBAM, SegFormer} & --- & \textbf{mIoU, OA, F1} \\ \hline
     \end{tabular}
 \end{table}
