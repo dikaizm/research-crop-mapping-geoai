@@ -3,11 +3,23 @@ Area studi penelitian ini adalah Sacramento Valley dalam daerah Central Valley, 
 Kawasan ini memiliki bentang alam dan jenis tanaman yang sangat beragam karena variasi iklim dan topografinya, juga menjadi salah satu wilayah pertanian paling produktif di Amerika Serikat dengan jenis tanaman pertanian yang beragam. 
 Iklim di wilayah ini termasuk minim hujan di musim panas, sehingga memungkinkan pengamatan spektral tanaman sepanjang musim tanam \citep{yuan2021}. 
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/study_area_map.png}
+    \caption{Peta area studi Sacramento Valley, California. Kotak merah menunjukkan batas area penelitian ($122^{\circ}4'41''$ BB hingga $121^{\circ}34'31''$ BB, $38^{\circ}45'14''$ LU hingga $39^{\circ}10'29''$ LU) dengan luas 2.038,08 km$^2$.}
+    \label{fig:study_area_map}
+\end{figure}
+
 \section{Pengumpulan Data}
 Data pada penelitian ini menggunakan citra satelit Sentinel-2 dan data label tutupan lahan dari Cropland Data Layer (CDL). 
 Data citra diambil dari koleksi Sentinel-2 Surface Reflectance (COPERNICUS/S2\_SR\_HARMONIZED) melalui platform Google Earth Engine (GEE) dengan batas persentase awan kurang dari 10\% pada area studi. 
-Citra dikumpulkan secara multi-temporal sepanjang tahun 2022, 2023, dan 2024 dengan interval pengambilan setiap 15 hari sekali. 
-Periode akuisisi mencakup satu tahun penuh, menghasilkan total 72 citra komposit yang terdiri dari 24 citra pada 2022, 23 citra pada 2023, dan 25 citra pada 2024. 
+Citra dikumpulkan secara multi-temporal sepanjang tahun 2022, 2023, dan 2024 dengan interval komposit setiap 15 hari sekali.
+Pemilihan interval 15 hari didasarkan pada dua pertimbangan.
+Pertama, interval ini cukup rapat untuk menangkap transisi fenologi antar fase pertumbuhan tanaman (vegetatif, berbunga, pematangan, panen) yang umumnya berlangsung dalam skala beberapa minggu \citep{phiri2020}.
+Kedua, interval 15 hari memberikan jendela kompositing yang cukup lebar untuk memperbesar peluang mendapatkan piksel bebas awan dari beberapa lintasan Sentinel-2, mengingat \textit{revisit time} efektif Sentinel-2A+2B di lintang Sacramento Valley (${\approx}38^{\circ}$LU) mencapai 2--5 hari \citep{phiri2020}.
+Griffiths et al. (2019) menunjukkan bahwa komposit 10 hari dari gabungan Sentinel-2 dan Landsat menghasilkan akurasi pemetaan tanaman tertinggi dibandingkan interval bulanan dan musiman, mengonfirmasi bahwa resolusi temporal yang lebih rapat dari satu bulan penting untuk membedakan jenis tanaman \citep{griffiths2019}.
+Interval 15 hari dipilih sebagai kompromi antara resolusi temporal yang memadai dan volume data yang dapat dikelola secara komputasi.
+Periode akuisisi mencakup satu tahun penuh, menghasilkan total 72 citra komposit yang terdiri dari 24 citra pada 2022, 23 citra pada 2023, dan 25 citra pada 2024.
 Terdapat tiga interval citra yang melebihi batas persentase awan, sehingga tidak digunakan sebagai dataset. 
 
 Untuk mendapatkan citra multispektral, dipilih sembilan band (B2, B3, B4, B5, B6, B7, B8, B11, B12) yang relevan terhadap karakteristik vegetasi.
@@ -241,56 +253,54 @@ Dari 72 kelas CDL yang teridentifikasi di area studi, dilakukan seleksi kelas un
     \label{fig:cdl_class_selection}
 \end{figure}
 
-Tabel~\ref{tab:selected_classes} menampilkan 11 kelas yang terpilih beserta justifikasinya.
+Seleksi kelas difokuskan pada \textbf{jenis tanaman aktif} --- yaitu tanaman yang sedang dalam siklus pertumbuhan --- karena tujuan penelitian adalah mengidentifikasi \textit{tipe tanaman} yang ditanam, bukan mengklasifikasikan area pertanian secara umum.
+Oleh karena itu, kelas \textit{Fallow/Idle Cropland} (ID 61) --- yang merupakan lahan pertanian yang tidak ditanami --- dimasukkan ke dalam kelas \textit{background} meskipun cakupan areanya besar (33,8\% dari total cropland).
+Tabel~\ref{tab:selected_classes} menampilkan 10 kelas tanaman aktif yang terpilih.
 
 \begin{table}[htbp]
 \centering
-\caption{Kelas CDL Terpilih untuk Pelatihan Model ($\geq 1\%$ cakupan area studi)}
+\caption{Kelas CDL Terpilih untuk Pelatihan Model (10 tanaman aktif, $\geq 1\%$ cakupan area studi)}
 \label{tab:selected_classes}
 \begin{tabular}{rlrrrr}
 \hline
 \textbf{No.} & \textbf{Kelas} & \textbf{ID} & \textbf{\% Tanaman} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} \\
 \hline
-1  & Fallow/Idle Cropland  & 61  & 33,8\% & 57.742 & 577,42 \\
-2  & Almonds               & 75  & 13,7\% & 23.412 & 234,12 \\
-3  & Walnuts               & 76  & 10,9\% & 18.566 & 185,66 \\
-4  & Tomatoes              & 54  &  8,8\% & 15.104 & 151,04 \\
-5  & Rice                  & 3   &  7,9\% & 13.463 & 134,63 \\
-6  & Winter Wheat          & 24  &  5,6\% &  9.579 &  95,79 \\
-7  & Sunflower             & 6   &  4,2\% &  7.103 &  71,03 \\
-8  & Alfalfa               & 36  &  2,6\% &  4.476 &  44,76 \\
-9  & Plums                 & 220 &  2,6\% &  4.359 &  43,59 \\
-10 & Other Hay/Non Alfalfa & 37  &  1,7\% &  2.922 &  29,22 \\
-11 & Grapes                & 69  &  1,5\% &  2.549 &  25,49 \\
--- & Background (lainnya)  & 0   &    --   &    --  &     -- \\
+1  & Almonds               & 75  & 13,7\% & 23.412 & 234,12 \\
+2  & Walnuts               & 76  & 10,9\% & 18.566 & 185,66 \\
+3  & Tomatoes              & 54  &  8,8\% & 15.104 & 151,04 \\
+4  & Rice                  & 3   &  7,9\% & 13.463 & 134,63 \\
+5  & Winter Wheat          & 24  &  5,6\% &  9.579 &  95,79 \\
+6  & Sunflower             & 6   &  4,2\% &  7.103 &  71,03 \\
+7  & Alfalfa               & 36  &  2,6\% &  4.476 &  44,76 \\
+8  & Plums                 & 220 &  2,6\% &  4.359 &  43,59 \\
+9  & Other Hay/Non Alfalfa & 37  &  1,7\% &  2.922 &  29,22 \\
+10 & Grapes                & 69  &  1,5\% &  2.549 &  25,49 \\
+-- & Background (Fallow/Idle, non-pertanian, lainnya) & 0 & -- & -- & -- \\
 \hline
-\multicolumn{3}{l}{\textbf{Total kelas terpilih}} & \textbf{93,3\%} & \textbf{159.278} & \textbf{1.592,8} \\
+\multicolumn{3}{l}{\textbf{Total kelas terpilih}} & \textbf{59,5\%} & \textbf{101.533} & \textbf{1.015,3} \\
 \hline
 \end{tabular}
 \end{table}
 
-Terdapat tiga justifikasi ilmiah untuk ambang batas $\geq 1\%$ yang digunakan:
+Terdapat tiga justifikasi ilmiah untuk konfigurasi kelas yang digunakan:
 
 \begin{enumerate}
+    \item \textbf{Fokus pada identifikasi tipe tanaman aktif.}
+    Tujuan penelitian adalah menjawab pertanyaan \textit{"jenis tanaman apa yang ditanam?"}, bukan \textit{"di mana letak lahan pertanian?"}.
+    Kelas \textit{Fallow/Idle Cropland} tidak merepresentasikan tipe tanaman melainkan kondisi lahan (tidak ditanami), sehingga dimasukkan ke \textit{background} bersama kelas non-pertanian lainnya.
+    Pendekatan ini konsisten dengan studi pemetaan tanaman yang memfokuskan klasifikasi pada komoditas pertanian aktif \citep{yi2020, li2023}.
+
     \item \textbf{Kecukupan sampel untuk \textit{deep learning}.}
     Kelas dengan cakupan $\geq 1\%$ menempati $\geq 2.038$ ha di area studi.
     Pada ukuran patch $256 \times 256$ piksel dengan resolusi 10 m ($\approx 510$ ha/patch), cakupan tersebut menghasilkan representasi spasial yang memadai dari ratusan petak lahan pertanian yang berbeda, sehingga model dapat mempelajari fitur spektral dan spasial yang dapat digeneralisasi.
     Kelas di bawah 1\% ($<$2.000 ha) umumnya tampil sebagai fragmen poligon yang tersebar dan kecil, sehingga tidak menyediakan keragaman spasial yang cukup untuk pelatihan segmentasi berbasis CNN \citep{alamimachichi2023}.
 
     \item \textbf{Ketidakseimbangan kelas yang dapat ditangani.}
-    Himpunan kelas terpilih menghasilkan rasio ketidakseimbangan maksimum sebesar 22{,}6:1 (Fallow 57.742 ha vs.\ Grapes 2.549 ha).
-    Rasio ini masih dapat ditangani dengan teknik standar seperti \textit{inverse-frequency class weighting} atau \textit{Focal Loss} tanpa menyebabkan ketidakstabilan pelatihan.
-    Memasukkan kelas di bawah 0{,}5\% akan mendorong rasio ini di atas 100:1, yang melampaui kemampuan koreksi teknik pembobotan standar \citep{luo2024}.
-
-    \item \textbf{Relevansi pertanian Sacramento Valley.}
-    Kesebelas kelas yang terpilih merepresentasikan komoditas pertanian dominan Sacramento Valley berdasarkan statistik produksi tahunan USDA NASS \citep{copenhaver2021}:
-    \textit{Almonds} dan \textit{Walnuts} merupakan tanaman pohon utama California yang bersama-sama mencakup 420 km$^2$;
-    \textit{Tomatoes} mencerminkan posisi Sacramento Valley sebagai pusat produksi tomat olahan;
-    \textit{Rice} memiliki tanda spektral yang khas akibat periode penggenangan sawah;
-    dan \textit{Fallow/Idle Cropland} penting untuk pemantauan rotasi tanaman dan intensitas pertanian \citep{maleki2024}.
+    Dengan \textit{Fallow/Idle} dipindahkan ke \textit{background}, rasio ketidakseimbangan kelas maksimum menjadi 9{,}2:1 (Almonds 23.412 ha vs.\ Grapes 2.549 ha) --- jauh lebih baik dari 22{,}6:1 jika \textit{Fallow} dipertahankan sebagai kelas.
+    Rasio 9{,}2:1 dapat ditangani langsung dengan \textit{inverse-frequency class weighting} tanpa teknik tambahan \citep{luo2024}.
 \end{enumerate}
 
-Dua kelas tambahan, yaitu \textit{Safflower} (ID 33, 0{,}92\%) dan \textit{Pistachios} (ID 204, 0{,}78\%), berada di batas ambang dan akan dievaluasi dalam eksperimen lanjutan dengan 13 kelas untuk menilai apakah fenologi khasnya dapat mengompensasi jumlah sampel yang lebih kecil.
+Dua kelas tambahan, yaitu \textit{Safflower} (ID 33, 0{,}92\%) dan \textit{Pistachios} (ID 204, 0{,}78\%), berada di batas ambang dan akan dievaluasi dalam eksperimen lanjutan dengan 12 kelas untuk menilai apakah fenologi khasnya dapat mengompensasi jumlah sampel yang lebih kecil.
 
 \section{Data Preprocessing}
 Tahap \textit{preprocessing} data bertujuan untuk memastikan citra satelit dan data label tutupan lahan memiliki kualitas spasial dan spektral yang konsisten sebelum digunakan untuk pelatihan model.
@@ -316,7 +326,7 @@ Langkah ini memastikan bahwa piksel tidak valid tidak berkontribusi pada perhitu
 
 \subsection{Label Filtering}
 Berdasarkan seleksi kelas yang dijelaskan pada Subbagian~\ref{subsec:class_selection}, diterapkan proses \textit{label filtering} pada data CDL.
-Sebelas kelas tanaman dengan cakupan $\geq 1\%$ (ID: 3, 6, 24, 36, 37, 54, 61, 69, 75, 76, 220) dipertahankan sebagai kelas target, sedangkan seluruh kelas lainnya---termasuk perairan, permukiman, lahan basah, dan kelas tanaman minor---diubah menjadi kelas \textit{background} (nilai 0).
+Sepuluh kelas tanaman aktif dengan cakupan $\geq 1\%$ (ID: 3, 6, 24, 36, 37, 54, 69, 75, 76, 220) dipertahankan sebagai kelas target, sedangkan seluruh kelas lainnya---termasuk \textit{Fallow/Idle Cropland} (ID 61), perairan, permukiman, lahan basah, dan kelas tanaman minor---diubah menjadi kelas \textit{background} (nilai 0).
 
 \subsection{Patching dan Normalisasi Citra}
 Citra dan data label dipotong menjadi patch berukuran $256\times256$ piksel dengan langkah (\textit{stride}) seukuran patch sehingga tidak terjadi tumpang tindih.
@@ -441,7 +451,7 @@ SegFormer menggunakan arsitektur \textit{encoder-decoder} berbasis \textit{Trans
 
 \subsection{Fungsi \textit{Loss} dan Penanganan Ketidakseimbangan Kelas}
 
-Ketidakseimbangan kelas pada dataset (rasio maksimum 22,6:1 antara \textit{Fallow/Idle Cropland} dan \textit{Grapes}) ditangani menggunakan \textit{weighted Cross-Entropy Loss}:
+Ketidakseimbangan kelas pada dataset (rasio maksimum 9,2:1 antara \textit{Almonds} dan \textit{Grapes}) ditangani menggunakan \textit{weighted Cross-Entropy Loss}:
 
 \begin{equation}
     \mathcal{L} = -\sum_{c=0}^{C-1} w_c \cdot y_c \cdot \log(\hat{y}_c)

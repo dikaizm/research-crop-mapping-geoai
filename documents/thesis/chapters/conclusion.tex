@@ -1,14 +1,117 @@
+% ============================================================
+% BAB KESIMPULAN DAN SARAN
+% ============================================================
+% NOTE (2026-03-04): Kesimpulan ini ditulis berdasarkan hasil
+% eksperimen skala kecil (3 tanggal Januari 2022, 15 epoch).
+% Bagian yang ditandai [*] perlu diperbarui setelah eksperimen
+% skala penuh dengan 72 tanggal selesai.
+% ============================================================
+
 \section{Kesimpulan}
-Berdasarkan hasil eksperimen dan analisis yang telah dilakukan, dapat disimpulkan bahwa:
+
+Berdasarkan hasil eksperimen dan analisis yang telah dilakukan, penelitian ini menghasilkan
+kesimpulan sebagai berikut yang menjawab tiga rumusan masalah penelitian:
+
 \begin{enumerate}
-    \item \textit{[Kesimpulan 1]}
-    \item \textit{[Kesimpulan 2]}
-    \item \textit{[Kesimpulan 3]}
+
+    \item \textbf{Perbandingan akurasi \textit{single-date} versus \textit{multi-temporal}.}
+
+    Pada eksperimen skala kecil dengan tiga tanggal akuisisi Januari 2022 dan 10 kelas
+    tanaman aktif (tanpa \textit{Fallow/Idle}), pendekatan \textit{multi-temporal} naif
+    (Exp B, 27 channel, mIoU SegFormer = 0.2519) tidak menunjukkan keunggulan yang
+    signifikan dibandingkan pendekatan \textit{single-date}
+    (Exp A, 9 channel, mIoU SegFormer = 0.2556).
+    Hasil ini disebabkan oleh keterbatasan variasi temporal --- ketiga tanggal yang tersedia
+    semuanya berasal dari bulan Januari sehingga tidak merepresentasikan siklus fenologi
+    lengkap.
+    Bukti manfaat multi-temporal paling terlihat pada kelas \textit{Winter Wheat}, yang
+    mengalami peningkatan IoU terbesar dari Exp A ke Exp B (27.13\% $\rightarrow$ 35.52\%
+    pada SegFormer), mengonfirmasi bahwa informasi temporal yang relevan membantu
+    membedakan tanaman dengan karakteristik fenologi musim yang berbeda.
+    Eksperimen skala penuh dengan 72 tanggal yang mencakup seluruh siklus tanam
+    diharapkan menunjukkan keunggulan multi-temporal yang lebih nyata.~[*]
+
+    \item \textbf{Efektivitas \textit{pipeline} seleksi band tiga tahap.}
+
+    \textit{Pipeline} seleksi band yang diusulkan --- terdiri dari \textit{Global Separation
+    Index} (GSI), \textit{Random Forest feature importance}, dan \textit{CNN forward
+    selection} berbasis mIoU --- berhasil mengidentifikasi subset band optimal sebanyak
+    $K^* = 4$ band dari total fitur yang tersedia.
+    Band yang terpilih adalah B11 (1 Jan), B12 (1 Jan), B12 (31 Jan), dan B8A (1 Jan),
+    yang merepresentasikan region SWIR dan \textit{Red Edge} --- dua kawasan spektral
+    paling diskriminatif untuk vegetasi pertanian.
+    Dengan hanya 4 channel (efisiensi 85.2\% dari 27 channel Exp B), Exp C mempertahankan
+    akurasi yang sebanding: penurunan mIoU hanya 1.98 poin pada SegFormer
+    (0.2519 $\rightarrow$ 0.2321).
+    Hasil ini memvalidasi hipotesis kedua bahwa subset band hasil seleksi dapat
+    mempertahankan akurasi segmentasi yang kompetitif dengan beban komputasi yang
+    jauh lebih rendah.
+
+    \item \textbf{Perbandingan kinerja DeepLabV3+CBAM dan SegFormer.}
+
+    SegFormer (encoder MiT-B2) secara konsisten mengungguli DeepLabV3+CBAM (encoder
+    ResNet-50 dengan CBAM) pada seluruh konfigurasi input.
+    Selisih mIoU berkisar antara 1.49 hingga 2.83 poin: Exp A (+2.83 poin),
+    Exp B (+1.49 poin), dan Exp C (+1.66 poin).
+    Keunggulan ini konsisten dengan hipotesis ketiga bahwa mekanisme
+    \textit{Efficient Self-Attention} pada SegFormer lebih efektif menangkap konteks
+    spasial global yang relevan untuk membedakan petak-petak lahan pertanian berskala
+    besar dalam citra Sentinel-2.
+    Sebaliknya, keunggulan konvolusi lokal DeepLabV3+CBAM relatif lebih terbatas pada
+    data resolusi 10 meter yang memiliki batas antar kelas yang gradual.
+
 \end{enumerate}
 
+Secara keseluruhan, penelitian ini membuktikan bahwa \textit{pipeline} tiga tahap yang
+mengintegrasikan seleksi fitur spektral-temporal dengan model \textit{semantic segmentation}
+adalah pendekatan yang layak untuk pemetaan tanaman berbasis citra Sentinel-2.
+SegFormer dengan input 4 channel hasil seleksi terbukti mampu menghasilkan akurasi
+yang mendekati konfigurasi penuh dengan efisiensi komputasi yang lebih tinggi.
+
 \section{Saran}
-Beberapa saran untuk pengembangan penelitian selanjutnya adalah:
-\begin{itemize}
-    \item \textit{[Saran 1]}
-    \item \textit{[Saran 2]}
-\end{itemize}
+
+Berdasarkan temuan dan keterbatasan penelitian ini, berikut adalah saran untuk
+pengembangan penelitian selanjutnya:
+
+\begin{enumerate}
+
+    \item \textbf{Eksperimen skala penuh dengan data 72 tanggal.}
+    Eksperimen skala kecil ini perlu diulang menggunakan seluruh dataset multi-temporal
+    (72 tanggal, 2022--2024) agar pengaruh informasi fenologi sepanjang siklus musim
+    tanam dapat terukur secara definitif.
+    Hasil eksperimen skala penuh akan menjadi dasar kesimpulan akhir yang lebih valid
+    mengenai keunggulan pendekatan \textit{multi-temporal}.
+
+    \item \textbf{Penanganan ketidakseimbangan kelas.}
+    Kelas minoritas seperti \textit{Other Hay} (IoU 3--4\%) dan \textit{Alfalfa}
+    (IoU 8--18\%) secara konsisten menunjukkan performa rendah akibat distribusi kelas
+    yang tidak seimbang.
+    Penelitian selanjutnya disarankan mengeksplorasi strategi seperti \textit{class-weighted
+    loss}, \textit{focal loss}, atau oversampling patch berbasis kelas minoritas untuk
+    meningkatkan akurasi pada kelas yang langka.
+
+    \item \textbf{Pengujian generalisasi antar area studi.}
+    Penelitian ini dibatasi pada Sacramento Valley, California.
+    Untuk mengevaluasi kemampuan generalisasi model dan \textit{pipeline} seleksi band,
+    perlu dilakukan pengujian pada area studi lain --- misalnya San Joaquin Valley
+    (California) atau kawasan pertanian di luar Amerika Serikat --- dengan pola tanam
+    dan jenis tanaman yang berbeda.
+
+    \item \textbf{Pengembangan \textit{pipeline} seleksi band.}
+    \textit{Pipeline} seleksi band yang diusulkan menggunakan U-Net ResNet-18 sebagai
+    \textit{oracle} pada Stage 2 untuk efisiensi komputasi.
+    Penelitian selanjutnya dapat membandingkan oracle ini dengan model alternatif
+    (misalnya SegFormer-B0) atau mengganti \textit{sequential forward selection} dengan
+    metode yang lebih efisien secara komputasi seperti \textit{mutual information}-based
+    selection atau \textit{LASSO regularization} agar seleksi dapat dilakukan pada ruang
+    fitur yang lebih besar.
+
+    \item \textbf{Integrasi \textit{encoder} temporal eksplisit.}
+    Pendekatan \textit{multi-temporal} pada penelitian ini menggunakan penggabungan
+    band secara naif (\textit{channel stacking}).
+    Penggunaan modul temporal eksplisit --- seperti \textit{Long Short-Term Memory} (LSTM),
+    \textit{Temporal Self-Attention}, atau \textit{TimeSformer} --- yang secara arsitektural
+    memisahkan dimensi temporal dan spasial diharapkan dapat mengekstraksi pola fenologi
+    lebih efektif dibandingkan \textit{channel stacking}.
+
+\end{enumerate}

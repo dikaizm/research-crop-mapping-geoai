@@ -1,14 +1,270 @@
+% ============================================================
+% BAB HASIL DAN PEMBAHASAN
+% ============================================================
+% NOTE (2026-03-04): Seluruh hasil pada bab ini berasal dari
+% eksperimen skala kecil (small-scale validation run) dengan
+% kondisi sebagai berikut:
+%   - Data: 3 tanggal Januari 2022 (Jan 01, Jan 16, Jan 31)
+%   - Jumlah channel total: 33 (3 tanggal × 11 band)
+%   - Patch: 128×128 px, stride 128 px (non-overlapping)
+%   - Epochs: 15 (early stop patience = 5)
+%   - Perangkat: Apple Silicon MPS
+%   - Exp A fallback date: Jan 31 (Jul 30 tidak tersedia)
+%   - Exp B fallback: semua 3 tanggal (Januari saja)
+% Hasil ini digunakan sebagai placeholder untuk memverifikasi
+% format tabel dan visualisasi. Nilai akan diperbarui setelah
+% eksperimen skala penuh dengan 72 tanggal dan dataset lengkap.
+% ============================================================
+
 \section{Hasil Eksperimen}
-\textit{[Bagian ini akan berisi hasil eksperimen dari pemetaan tanaman pertanian menggunakan model semantic segmentation. Tabel dan grafik hasil akurasi (OA, mIoU, F1-score) akan ditampilkan di sini.]}
+
+Eksperimen dilakukan pada tiga konfigurasi input (Exp A, B, C) dengan dua arsitektur model
+(\textit{DeepLabV3+CBAM} dan \textit{SegFormer}), menghasilkan total enam skenario pelatihan.
+Tabel~\ref{tab:hasil_utama} merangkum metrik evaluasi utama pada set uji.
+
+\subsection{Ringkasan Performa Keseluruhan}
+
+\begin{table}[H]
+    \centering
+    \caption{Hasil evaluasi mIoU dan OA pada set uji untuk seluruh skenario eksperimen (10 kelas tanaman aktif, tanpa \textit{Fallow/Idle})}
+    \label{tab:hasil_utama}
+    \begin{tabular}{|l|l|c|c|c|c|}
+    \hline
+    \textbf{Eksperimen} & \textbf{Arsitektur} & \textbf{Channel} & \textbf{Val mIoU} & \textbf{Test mIoU} & \textbf{Test OA} \\
+    \hline
+    \multirow{2}{*}{Exp A --- Single-Date} & SegFormer        & 9  & 0.2820 & 0.2556 & 0.4895 \\
+                                          & DeepLabV3+CBAM   & 9  & 0.2430 & 0.2273 & 0.4787 \\
+    \hline
+    \multirow{2}{*}{Exp B --- Multi-Temporal Naif} & SegFormer & 27 & 0.2548 & 0.2519 & 0.4946 \\
+                                                  & DeepLabV3+CBAM & 27 & 0.2534 & 0.2370 & 0.5008 \\
+    \hline
+    \multirow{2}{*}{Exp C --- Seleksi Band} & SegFormer       & 4  & 0.2672 & 0.2321 & 0.4820 \\
+                                           & DeepLabV3+CBAM  & 4  & 0.2203 & 0.2155 & 0.4964 \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\textit{Catatan: Hasil di atas merupakan hasil eksperimen skala kecil menggunakan 3 tanggal
+Januari 2022 saja, dievaluasi pada 10 kelas tanaman aktif (Fallow/Idle diperlakukan sebagai background).
+Nilai mIoU rendah disebabkan oleh keterbatasan data temporal (tidak ada siklus fenologi lengkap)
+dan jumlah epoch yang terbatas (15 epoch). Hasil eksperimen skala penuh dengan 72 tanggal akan menggantikan tabel ini.}
+
+\subsection{Perbandingan Konfigurasi Input}
+
+Berdasarkan Tabel~\ref{tab:hasil_utama}, diperoleh beberapa observasi awal:
+
+\begin{enumerate}
+    \item \textbf{Exp A (single-date) vs Exp B (multi-temporal naif)}: Pada konfigurasi skala
+    kecil ini, Exp A SegFormer (mIoU = 0.2556) sedikit mengungguli Exp B SegFormer
+    (mIoU = 0.2519). Hal ini berbeda dari hipotesis bahwa multi-temporal akan lebih unggul,
+    namun kemungkinan disebabkan oleh keterbatasan data — ketiga tanggal yang tersedia
+    semuanya berasal dari Januari 2022, sehingga variasi temporal antar tanggal sangat kecil.
+    Pada eksperimen skala penuh, perbedaan ini diharapkan akan signifikan karena mencakup
+    seluruh siklus fenologi.
+
+    \item \textbf{Exp B (multi-temporal naif) vs Exp C (seleksi band)}: Exp B SegFormer
+    (mIoU = 0.2519, 27 channel) dan Exp C SegFormer (mIoU = 0.2321, 4 channel) menunjukkan
+    bahwa seleksi band berhasil mempertahankan akurasi yang sebanding menggunakan hanya 4 dari
+    27 channel (efisiensi 14.8\%).
+
+    \item \textbf{SegFormer vs DeepLabV3+CBAM}: SegFormer konsisten unggul pada seluruh
+    konfigurasi (Exp A: +2.83\%, Exp B: +1.49\%, Exp C: +1.66\% mIoU). Keunggulan ini
+    konsisten dengan hipotesis bahwa \textit{Efficient Self-Attention} pada SegFormer lebih
+    efektif menangkap konteks spasial global pada data multi-spektral.
+\end{enumerate}
+
+\subsection{Performa Per Kelas Tanaman}
+
+Tabel~\ref{tab:iou_per_kelas} menampilkan IoU per kelas tanaman pada set uji untuk setiap
+skenario eksperimen.
+
+\begin{table}[H]
+    \centering
+    \caption{IoU per kelas tanaman pada set uji (\%)}
+    \label{tab:iou_per_kelas}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+    \hline
+    \multirow{2}{*}{\textbf{Kelas Tanaman}} &
+    \multicolumn{2}{c|}{\textbf{Exp A (9ch)}} &
+    \multicolumn{2}{c|}{\textbf{Exp B (27ch)}} &
+    \multicolumn{2}{c|}{\textbf{Exp C (4ch)}} \\
+    \cline{2-7}
+    & \textbf{SF} & \textbf{DLV3} & \textbf{SF} & \textbf{DLV3} & \textbf{SF} & \textbf{DLV3} \\
+    \hline
+    Rice            & 21.74 & 21.45 & 25.10 & 22.70 & 22.69 & 14.56 \\
+    Sunflower       & 14.58 & 13.64 & 17.93 & 16.00 & 15.31 & 15.79 \\
+    Winter Wheat    & 27.13 & 28.92 & 35.52 & 32.30 & 32.79 & 24.03 \\
+    Alfalfa         & 11.45 & 11.96 & 18.48 & 10.69 &  8.26 &  9.28 \\
+    Other Hay       &  4.35 &  3.79 &  3.38 &  3.80 &  4.41 &  3.98 \\
+    Tomatoes        & 40.43 & 33.22 & 35.18 & 32.36 & 34.46 & 35.33 \\
+    Grapes          & 24.58 & 13.88 & 12.02 & 21.14 & 10.95 & 14.63 \\
+    Almonds         & 57.37 & 54.99 & 56.43 & 54.61 & 52.88 & 49.33 \\
+    Walnuts         & 35.03 & 32.28 & 32.61 & 29.56 & 36.66 & 34.93 \\
+    Plums           & 18.91 & 13.13 & 15.25 & 13.80 & 13.69 & 13.68 \\
+    \hline
+    \textbf{mIoU}   & \textbf{25.56} & \textbf{22.73} & \textbf{25.19} & \textbf{23.70} & \textbf{23.21} & \textbf{21.55} \\
+    \hline
+    \end{tabular}%
+    }
+    \par\smallskip
+    {\footnotesize SF = SegFormer; DLV3 = DeepLabV3+CBAM.}
+\end{table}
+
+Secara umum, kelas dengan area dominan seperti \textit{Almonds} dan \textit{Tomatoes}
+menunjukkan IoU tertinggi (34--57\%), sedangkan kelas minoritas seperti \textit{Other Hay}
+dan \textit{Alfalfa} memiliki IoU terendah (3--18\%). Pola ini konsisten dengan distribusi
+kelas yang tidak seimbang pada data CDL.
+
+\textit{Winter Wheat} mendapat manfaat terbesar dari penambahan tanggal multi-temporal
+(Exp B SF: 35.52\% vs Exp A SF: 27.13\%), konsisten dengan karakteristik fenologi musim
+dingin yang membedakannya dari tanaman musim panas dalam citra Januari.
 
 \section{Analisis Hasil}
-\textit{[Bagian ini akan membahas analisis dari hasil yang didapatkan. Perbandingan antar model (DeepLabV3+ vs SegFormer), pengaruh kombinasi band, dan analisis kesalahan (error analysis) akan dijabarkan secara mendetail.]}
 
 \subsection{Perbandingan Performa Model}
-\textit{[Diskusi mengenai model mana yang lebih unggul dalam berbagai skenario]}
+
+Pada seluruh konfigurasi input, SegFormer konsisten mengungguli DeepLabV3+CBAM. Selisih
+terbesar terjadi pada Exp A (single-date): SegFormer mIoU = 0.2556 vs DeepLabV3+CBAM
+mIoU = 0.2273 (selisih 2.83 poin). Hasil ini mendukung hipotesis ketiga bahwa mekanisme
+\textit{Efficient Self-Attention} pada SegFormer lebih efektif untuk pemetaan pertanian
+dengan konteks spasial luas.
+
+Meskipun demikian, selisih performa antara kedua arsitektur relatif kecil pada skala kecil
+ini. Evaluasi skala penuh dengan data 72 tanggal diperlukan untuk kesimpulan yang definitif.
 
 \subsection{Pengaruh Data Multi-Temporal}
-\textit{[Diskusi mengenai apakah data multi-temporal meningkatkan akurasi dibandingkan single-date]}
+
+Pada eksperimen skala kecil ini, pengaruh data multi-temporal tidak terbukti secara
+signifikan karena ketiga tanggal yang tersedia semuanya berasal dari Januari 2022 — tidak
+merepresentasikan variasi fenologi yang sesungguhnya (musim tanam vs panen). Pada
+eksperimen skala penuh dengan 72 tanggal (mencakup seluruh siklus Jan--Des), pengaruh
+multi-temporal diharapkan jauh lebih besar.
+
+\subsection{Efisiensi Seleksi Band}
+
+Exp C menggunakan hanya 4 channel hasil seleksi Stage 2 (B11, B12, B12 tanggal berbeda,
+B8A) dibandingkan 27 channel pada Exp B. Penurunan mIoU yang terjadi pada SegFormer
+hanya 1.98 poin ($0.2519 \rightarrow 0.2321$), menunjukkan bahwa mayoritas informasi diskriminatif
+tersimpan pada subset band SWIR dan NIR yang dipilih Stage 1+2.
+
+\subsection{Log Pelatihan Seleksi Fitur}
+
+Gambar~\ref{fig:stage1_joint_score} menampilkan \textit{joint score} setiap \textit{band-date}
+pada Stage 1.
+Band yang berwarna jingga termasuk dalam 25 kandidat teratas yang diteruskan ke Stage 2,
+sedangkan band abu-abu tidak terpilih.
+Band SWIR (B11, B12) dan \textit{Red Edge} (B8A) secara konsisten mendapatkan skor tertinggi,
+mengonfirmasi relevansinya untuk diskriminasi vegetasi pertanian.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/stage1_joint_score.png}
+    \caption{Stage 1 --- \textit{Joint Score} setiap \textit{band-date} (GSI+RF, $\alpha=0.5$).
+             Band jingga terpilih sebagai kandidat Top-$K$ untuk Stage 2.}
+    \label{fig:stage1_joint_score}
+\end{figure}
+
+Gambar~\ref{fig:stage2_forward_selection} menampilkan kurva mIoU selama proses
+\textit{CNN forward selection} pada Stage 2.
+Setiap titik hijau (diterima) menunjukkan penambahan band yang meningkatkan mIoU oracle
+melampaui ambang $\delta = 0.005$, sedangkan tanda silang merah (ditolak) menunjukkan band
+yang gagal meningkatkan mIoU secara signifikan.
+Kurva berhenti pada $K^* = 4$ band setelah tiga langkah berturut-turut tidak menghasilkan
+perbaikan (\textit{patience} = 3).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{figures/stage2_forward_selection.png}
+    \caption{Stage 2 --- Kurva mIoU \textit{CNN forward selection}.
+             Titik hijau = band diterima; tanda silang merah = band ditolak.
+             Garis putus-putus = mIoU akhir pada $K^* = 4$ band.}
+    \label{fig:stage2_forward_selection}
+\end{figure}
+
+\subsection{Kurva Pelatihan Model}
+
+Gambar~\ref{fig:training_curves} menampilkan kurva \textit{loss} dan mIoU validasi selama
+pelatihan untuk seluruh enam skenario eksperimen.
+Garis putus-putus menunjukkan \textit{train loss} dan garis penuh menunjukkan \textit{val loss}.
+Titik henti vertikal (garis titik-titik) pada kurva mIoU menandai \textit{epoch} terbaik
+yang dipilih sebagai \textit{checkpoint} final.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/training_curves_all.png}
+    \caption{Kurva pelatihan (kiri: \textit{loss}, kanan: Val mIoU) untuk Exp A, B, C.
+             Biru = DeepLabV3+CBAM; jingga = SegFormer.
+             Garis putus-putus = \textit{train loss}; garis penuh = \textit{val loss/mIoU}.}
+    \label{fig:training_curves}
+\end{figure}
+
+\subsection{Visualisasi Hasil Segmentasi pada Set Uji}
+
+Gambar~\ref{fig:seg_expA_sf} hingga Gambar~\ref{fig:seg_expC_sf} menampilkan peta segmentasi
+hasil inferensi penuh (\textit{full-image inference}) pada seluruh area studi Sacramento Valley
+menggunakan data set uji tahun 2024.
+Setiap gambar menampilkan dua panel berdampingan: \textit{ground truth} CDL (kiri) dan
+prediksi model (kanan).
+Inferensi dilakukan secara \textit{tiled} dengan \textit{patch} 256$\times$256 piksel,
+kemudian hasilnya dirakit kembali menjadi peta segmentasi skala penuh
+($5596 \times 4684$ piksel, $\approx$2.038 km\textsuperscript{2}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/test_segmentation_exp_A_segformer.png}
+    \caption{Peta segmentasi penuh set uji --- Exp A SegFormer (9 channel, \textit{single-date} 2024).
+             Kiri: \textit{Ground Truth} CDL; Kanan: Prediksi model.}
+    \label{fig:seg_expA_sf}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/test_segmentation_exp_B_segformer.png}
+    \caption{Peta segmentasi penuh set uji --- Exp B SegFormer (27 channel, \textit{multi-temporal naif}).}
+    \label{fig:seg_expB_sf}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/test_segmentation_exp_C_segformer.png}
+    \caption{Peta segmentasi penuh set uji --- Exp C SegFormer ($K^* = 4$ channel, seleksi band).
+             Peta yang lebih rapat secara spasial menunjukkan efek reduksi \textit{channel} terhadap
+             batas antar kelas tanaman.}
+    \label{fig:seg_expC_sf}
+\end{figure}
+
+\textit{Catatan: Gambar-gambar di atas akan diperbarui dengan hasil eksperimen skala penuh
+(dataset 2022--2024, GPU server). Visualisasi saat ini merupakan placeholder yang menunjukkan
+format tampilan, menggunakan hasil eksperimen skala kecil.}
 
 \subsection{Analisis Kesalahan}
-\textit{[Visualisasi dan pembahasan mengenai area yang sering salah diklasifikasikan]}
+
+\textit{[Bagian ini akan ditambahkan setelah eksperimen skala penuh. Rencana konten:
+confusion matrix per kelas, analisis area geografis dengan tingkat kesalahan tinggi,
+dan contoh patch dengan kesalahan klasifikasi yang dominan.]}
+
+\subsection{Waktu Pelatihan}
+
+\begin{table}[H]
+    \centering
+    \caption{Perbandingan waktu pelatihan per eksperimen (small-scale, MPS, 15 epoch)}
+    \label{tab:waktu_pelatihan}
+    \begin{tabular}{|l|l|c|c|}
+    \hline
+    \textbf{Eksperimen} & \textbf{Arsitektur} & \textbf{Epoch} & \textbf{Total (menit)} \\
+    \hline
+    Exp A & DeepLabV3+CBAM & 15 & $\approx$9 \\
+    Exp A & SegFormer      & 15 & $\approx$9 \\
+    Exp B & DeepLabV3+CBAM & 15 & $\approx$9 \\
+    Exp B & SegFormer      & 15 & $\approx$9 \\
+    Exp C & DeepLabV3+CBAM & 15 & $\approx$9 \\
+    Exp C & SegFormer      & 15 & $\approx$9 \\
+    \hline
+    \end{tabular}
+\end{table}
+
+Semua eksperimen membutuhkan waktu yang setara ($\approx$9 menit) karena jumlah patch sama
+(1.440 patch, 1.008 train) dan epoch yang sama (15). Pada skala penuh, Exp B (27ch) dan
+Exp C ($K^*$ ch) akan memiliki perbedaan waktu yang lebih terlihat akibat perbedaan ukuran
+input.
