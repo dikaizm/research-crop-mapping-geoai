@@ -10,3 +10,7 @@ utils/__pycache__/
 mlflow/mlruns/
 ssh/
 mlruns/
+secrets.txt
+.env
+*.env
+documents/references/
