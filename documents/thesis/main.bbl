@@ -1,0 +1,133 @@
+\begin{thebibliography}{}
+
+\bibitem[Ajibola and Cabral, 2024]{ajibola2024}
+Ajibola, S. and Cabral, P. (2024).
+\newblock A systematic literature review and bibliometric analysis of semantic segmentation models in land cover mapping.
+\newblock {\em Remote Sensing}, 16(12):2222.
+
+\bibitem[Alami~Machichi et~al., 2023]{alamimachichi2023}
+Alami~Machichi, M. et~al. (2023).
+\newblock Crop mapping using supervised machine learning and deep learning: a systematic literature review.
+\newblock {\em Int J Remote Sens}, 44(8):2717--2753.
+
+\bibitem[Chang et~al., 2023]{chang2023}
+Chang, Z. et~al. (2023).
+\newblock Crop type identification using high-resolution remote sensing images based on an improved deeplabv3+ network.
+\newblock {\em Remote Sens (Basel)}, 15(21):5088.
+
+\bibitem[Chen et~al., 2018]{chen2018}
+Chen, L.-C. et~al. (2018).
+\newblock Encoder-decoder with atrous separable convolution for semantic image segmentation.
+\newblock {\em arXiv preprint arXiv:1802.02611}.
+
+\bibitem[Cheng et~al., 2023]{cheng2023}
+Cheng, X. et~al. (2023).
+\newblock Application of deep learning in multitemporal remote sensing image classification.
+\newblock {\em Remote Sens (Basel)}, 15(15):3859.
+
+\bibitem[Copenhaver et~al., 2021]{copenhaver2021}
+Copenhaver, K. et~al. (2021).
+\newblock Examining the characteristics of the cropland data layer in the context of estimating land cover change.
+\newblock {\em ISPRS Int. J. Geo-Inf.}, 10(5):281.
+
+\bibitem[others, 2020]{rs12010162}
+others (2020).
+\newblock Optimizing feature selection of individual crop types for improved crop mapping.
+\newblock {\em Remote Sensing}, 12(1):162.
+
+\bibitem[others, 2023]{rs15215203}
+others (2023).
+\newblock Feature importance ranking of random forest-based end-to-end learning algorithm.
+\newblock {\em Remote Sensing}, 15(21):5203.
+
+\bibitem[Gao et~al., 2023]{gao2023}
+Gao, M., Lu, T., and Wang, L. (2023).
+\newblock Crop mapping based on sentinel-2 images using semantic segmentation model of attention mechanism.
+\newblock {\em Sensors}, 23(15):7008.
+
+\bibitem[Griffiths et~al., 2019]{griffiths2019}
+Griffiths, P., Nendel, C., and Hostert, P. (2019).
+\newblock Intra-annual reflectance composites from {Sentinel-2} and {Landsat} for national-scale crop and land cover mapping.
+\newblock {\em Remote Sensing of Environment}, 220:135--151.
+
+\bibitem[Hsu et~al., 2022]{hsu2022}
+Hsu, C.-Y. et~al. (2022).
+\newblock Improving the deeplabv3+ model with attention mechanisms applied to eye detection and segmentation.
+\newblock {\em Mathematics}, 10(15):2597.
+
+\bibitem[Li et~al., 2023a]{li2023}
+Li, G. et~al. (2023a).
+\newblock Multi-year crop type mapping using sentinel-2 imagery and deep semantic segmentation algorithm in the hetao irrigation district in china.
+\newblock {\em Remote Sensing}, 15(4):875.
+
+\bibitem[Li et~al., 2023b]{li2023agri}
+Li, Q., Tian, J., and Tian, Q. (2023b).
+\newblock Deep learning application for crop classification via multi-temporal remote sensing images.
+\newblock {\em Agriculture}, 13(4):906.
+
+\bibitem[Li et~al., 2023c]{li2023hetao}
+Li, Z. et~al. (2023c).
+\newblock Multi-year crop type mapping using sentinel-2 imagery and deep semantic segmentation algorithm in the hetao irrigation district in china.
+\newblock {\em Remote Sensing}, 15(4):875.
+
+\bibitem[Luo et~al., 2024]{luo2024}
+Luo, Z. et~al. (2024).
+\newblock Semantic segmentation of agricultural images: A survey.
+\newblock {\em Information Processing in Agriculture}, 11(2):172--186.
+
+\bibitem[Maleki et~al., 2024]{maleki2024}
+Maleki, R. et~al. (2024).
+\newblock Refinement of cropland data layer with effective confidence layer interval and image filtering.
+\newblock {\em Agriculture}, 14(8):1285.
+
+\bibitem[Phiri et~al., 2020]{phiri2020}
+Phiri, D. et~al. (2020).
+\newblock Sentinel-2 data for land cover/use mapping: A review.
+\newblock {\em Remote Sensing}, 12(14):2291.
+
+\bibitem[Potapov et~al., 2022]{potapov2022}
+Potapov, P. et~al. (2022).
+\newblock Global maps of cropland extent and change show accelerated cropland expansion in the twenty-first century.
+\newblock {\em Nature Food}, 3(1):19--28.
+
+\bibitem[Thomas~Ramos and Sappa, 2024]{thomasramos2024}
+Thomas~Ramos, L. and Sappa, A.~D. (2024).
+\newblock Multispectral semantic segmentation for land cover classification: An overview.
+\newblock {\em IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens.}, 17:14295--14336.
+
+\bibitem[Tran et~al., 2022]{tran2022}
+Tran, K.~H. et~al. (2022).
+\newblock 10 m crop type mapping using sentinel-2 reflectance and 30 m cropland data layer product.
+\newblock {\em Int. J. Appl. Earth Obs. Geoinf.}, 107:102692.
+
+\bibitem[Weiss et~al., 2020]{weiss2020}
+Weiss, M., Jacob, F., and Duveiller, G. (2020).
+\newblock Remote sensing for agricultural applications: A meta-review.
+\newblock {\em Remote Sens Environ}, 236:111402.
+
+\bibitem[Wu et~al., 2025]{wu2025}
+Wu, Y., Tang, L., and Yuan, S. (2025).
+\newblock Semantic segmentation model of multi-source remote sensing images was used to extract winter wheat at tillering stage.
+\newblock {\em Scientific Reports}, 15(1):14751.
+
+\bibitem[Xie et~al., 2021]{xie2021}
+Xie, E. et~al. (2021).
+\newblock Segformer: Simple and efficient design for semantic segmentation with transformers.
+\newblock {\em arXiv preprint arXiv:2105.15203}.
+
+\bibitem[Yi et~al., 2020]{yi2020}
+Yi, Z., Jia, L., and Chen, Q. (2020).
+\newblock Crop classification using multi-temporal sentinel-2 data in the shiyang river basin of china.
+\newblock {\em Remote Sensing}, 12(24):4052.
+
+\bibitem[Yuan and Lin, 2021]{yuan2021}
+Yuan, Y. and Lin, L. (2021).
+\newblock Self-supervised pretraining of transformers for satellite image time series classification.
+\newblock {\em IEEE J Sel Top Appl Earth Obs Remote Sens}, 14:474--487.
+
+\bibitem[Zhao et~al., 2020]{zhao2020}
+Zhao, J. et~al. (2020).
+\newblock A robust spectral-spatial approach to identifying heterogeneous crops using remote sensing imagery with high spectral and spatial resolutions.
+\newblock {\em Remote Sens Environ}, 239:111605.
+
+\end{thebibliography}

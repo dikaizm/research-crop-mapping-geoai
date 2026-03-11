@@ -165,6 +165,24 @@ mengonfirmasi relevansinya untuk diskriminasi vegetasi pertanian.
     \label{fig:stage1_joint_score}
 \end{figure}
 
+Gambar~\ref{fig:stage1_rf_importance} menampilkan peta panas (\textit{heatmap}) nilai RF \textit{feature importance} per band per kelas tanaman, yang menunjukkan band mana yang paling penting untuk membedakan masing-masing kelas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/stage1_rf_importance.png}
+    \caption{Stage 1 --- RF \textit{Feature Importance} per band per kelas tanaman. Nilai lebih tinggi (warna lebih terang) menunjukkan band yang lebih penting untuk membedakan kelas tersebut dari kelas lainnya.}
+    \label{fig:stage1_rf_importance}
+\end{figure}
+
+Gambar~\ref{fig:stage1v2_siglobal_heatmap} menampilkan nilai SI\textit{global} per band per kelas tanaman hasil analisis Tahap 1 versi per-kelas biner, yang digunakan untuk menentukan urutan kandidat band pada Tahap 2.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/stage1v2_siglobal_heatmap.png}
+    \caption{Stage 1 --- Peta panas nilai SIglobal per \textit{band-date} per kelas tanaman. Setiap sel menunjukkan kemampuan separabilitas band tersebut untuk membedakan satu kelas tanaman dari semua kelas lainnya. Band SWIR (B11, B12) dan \textit{Red Edge} (B5--B7) secara konsisten menunjukkan nilai tertinggi.}
+    \label{fig:stage1v2_siglobal_heatmap}
+\end{figure}
+
 Gambar~\ref{fig:stage2_forward_selection} menampilkan kurva mIoU selama proses
 \textit{CNN forward selection} pada Stage 2.
 Setiap titik hijau (diterima) menunjukkan penambahan band yang meningkatkan mIoU oracle
@@ -192,7 +210,7 @@ yang dipilih sebagai \textit{checkpoint} final.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/training_curves_all.png}
+    \fbox{\parbox[c][5cm][c]{\linewidth}{\centering\itshape [Placeholder: \texttt{figures/training\_curves\_all.png} --- belum tersedia]}}
     \caption{Kurva pelatihan (kiri: \textit{loss}, kanan: Val mIoU) untuk Exp A, B, C.
              Biru = DeepLabV3+CBAM; jingga = SegFormer.
              Garis putus-putus = \textit{train loss}; garis penuh = \textit{val loss/mIoU}.}
@@ -212,7 +230,7 @@ kemudian hasilnya dirakit kembali menjadi peta segmentasi skala penuh
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/test_segmentation_exp_A_segformer.png}
+    \fbox{\parbox[c][8cm][c]{\linewidth}{\centering\itshape [Placeholder: \texttt{figures/test\_segmentation\_exp\_A\_segformer.png} --- belum tersedia]}}
     \caption{Peta segmentasi penuh set uji --- Exp A SegFormer (9 channel, \textit{single-date} 2024).
              Kiri: \textit{Ground Truth} CDL; Kanan: Prediksi model.}
     \label{fig:seg_expA_sf}
@@ -220,14 +238,14 @@ kemudian hasilnya dirakit kembali menjadi peta segmentasi skala penuh
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/test_segmentation_exp_B_segformer.png}
+    \fbox{\parbox[c][8cm][c]{\linewidth}{\centering\itshape [Placeholder: \texttt{figures/test\_segmentation\_exp\_B\_segformer.png} --- belum tersedia]}}
     \caption{Peta segmentasi penuh set uji --- Exp B SegFormer (27 channel, \textit{multi-temporal naif}).}
     \label{fig:seg_expB_sf}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/test_segmentation_exp_C_segformer.png}
+    \fbox{\parbox[c][8cm][c]{\linewidth}{\centering\itshape [Placeholder: \texttt{figures/test\_segmentation\_exp\_C\_segformer.png} --- belum tersedia]}}
     \caption{Peta segmentasi penuh set uji --- Exp C SegFormer ($K^* = 4$ channel, seleksi band).
              Peta yang lebih rapat secara spasial menunjukkan efek reduksi \textit{channel} terhadap
              batas antar kelas tanaman.}

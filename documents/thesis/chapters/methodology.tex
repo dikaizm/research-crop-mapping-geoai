@@ -115,6 +115,19 @@ Pola dua puncak ini memvalidasi pendekatan \textit{multi-temporal} karena setiap
     \label{fig:s2_ndvi_temporal}
 \end{figure}
 
+\subsubsection{Profil NDVI Per Kelas Tanaman}
+Gambar~\ref{fig:s2_ndvi_per_class} menampilkan profil rata-rata NDVI untuk setiap kelas tanaman target sepanjang 24 tanggal akuisisi tahun 2022.
+Setiap kelas menunjukkan pola fenologi yang berbeda: \textit{Rice} mengalami kenaikan tajam pada Juni--Juli seiring transplantasi bibit ke sawah; \textit{Winter Wheat} memuncak pada Januari--Maret kemudian menurun seiring panen musim semi; tanaman pohon tahunan (\textit{Almonds}, \textit{Walnuts}, \textit{Plums}) menunjukkan kurva lebih landai karena kanopi permanen.
+\textit{Alfalfa} menunjukkan pola berulang akibat siklus potong hingga empat kali setahun, sedangkan \textit{Sunflower} dan \textit{Tomatoes} mencapai puncak NDVI pada Juli--September.
+Keragaman profil fenologi antar kelas ini mengonfirmasi bahwa setiap tanggal akuisisi membawa informasi diskriminatif yang unik, sekaligus menjadi motivasi empiris pendekatan \textit{multi-temporal} pada penelitian ini.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_ndvi_per_class.png}
+    \caption{Profil rata-rata NDVI per kelas tanaman sepanjang 24 tanggal akuisisi Sentinel-2 tahun 2022. Setiap kelas menunjukkan trajektori fenologi yang khas, mengonfirmasi nilai informasi temporal untuk diskriminasi jenis tanaman.}
+    \label{fig:s2_ndvi_per_class}
+\end{figure}
+
 \subsubsection{Profil Spektral per Band}
 Gambar~\ref{fig:s2_spectral_profile} menampilkan rata-rata nilai reflektansi untuk setiap band Sentinel-2 pada tiga tanggal representatif yang mewakili tiga fase musim berbeda: Januari (musim dingin, tanaman aktif), Mei (persiapan lahan, biomassa rendah), dan Juli (puncak musim panas, tanaman aktif).
 Perbedaan antar musim terlihat jelas terutama pada band NIR (B8) yang menunjukkan nilai reflektansi tertinggi pada Januari, mencerminkan biomassa tanaman musim dingin yang sedang tumbuh.
@@ -339,16 +352,62 @@ Setiap patch dinormalisasi menggunakan \textit{min-max normalization} ke rentang
 
 Penelitian ini mengusulkan metode seleksi fitur tiga tahap (\textit{3-stage feature selection}) yang dirancang khusus untuk citra Sentinel-2 multi-temporal pada tugas \textit{semantic segmentation}. Tujuannya adalah mengurangi redundansi spektral dan temporal tanpa mengorbankan performa segmentasi, sekaligus menekan biaya komputasi pelatihan model.
 
+\subsubsection{Pemilihan Tahun Referensi: Analisis Stabilitas Fenologi NDVI}
+\label{subsubsec:tahun_referensi}
+
+Seleksi fitur pada Tahap 1 dan Tahap 2 membutuhkan satu tahun data citra sebagai referensi.
+Untuk memvalidasi pilihan tahun referensi secara kuantitatif, dilakukan analisis stabilitas fenologi NDVI antar-tahun: profil NDVI per kelas dihitung untuk setiap tahun (2022, 2023, 2024), diselaraskan pada sumbu Day-of-Year (DOY), lalu dihitung korelasi Pearson $r$ pada pasangan tanggal yang berdekatan ($\pm$7 hari).
+
+Tabel~\ref{tab:ndvi_stability} merangkum nilai korelasi antar-tahun untuk setiap kelas tanaman.
+
+\begin{table}[htbp]
+\centering
+\caption{Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm$7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$).}
+\label{tab:ndvi_stability}
+\begin{tabular}{lrrrl}
+\hline
+\textbf{Tanaman} & \textbf{$r$(22 vs 23)} & \textbf{$r$(22 vs 24)} & \textbf{$r$(23 vs 24)} & \textbf{Stabilitas} \\
+\hline
+Rice         & $+0{,}949$ & $+0{,}949$ & $+0{,}981$ & Tinggi \\
+Sunflower    & $+0{,}911$ & $+0{,}879$ & $+0{,}977$ & Tinggi \\
+Winter Wheat & $+0{,}861$ & $+0{,}918$ & $+0{,}938$ & Tinggi \\
+Tomatoes     & $+0{,}872$ & $+0{,}914$ & $+0{,}901$ & Tinggi \\
+Walnuts      & $+0{,}805$ & $+0{,}800$ & $+0{,}920$ & Sedang \\
+Almonds      & $+0{,}475$ & $+0{,}742$ & $+0{,}721$ & Rendah \\
+Other Hay    & $+0{,}431$ & $+0{,}779$ & $+0{,}615$ & Rendah \\
+Grapes       & $+0{,}115$ & $+0{,}014$ & $+0{,}755$ & Tidak Stabil \\
+Alfalfa      & $-0{,}025$ & $+0{,}769$ & $+0{,}174$ & Tidak Stabil \\
+Plums        & $-0{,}370$ & $+0{,}680$ & $-0{,}271$ & Tidak Stabil \\
+\hline
+\end{tabular}
+\end{table}
+
+Gambar~\ref{fig:s2_ndvi_year_comparison} menampilkan perbandingan visual profil NDVI ketiga tahun untuk setiap kelas tanaman.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_ndvi_year_comparison.png}
+    \caption{Perbandingan profil NDVI per kelas tanaman antar-tahun (2022, 2023, 2024) yang diselaraskan pada sumbu Day-of-Year. Kelas dengan profil tumpang tindih (Rice, Sunflower, Winter Wheat) menunjukkan stabilitas tinggi; kelas dengan profil menyebar (Alfalfa, Grapes, Plums) menunjukkan variabilitas biologis intrinsik.}
+    \label{fig:s2_ndvi_year_comparison}
+\end{figure}
+
+Hasil analisis menunjukkan bahwa kelas dengan korelasi rendah ($r < 0{,}5$) seperti \textit{Alfalfa}, \textit{Grapes}, dan \textit{Plums} bukan disebabkan oleh kekurangan data, melainkan oleh variabilitas biologis intrinsik:
+\textit{Alfalfa} merupakan tanaman tahunan multi-potong (3--5 kali/tahun) dengan jadwal pemotongan yang berbeda antar-tahun;
+\textit{Grapes} menunjukkan anomali pada 2022 ($r$(22 vs 23) $= +0{,}115$) yang mereda pada pasangan 2023--2024 ($r = +0{,}755$);
+\textit{Plums} hanya mencakup 2{,}1\% area studi sehingga profil NDVI-nya didominasi oleh \textit{noise} piksel campuran pada resolusi 10 m.
+Menambahkan data 2023 ke tahap seleksi tidak akan memperbaiki stabilitas kelas-kelas ini.
+Berdasarkan pertimbangan di atas, \textbf{tahun 2022 dipilih sebagai satu-satunya tahun referensi} untuk Tahap 1 dan Tahap 2, dengan alasan: (1) menghindari kebocoran data (\textit{data leakage}) terhadap tahun 2023 dan 2024 yang digunakan pada pelatihan dan pengujian model penuh; dan (2) penambahan tahun referensi tidak memberikan manfaat yang signifikan untuk kelas-kelas yang tidak stabil.
+
 \subsubsection{Tahap 1 — Filter Preselection}
 
-Tahap pertama bertujuan mereduksi seluruh channel masukan menjadi sekitar 25 kandidat terbaik menggunakan dua ukuran statistik yang murah secara komputasi.
+Tahap pertama bertujuan memilih $K_{cand} = 20$ kandidat band terbaik untuk \textbf{setiap kelas tanaman secara terpisah}, menggunakan dua ukuran statistik yang murah secara komputasi. Pendekatan per-kelas ini memastikan bahwa setiap tanaman memiliki set kandidat yang dioptimalkan untuk karakteristik fenologinya masing-masing.
 
 \textbf{Global Separation Index (GSI).}
 Untuk setiap band $b$, dihitung nilai separabilitas antar kelas:
 \begin{equation}
     SI_{s,o}^{(b)} = \frac{|\mu_s^{(b)} - \mu_o^{(b)}|}{1{,}96 \times (\sigma_s^{(b)} + \sigma_o^{(b)})}
 \end{equation}
-di mana $\mu_s$, $\sigma_s$ adalah rata-rata dan standar deviasi kelas $s$, dan $\mu_o$, $\sigma_o$ untuk kelas pembanding $o$. Nilai GSI merupakan rata-rata $SI_{s,o}$ atas seluruh pasangan kelas.
+di mana $\mu_s$, $\sigma_s$ adalah rata-rata dan standar deviasi piksel kelas tanaman $s$ (label biner: kelas $s$ sebagai positif), dan $\mu_o$, $\sigma_o$ untuk seluruh piksel kelas lainnya sebagai negatif. Nilai $SI_{s}^{(b)}$ dihitung secara mandiri untuk setiap kelas tanaman $s$, dan band diurutkan per kelas berdasarkan nilai ini.
 
 \textbf{RF Feature Importance.}
 Nilai kepentingan fitur diperoleh dari Random Forest yang dilatih pada sampel piksel berlabel:
@@ -365,7 +424,7 @@ dengan $\alpha = 0{,}5$ (bobot seimbang). Band dengan skor $\text{Score}_b$ tert
 
 \subsubsection{Tahap 2 — CNN Forward Selection}
 
-Tahap kedua menggunakan model segmentasi ringan (U-Net dengan encoder ResNet-18) sebagai \textit{oracle} seleksi untuk menentukan jumlah optimal band $K^*$ dari daftar peringkat yang dihasilkan Tahap 1.
+Tahap kedua menggunakan model segmentasi ringan (U-Net dengan encoder ResNet-18) sebagai \textit{oracle} seleksi untuk menentukan jumlah band optimal $K^*_c$ \textbf{per kelas tanaman} dari daftar peringkat yang dihasilkan Tahap 1. Proses seleksi menggunakan data citra tahun referensi 2022 dengan label biner (kelas $c$ vs.\ semua kelas lainnya) untuk setiap kelas tanaman $c$ secara mandiri.
 
 \textbf{Hubungan dengan Tahap 1.}
 Tahap 1 dan Tahap 2 merupakan dua komponen yang saling bergantung dan tidak dapat dipisahkan.
@@ -384,12 +443,40 @@ Band ditambahkan dan dipertahankan hanya apabila mIoU validasi meningkat melebih
     \text{terima band } b_k \iff \text{mIoU}(b_1, \ldots, b_k) > \text{mIoU}(b_1, \ldots, b_{k-1}) + \delta
 \end{equation}
 
-dengan $\delta = 0{,}005$ dan $b_1, b_2, \ldots, b_N$ adalah urutan band berdasarkan peringkat Tahap 1.
-Proses dihentikan apabila tidak terjadi peningkatan selama tiga penambahan berturut-turut (\textit{early stopping}).
-Titik ini mendefinisikan $K^*$ — jumlah band optimal yang digunakan pada Tahap 3.
-Setiap iterasi melatih model selama 15 epoch dengan \textit{early stopping} (patience = 5) untuk efisiensi komputasi.
+dengan $\delta = 0{,}001$ dan $b_1, b_2, \ldots, b_N$ adalah urutan band berdasarkan peringkat Tahap 1.
+Proses dihentikan apabila tidak terjadi peningkatan selama lima penambahan berturut-turut (\textit{no-improve patience} = 5).
+Titik ini mendefinisikan $K^*_c$ --- jumlah band optimal untuk kelas tanaman $c$.
+Setiap iterasi melatih model selama 15 epoch dengan \textit{early stopping} (\textit{patience} = 5) untuk efisiensi komputasi.
+
+Apabila tidak ada band yang memenuhi ambang $\delta$ sehingga $K^*_c = 0$, digunakan satu band dengan skor Tahap~1 tertinggi sebagai \textit{fallback} (\textit{Option~B}), untuk memastikan setiap kelas tanaman tetap terwakili dalam subset akhir.
+Band terpilih dari seluruh kelas tanaman kemudian digabungkan (\textit{union}) untuk membentuk set masukan Eksperimen~C:
+\begin{equation}
+    S_{ExpC} = \bigcup_{c \in \mathcal{C}} S_c, \quad K^* = |S_{ExpC}|
+\end{equation}
+di mana $S_c$ adalah himpunan band terpilih untuk kelas $c$ dan $\mathcal{C}$ adalah himpunan seluruh kelas tanaman.
 
 Metode ini merupakan kontribusi baru yang membedakan penelitian ini dari pendekatan sebelumnya. Pada studi terdahulu \citep{li2023hetao}, seleksi band dilakukan menggunakan GSI dan eliminasi fitur berbasis Random Forest sebagai \textit{filter} statis, di mana model segmentasi hanya digunakan setelah proses seleksi selesai. Dalam penelitian ini, model segmentasi sendiri bertindak sebagai \textit{oracle} dalam loop seleksi, sehingga kriteria pemilihan fitur sepenuhnya dioptimalkan terhadap metrik segmentasi (mIoU) daripada metrik klasifikasi piksel.
+
+\subsubsection{Proyeksi Band ke Tahun Lain}
+\label{subsubsec:band_projection}
+
+Band-band terpilih disimpan dalam format \texttt{BAND\_YYYYMMDD} (contoh: \texttt{B4\_20220730}) yang mengacu pada tanggal akuisisi spesifik tahun referensi 2022.
+Untuk pelatihan model pada tahun 2023 dan pengujian pada tahun 2024, setiap band diproyeksikan ke tanggal akuisisi yang paling dekat secara Day-of-Year (DOY):
+
+\begin{equation}
+    d^*(b, y) = \underset{d \in D_y}{\arg\min}\; \left| \text{DOY}(d) - \text{DOY}(\text{ref}_b) \right|
+\end{equation}
+
+di mana $\text{ref}_b$ adalah tanggal referensi band $b$ pada tahun 2022, $D_y$ adalah himpunan tanggal akuisisi yang tersedia pada tahun $y$, dan $\text{DOY}(\cdot)$ adalah hari ke-$n$ dalam tahun.
+Proyeksi ini menghasilkan pemetaan per-tahun yang disimpan dalam format JSON:
+\begin{verbatim}
+{"2022": ["B4_20220730", ...],
+ "2023": ["B4_20230801", ...],
+ "2024": ["B4_20240730", ...]}
+\end{verbatim}
+
+Apabila jarak DOY antar tanggal terdekat melebihi 15 hari, peringatan diberikan sebagai catatan keterbatasan.
+Pendekatan ini memastikan bahwa jumlah \textit{channel} masukan $K^*$ tetap konsisten untuk semua tahun pelatihan dan pengujian, sehingga arsitektur model yang sama dapat digunakan tanpa modifikasi.
 
 \subsubsection{Tahap 3 — Validasi Model Penuh}
 
