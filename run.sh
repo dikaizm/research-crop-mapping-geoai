@@ -41,7 +41,7 @@ echo "Log file: $LOG_FILE"
 echo "Args: $*"
 echo ""
 
-nohup python -u "$SCRIPT_DIR/scripts/pipeline.py" "$@" \
+nohup python -u "$SCRIPT_DIR/crop_mapping_pipeline/pipeline.py" "$@" \
     > >(tee "$LOG_FILE") \
     2>&1 &
 

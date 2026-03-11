@@ -5,18 +5,22 @@ Stage 1: Per-crop SIglobal ranking (Yin et al. 2020, RS 12(1):162)
 Stage 2: Per-crop binary CNN forward selection (crop_i vs. rest, metric = IoU class 1)
 
 Outputs:
+    data/processed/stage1v2_candidates.json       — Stage 1 per-crop candidate lists (handoff file)
     data/processed/stage2v2_per_crop_results.csv  — per-crop results table
     data/processed/stage3_exp_c_bands.txt         — union of selections (Stage 3 Exp C input)
 
 Usage:
-    python scripts/feature_analysis.py
-    python scripts/feature_analysis.py --force        # re-run even if outputs exist
-    python scripts/feature_analysis.py --data-dir /data/processed
+    python feature_analysis.py                          # run both stages
+    python feature_analysis.py --stage 1                # Stage 1 only (run locally, CPU)
+    python feature_analysis.py --stage 2                # Stage 2 only (run on GPU server)
+    python feature_analysis.py --force                  # re-run even if outputs exist
+    python feature_analysis.py --data-dir /data/processed
 """
 
 import os
 import re
 import sys
+import json
 import time
 import logging
 import argparse
@@ -31,16 +35,16 @@ import rasterio
 import torch
 import torch.nn as nn
 import segmentation_models_pytorch as smp
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import DataLoader, Dataset, TensorDataset, random_split
 
-_ROOT = pathlib.Path(__file__).parent.parent
-sys.path.insert(0, str(_ROOT))
+_ROOT = pathlib.Path(__file__).parent.parent   # crop_mapping_pipeline/
+sys.path.insert(0, str(_ROOT.parent))
 
 os.environ["MLFLOW_DISABLE_TELEMETRY"] = "true"
 import mlflow
 
-import src.utils.band_selection as bs
-from scripts.config import (
+import crop_mapping_pipeline.utils.band_selection as bs
+from crop_mapping_pipeline.config import (
     S2_PROCESSED_DIR, CDL_BY_YEAR, PROCESSED_DIR, FIGURES_DIR,
     S2_BAND_NAMES, S2_NODATA, KEEP_CLASSES, CLASS_REMAP, NUM_CLASSES, CDL_CLASS_NAMES,
     REMAP_LUT, MLFLOW_TRACKING_URI, MLFLOW_EXPERIMENT_FEATURE,
@@ -49,6 +53,9 @@ from scripts.config import (
     S2_EPOCHS, S2_PATIENCE, S2_DELTA, S2_NO_IMPROVE, S2_MAX_BANDS, S2_BATCH_SIZE,
     STAGE2_RESULTS_CSV, STAGE3_EXP_C_BANDS,
 )
+
+# Handoff file written by Stage 1, read by Stage 2 when run separately
+STAGE1_CANDIDATES_JSON = PROCESSED_DIR / "s2" / "2022" / "stage1v2_candidates.json"
 
 log = logging.getLogger(__name__)
 
@@ -60,6 +67,15 @@ def _get_device() -> str:
         return "cuda"
     if torch.backends.mps.is_available():
         return "mps"
+    return "cpu"
+
+
+def _device_label() -> str:
+    if torch.cuda.is_available():
+        name = torch.cuda.get_device_name(0)
+        return f"cuda ({name})"
+    if torch.backends.mps.is_available():
+        return "mps (Apple Silicon)"
     return "cpu"
 
 DEVICE = _get_device()
@@ -146,38 +162,78 @@ class RasterPatchDataset(Dataset):
                 pass
 
 
+def _preload_patches(dataset: "RasterPatchDataset") -> TensorDataset:
+    """
+    Eagerly load all patches from a RasterPatchDataset into a TensorDataset.
+
+    RasterPatchDataset holds open rasterio file handles that cannot be pickled,
+    so DataLoader must use num_workers=0, starving the GPU.  By loading all patches
+    into RAM once we get a picklable TensorDataset that supports num_workers>0
+    and pin_memory=True, keeping the GPU fed.
+    """
+    n = len(dataset)
+    t0 = time.time()
+    log.info(f"  Pre-loading {n} patches into RAM...")
+    imgs_list, masks_list = [], []
+    for i in range(n):
+        img, mask = dataset[i]
+        imgs_list.append(img)
+        masks_list.append(mask)
+    imgs_t  = torch.stack(imgs_list)
+    masks_t = torch.stack(masks_list)
+    elapsed = time.time() - t0
+    mem_mb  = (imgs_t.nbytes + masks_t.nbytes) / 1e6
+    log.info(f"  Pre-load done: {n} patches  {mem_mb:.1f} MB  ({elapsed:.1f}s)")
+    return TensorDataset(imgs_t, masks_t)
+
+
 # ── Data loading ───────────────────────────────────────────────────────────────
 
-def load_data(s2_year: str = "2022"):
+def load_data(s2_year: str = "2022", stage: int = 1):
     """
-    Stack S2 files for a given year, load CDL, sample pixels for Stage 1.
+    Load S2 file paths and band names for a given year.
+
+    stage=1: stacks all rasters into RAM for GSI pixel sampling (~29 GB peak).
+    stage=2: skips stacking — only derives band names from filenames (~2 GB).
+             Stage 2 uses RasterPatchDataset which reads patches on-the-fly.
 
     Returns (df, all_bandnames, n_channels, s2_files, cdl_path).
+    df and n_channels are None when stage=2.
     """
     s2_files = sorted([
-        p for p in glob(f"{S2_PROCESSED_DIR}/*_processed.tif")
-        if os.path.basename(p).split("_")[1] == s2_year
+        p for p in glob(f"{S2_PROCESSED_DIR}/{s2_year}/*_processed.tif")
     ])
     assert s2_files, f"No processed S2 files for year {s2_year} in {S2_PROCESSED_DIR}"
 
     cdl_path = str(CDL_BY_YEAR[s2_year])
     assert os.path.exists(cdl_path), f"CDL not found: {cdl_path}"
 
-    log.info(f"Loading {len(s2_files)} S2 files ({s2_year})...")
-    all_arrays, all_bandnames = [], []
-
+    # Derive band names from filenames — no I/O needed
+    all_bandnames = []
     for s2_path in s2_files:
         fname    = os.path.basename(s2_path)
         m        = re.search(r"_(\d{4})_(\d{2})_(\d{2})_processed", fname)
         date_str = f"{m.group(1)}{m.group(2)}{m.group(3)}" if m else fname[:8]
+        all_bandnames.extend([f"{b}_{date_str}" for b in S2_BAND_NAMES])
+
+    n_channels = len(all_bandnames)
+    log.info(f"S2 files: {len(s2_files)} ({s2_year})  |  {n_channels} channels")
+
+    if stage == 2:
+        log.info("Stage 2 mode: skipping raster stacking (patches read on-the-fly)")
+        return None, all_bandnames, n_channels, s2_files, cdl_path
+
+    # Stage 1: stack all rasters into RAM for pixel sampling
+    log.info(f"Loading {len(s2_files)} S2 files ({s2_year})...")
+    all_arrays = []
+    for s2_path in s2_files:
         with rasterio.open(s2_path) as src:
             arr = src.read().astype(np.float32)
         arr[arr == S2_NODATA] = np.nan
         all_arrays.append(arr)
-        all_bandnames.extend([f"{b}_{date_str}" for b in S2_BAND_NAMES])
 
-    stacked              = np.concatenate(all_arrays, axis=0)
-    n_channels, H, W    = stacked.shape
+    stacked           = np.concatenate(all_arrays, axis=0)
+    _, H, W           = stacked.shape
     log.info(f"Stacked S2: {n_channels} channels × {H} × {W} px")
 
     with rasterio.open(cdl_path) as src:
@@ -187,10 +243,8 @@ def load_data(s2_year: str = "2022"):
     img_2d = stacked.reshape(n_channels, -1).T
     lbl_1d = cdl.flatten()
 
-    # NaN-aware: only filter by CDL class (not all-finite).
-    # GSI uses pandas mean/std (skipna=True) → NaN bands handled correctly.
     valid_mask = np.isin(lbl_1d, KEEP_CLASSES)
-    img_valid  = img_2d[valid_mask]   # fancy indexing → copy
+    img_valid  = img_2d[valid_mask]
     lbl_valid  = lbl_1d[valid_mask]
 
     log.info(f"Labeled crop pixels: {len(lbl_valid):,} "
@@ -200,7 +254,7 @@ def load_data(s2_year: str = "2022"):
     n   = min(len(lbl_valid), max(1000, int(len(lbl_valid) * SAMPLE_FRACTION)))
     idx = rng.choice(len(lbl_valid), n, replace=False)
 
-    df        = pd.DataFrame(img_valid[idx], columns=all_bandnames)
+    df = pd.DataFrame(img_valid[idx], columns=all_bandnames)
     df.insert(0, "class_label", lbl_valid[idx].astype(int))
 
     log.info(f"Sampled {len(df):,} pixels (SAMPLE_FRACTION={SAMPLE_FRACTION})")
@@ -271,6 +325,17 @@ def run_stage1(df: pd.DataFrame, all_bandnames: list, n_channels: int, s2_files:
 
     mlflow.end_run(status="FINISHED")
     log.info(f"Stage 1 MLflow run_id: {stage1_run.info.run_id}")
+
+    # Save candidates as handoff file so Stage 2 can run independently
+    os.makedirs(os.path.dirname(STAGE1_CANDIDATES_JSON), exist_ok=True)
+    payload = {
+        "run_ts":              run_ts,
+        "candidates_per_crop": {str(k): v for k, v in candidates_per_crop.items()},
+    }
+    with open(STAGE1_CANDIDATES_JSON, "w") as f:
+        json.dump(payload, f, indent=2)
+    log.info(f"Stage 1 candidates saved: {STAGE1_CANDIDATES_JSON}")
+
     return candidates_per_crop, run_ts
 
 
@@ -294,7 +359,8 @@ def _compute_iou_class1(preds: torch.Tensor, labels: torch.Tensor) -> float:
 
 
 def _train_eval_binary(band_indices: list, crop_id: int, binary_lut: np.ndarray,
-                       s2_files: list, cdl_path: str) -> float:
+                       s2_files: list, cdl_path: str,
+                       band_label: str = "") -> float:
     """Train a binary U-Net oracle for crop_id vs. rest. Returns best IoU(class 1)."""
     dataset = RasterPatchDataset(
         s2_paths=s2_files, cdl_path=cdl_path,
@@ -307,28 +373,49 @@ def _train_eval_binary(band_indices: list, crop_id: int, binary_lut: np.ndarray,
         log.warning(f"    Only {len(dataset)} patches for crop {crop_id} — returning 0.0")
         return 0.0
 
-    n_val   = max(1, int(0.2 * len(dataset)))
-    n_train = len(dataset) - n_val
+    # Pre-load all patches into RAM so DataLoader can use multiple workers + pin_memory.
+    # RasterPatchDataset holds open rasterio handles (not picklable), forcing num_workers=0
+    # which starves the GPU.  TensorDataset is fully picklable.
+    tensor_ds = _preload_patches(dataset)
+
+    n_val   = max(1, int(0.2 * len(tensor_ds)))
+    n_train = len(tensor_ds) - n_val
     train_ds, val_ds = random_split(
-        dataset, [n_train, n_val],
+        tensor_ds, [n_train, n_val],
         generator=torch.Generator().manual_seed(42),
     )
 
-    train_dl  = DataLoader(train_ds, batch_size=S2_BATCH_SIZE, shuffle=True,  num_workers=0)
-    val_dl    = DataLoader(val_ds,   batch_size=S2_BATCH_SIZE, shuffle=False, num_workers=0)
+    use_pin  = DEVICE.startswith("cuda")
+    n_workers = min(4, os.cpu_count() or 1)
+    train_dl  = DataLoader(train_ds, batch_size=S2_BATCH_SIZE, shuffle=True,
+                           num_workers=n_workers, pin_memory=use_pin,
+                           persistent_workers=n_workers > 0)
+    val_dl    = DataLoader(val_ds,   batch_size=S2_BATCH_SIZE, shuffle=False,
+                           num_workers=n_workers, pin_memory=use_pin,
+                           persistent_workers=n_workers > 0)
     model     = _build_unet(len(band_indices))
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     criterion = nn.CrossEntropyLoss()   # no ignore_index: binary, class 0 is informative
 
+    log.info(f"    U-Net  in_ch={len(band_indices)}  "
+             f"train={n_train} patches  val={n_val} patches  "
+             f"max_epochs={S2_EPOCHS}  patience={S2_PATIENCE}  "
+             f"workers={n_workers}  pin_memory={use_pin}"
+             + (f"  [{band_label}]" if band_label else ""))
+
     best_iou, no_improve = 0.0, 0
 
-    for _ in range(S2_EPOCHS):
+    for epoch in range(S2_EPOCHS):
         model.train()
+        train_loss, n_batches = 0.0, 0
         for imgs, masks in train_dl:
             imgs, masks = imgs.to(DEVICE), masks.to(DEVICE)
             optimizer.zero_grad()
-            criterion(model(imgs), masks).backward()
+            loss = criterion(model(imgs), masks)
+            loss.backward()
             optimizer.step()
+            train_loss += loss.item()
+            n_batches  += 1
 
         model.eval()
         all_preds, all_labels = [], []
@@ -338,13 +425,20 @@ def _train_eval_binary(band_indices: list, crop_id: int, binary_lut: np.ndarray,
                 all_preds.append(preds.cpu())
                 all_labels.append(masks)
 
-        iou = _compute_iou_class1(torch.cat(all_preds), torch.cat(all_labels))
+        iou       = _compute_iou_class1(torch.cat(all_preds), torch.cat(all_labels))
+        avg_loss  = train_loss / max(n_batches, 1)
+        improved  = iou > best_iou + 1e-4
+        marker    = " *" if improved else ""
+        log.info(f"    epoch {epoch+1:>2}/{S2_EPOCHS}  loss={avg_loss:.4f}  "
+                 f"IoU(c1)={iou:.4f}{marker}  "
+                 f"[best={best_iou:.4f}  no_improve={no_improve}/{S2_PATIENCE}]")
 
-        if iou > best_iou + 1e-4:
+        if improved:
             best_iou, no_improve = iou, 0
         else:
             no_improve += 1
             if no_improve >= S2_PATIENCE:
+                log.info(f"    Early stop at epoch {epoch+1} (patience={S2_PATIENCE})")
                 break
 
     return best_iou
@@ -354,12 +448,24 @@ def run_stage2(candidates_per_crop: dict, all_bandnames: list,
                s2_files: list, cdl_path: str, run_ts: str) -> dict:
     """
     Per-crop binary CNN forward selection.
+
+    MLflow structure:
+        stage2v2_binary_fwd_{ts}          — parent: hyperparams + summary
+        └── stage2v2_{crop_name}_{ts}     — child per crop: IoU curve, K*, accepted bands
+
     Returns selected_per_crop = {crop_id: [band_name, ...]}.
     """
     band_index = {name: i for i, name in enumerate(all_bandnames)}
 
+    # Attach a file handler so all log output is also written to disk
+    log_path    = PROCESSED_DIR / f"stage2_run_{run_ts}.log"
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
+    _fh         = logging.FileHandler(log_path, mode="w", encoding="utf-8")
+    _fh.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+    logging.getLogger().addHandler(_fh)
+
     _mlflow_setup()
-    stage2_run = mlflow.start_run(run_name=f"stage2v2_binary_fwd_{run_ts}")
+    parent_run = mlflow.start_run(run_name=f"stage2v2_binary_fwd_{run_ts}")
     mlflow.log_params({
         "stage":          "2_per_crop_binary_forward",
         "version":        "v2",
@@ -374,93 +480,152 @@ def run_stage2(candidates_per_crop: dict, all_bandnames: list,
         "max_bands":      S2_MAX_BANDS,
         "top_k_per_crop": TOP_K_PER_CROP,
         "device":         DEVICE,
+        "n_crops":        len(KEEP_CLASSES),
     })
 
     selected_per_crop: dict[int, list] = {}
     history_per_crop:  dict[int, list] = {}
-    global_step = 0
+    crop_run_ids:      dict[int, str]  = {}
+
+    n_crops     = len(KEEP_CLASSES)
+    total_cands = sum(len(v) for v in candidates_per_crop.values())
+    log.info(f"\nStage 2 — per-crop binary CNN forward selection")
+    log.info(f"  Crops: {n_crops}  |  Total candidates: {total_cands}  "
+             f"|  δ={S2_DELTA}  max_bands={S2_MAX_BANDS}  no_improve={S2_NO_IMPROVE}")
+    log.info(f"  Epochs={S2_EPOCHS}  patience={S2_PATIENCE}  "
+             f"batch={S2_BATCH_SIZE}  patch={S2_PATCH_SIZE}px  stride={S2_STRIDE}px")
 
     try:
-        for crop_id in KEEP_CLASSES:
+        for crop_idx, crop_id in enumerate(KEEP_CLASSES, 1):
             crop_name  = CDL_CLASS_NAMES[crop_id]
             candidates = candidates_per_crop[crop_id]
 
-            log.info(f"\n{'='*55}")
-            log.info(f"Crop: {crop_name} (id={crop_id}) — {len(candidates)} candidates")
+            log.info(f"\n{'='*60}")
+            log.info(f"[{crop_idx}/{n_crops}] Crop: {crop_name} (CDL id={crop_id}) "
+                     f"— {len(candidates)} candidates")
 
             binary_lut          = np.zeros(256, dtype=np.int64)
             binary_lut[crop_id] = 1
 
             selected, prev_iou, no_improve_cnt, history = [], 0.0, 0, []
 
-            for step, band in enumerate(candidates):
-                if len(selected) >= S2_MAX_BANDS:
-                    log.info(f"  max_bands={S2_MAX_BANDS} reached — stopping")
-                    break
-                if no_improve_cnt >= S2_NO_IMPROVE:
-                    log.info(f"  {S2_NO_IMPROVE} consecutive rejections — stopping")
-                    break
-
-                trial_indices = [band_index[b] for b in selected + [band]]
-                t0            = time.time()
-                iou           = _train_eval_binary(trial_indices, crop_id, binary_lut,
-                                                   s2_files, cdl_path)
-                elapsed       = time.time() - t0
-                gain          = iou - prev_iou
-                accepted      = gain >= S2_DELTA
-
-                if accepted:
-                    selected = selected + [band]
-                    prev_iou = iou
-                    no_improve_cnt = 0
-                else:
-                    no_improve_cnt += 1
-
-                history.append({
-                    "crop_id":   crop_id, "crop_name": crop_name,
-                    "step":      step,    "band":      band,
-                    "n_bands":   len(selected),
-                    "iou_class1":round(iou,  4), "gain":  round(gain, 4),
-                    "accepted":  accepted,        "elapsed_s": round(elapsed),
+            # ── Nested run per crop ───────────────────────────────────────────
+            with mlflow.start_run(
+                run_name=f"stage2v2_{crop_name.replace('/', '-')}_{run_ts}",
+                nested=True,
+            ) as crop_run:
+                mlflow.log_params({
+                    "crop_id":         crop_id,
+                    "crop_name":       crop_name,
+                    "n_candidates":    len(candidates),
                 })
 
-                mlflow.log_metrics({
-                    f"crop_{crop_id}_iou":      iou,
-                    f"crop_{crop_id}_gain":     gain,
-                    f"crop_{crop_id}_accepted": int(accepted),
-                }, step=global_step)
-                global_step += 1
+                for step, band in enumerate(candidates):
+                    if len(selected) >= S2_MAX_BANDS:
+                        log.info(f"  max_bands={S2_MAX_BANDS} reached — stopping")
+                        break
+                    if no_improve_cnt >= S2_NO_IMPROVE:
+                        log.info(f"  {S2_NO_IMPROVE} consecutive rejections — stopping")
+                        break
 
-                tag = "✅" if accepted else "❌"
-                log.info(f"  {tag} +{band:<22} IoU={iou:.4f} gain={gain:+.4f} ({elapsed:.0f}s)")
+                    trial_bands   = selected + [band]
+                    trial_indices = [band_index[b] for b in trial_bands]
+                    log.info(f"\n  --- step {step+1}/{len(candidates)}  "
+                             f"trial band: {band}  "
+                             f"(selected so far: {len(selected)}) ---")
+                    t0      = time.time()
+                    iou     = _train_eval_binary(trial_indices, crop_id, binary_lut,
+                                                 s2_files, cdl_path, band_label=band)
+                    elapsed = time.time() - t0
+                    gain          = iou - prev_iou
+                    accepted      = gain >= S2_DELTA
+
+                    if accepted:
+                        selected = selected + [band]
+                        prev_iou = iou
+                        no_improve_cnt = 0
+                    else:
+                        no_improve_cnt += 1
+
+                    history.append({
+                        "crop_id":    crop_id,   "crop_name": crop_name,
+                        "step":       step,       "band":      band,
+                        "n_bands":    len(selected),
+                        "iou_class1": round(iou,  4), "gain":  round(gain, 4),
+                        "accepted":   accepted,        "elapsed_s": round(elapsed),
+                    })
+
+                    # step = band rank within this crop → clean IoU curve per crop
+                    mlflow.log_metrics({
+                        "iou_class1": iou,
+                        "gain":       gain,
+                        "accepted":   int(accepted),
+                        "n_selected": len(selected),
+                    }, step=step)
+
+                    tag = "✅" if accepted else "❌"
+                    log.info(f"  {tag} +{band:<22} IoU={iou:.4f} gain={gain:+.4f} ({elapsed:.0f}s)")
+
+                # ── Option B: top-1 fallback if nothing was selected ─────────
+                if not selected and candidates:
+                    fallback = candidates[0]
+                    selected = [fallback]
+                    log.warning(
+                        f"  K*=0 for {crop_name} — fallback to top-1 GSI band: {fallback}"
+                    )
+                    mlflow.set_tag("fallback_band", fallback)
+
+                mlflow.log_metrics({"final_iou": prev_iou, "k_star": len(selected)})
+                mlflow.set_tag("selected_bands", str(selected))
+                mlflow.set_tag("stop_reason",
+                    "max_bands"  if len(selected) >= S2_MAX_BANDS
+                    else "no_improve" if no_improve_cnt >= S2_NO_IMPROVE
+                    else "exhausted"
+                )
+
+                crop_run_ids[crop_id] = crop_run.info.run_id
 
             selected_per_crop[crop_id] = selected
             history_per_crop[crop_id]  = history
+            log.info(f"\n  → [{crop_idx}/{n_crops}] {crop_name}: "
+                     f"K*={len(selected)}  final IoU(c1)={prev_iou:.4f}")
+            if selected:
+                log.info(f"     Selected bands: {selected}")
 
+            # Mirror summary to parent so it's visible without drilling into children
             mlflow.log_metrics({
-                f"crop_{crop_id}_final_iou":  prev_iou,
-                f"crop_{crop_id}_n_selected": len(selected),
-            }, step=global_step)
-            mlflow.set_tag(f"stage2_selected_{crop_id}", str(selected))
-            log.info(f"  → {crop_name}: K*={len(selected)}, final IoU={prev_iou:.4f}")
+                f"crop_{crop_id}_final_iou": prev_iou,
+                f"crop_{crop_id}_k_star":    len(selected),
+            })
 
-        _save_results(selected_per_crop, history_per_crop, stage2_run.info.run_id)
+        _save_results(selected_per_crop, history_per_crop, crop_run_ids)
+        mlflow.log_artifact(str(STAGE2_RESULTS_CSV))
+        mlflow.log_artifact(str(STAGE3_EXP_C_BANDS))
+        log.info(f"Stage 2 parent run_id: {parent_run.info.run_id}")
+        logging.getLogger().removeHandler(_fh)
+        _fh.flush()
+        _fh.close()
+        mlflow.log_artifact(str(log_path))
         mlflow.end_run(status="FINISHED")
-        log.info(f"Stage 2 MLflow run_id: {stage2_run.info.run_id}")
 
     except Exception as e:
+        logging.getLogger().removeHandler(_fh)
+        _fh.flush()
+        _fh.close()
+        mlflow.log_artifact(str(log_path))
         mlflow.end_run(status="FAILED")
         raise e
 
     return selected_per_crop
 
 
-def _save_results(selected_per_crop: dict, history_per_crop: dict, run_id: str) -> None:
+def _save_results(selected_per_crop: dict, history_per_crop: dict,
+                  crop_run_ids: dict) -> None:
     """Save stage2v2_per_crop_results.csv and stage3_exp_c_bands.txt."""
     rows = []
     for crop_id in KEEP_CLASSES:
-        sel      = selected_per_crop.get(crop_id, [])
-        hist     = history_per_crop.get(crop_id, [])
+        sel       = selected_per_crop.get(crop_id, [])
+        hist      = history_per_crop.get(crop_id, [])
         final_iou = max((r["iou_class1"] for r in hist if r["accepted"]), default=0.0)
 
         dates    = sorted(set(
@@ -477,7 +642,7 @@ def _save_results(selected_per_crop: dict, history_per_crop: dict, run_id: str) 
             "key_bands":      ", ".join(spectral),
             "selected_bands": str(sel),
             "final_iou_c1":   round(final_iou, 4),
-            "mlflow_run_id":  run_id,
+            "mlflow_run_id":  crop_run_ids.get(crop_id, ""),
         })
 
     os.makedirs(os.path.dirname(STAGE2_RESULTS_CSV), exist_ok=True)
@@ -515,35 +680,86 @@ def _mlflow_setup() -> None:
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
-def main(force: bool = False, data_dir: str = None) -> None:
+def main(force: bool = False, data_dir: str = None, stage: str = "all",
+         delta: float = None) -> None:
     # Override data paths if requested
+    # Use `global` so all module-level functions pick up the new paths at call time.
     if data_dir:
-        import scripts.config as _cfg
-        _cfg.PROCESSED_DIR    = pathlib.Path(data_dir)
-        _cfg.S2_PROCESSED_DIR = pathlib.Path(data_dir) / "s2"
-        _cfg.CDL_DIR          = pathlib.Path(data_dir) / "cdl"
+        global S2_PROCESSED_DIR, CDL_BY_YEAR, PROCESSED_DIR, FIGURES_DIR, \
+               STAGE2_RESULTS_CSV, STAGE3_EXP_C_BANDS, STAGE1_CANDIDATES_JSON
+        processed               = pathlib.Path(data_dir)
+        PROCESSED_DIR           = processed
+        S2_PROCESSED_DIR        = processed / "s2"
+        CDL_BY_YEAR             = {
+            yr: processed / "cdl" / f"cdl_{yr}_study_area_filtered.tif"
+            for yr in ["2022", "2023", "2024"]
+        }
+        STAGE2_RESULTS_CSV      = processed / "stage2v2_per_crop_results.csv"
+        STAGE3_EXP_C_BANDS      = processed / "stage3_exp_c_bands.txt"
+        STAGE1_CANDIDATES_JSON  = processed / "s2" / "2022" / "stage1v2_candidates.json"
+        log.info(f"Data dir overridden to {processed}")
 
-    # Skip if outputs already exist
-    if not force and os.path.exists(STAGE3_EXP_C_BANDS):
-        log.info(f"Output already exists: {STAGE3_EXP_C_BANDS}")
-        log.info("Use --force to re-run feature analysis.")
-        return
+    if delta is not None:
+        global S2_DELTA
+        S2_DELTA = delta
+        log.info(f"S2_DELTA overridden to {S2_DELTA}")
 
-    log.info(f"Device: {DEVICE}")
     os.makedirs(FIGURES_DIR, exist_ok=True)
 
-    df, all_bandnames, n_channels, s2_files, cdl_path = load_data(s2_year="2022")
-    candidates_per_crop, run_ts = run_stage1(df, all_bandnames, n_channels, s2_files)
-    run_stage2(candidates_per_crop, all_bandnames, s2_files, cdl_path, run_ts)
+    # ── Stage 1 ───────────────────────────────────────────────────────────────
+    if stage in ("1", "all"):
+        if not force and os.path.exists(STAGE1_CANDIDATES_JSON):
+            log.info(f"Stage 1 output already exists: {STAGE1_CANDIDATES_JSON}")
+            log.info("Use --force to re-run.")
+        else:
+            log.info(f"Device: {_device_label()}")
+            df, all_bandnames, n_channels, s2_files, cdl_path = load_data(s2_year="2022")
+            run_stage1(df, all_bandnames, n_channels, s2_files)
+            log.info("Stage 1 complete.")
+
+        if stage == "1":
+            return
+
+    # ── Stage 2 ───────────────────────────────────────────────────────────────
+    if stage in ("2", "all"):
+        if not force and os.path.exists(STAGE3_EXP_C_BANDS):
+            log.info(f"Stage 2 output already exists: {STAGE3_EXP_C_BANDS}")
+            log.info("Use --force to re-run.")
+            return
+
+        # Load Stage 1 candidates from handoff file
+        if not os.path.exists(STAGE1_CANDIDATES_JSON):
+            raise FileNotFoundError(
+                f"Stage 1 candidates not found: {STAGE1_CANDIDATES_JSON}\n"
+                "Run Stage 1 first:  python feature_analysis.py --stage 1"
+            )
+        with open(STAGE1_CANDIDATES_JSON) as f:
+            payload = json.load(f)
+        candidates_per_crop = {int(k): v for k, v in payload["candidates_per_crop"].items()}
+        run_ts              = payload["run_ts"]
+        log.info(f"Loaded Stage 1 candidates from {STAGE1_CANDIDATES_JSON}  (run_ts={run_ts})")
+
+        log.info(f"Device: {_device_label()}")
+        _, all_bandnames, _, s2_files, cdl_path = load_data(s2_year="2022", stage=2)
+        run_stage2(candidates_per_crop, all_bandnames, s2_files, cdl_path, run_ts)
+        log.info("Stage 2 complete.")
 
     log.info("Feature analysis complete.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Feature analysis v2: Stage 1 + Stage 2")
+    parser.add_argument(
+        "--stage",
+        choices=["1", "2", "all"],
+        default="all",
+        help="Which stage to run: 1 (CPU, run locally), 2 (GPU, run on server), all (default)",
+    )
     parser.add_argument("--force",    action="store_true", help="Re-run even if outputs exist")
-    parser.add_argument("--data-dir", type=str, default=None,
+    parser.add_argument("--data-dir", type=str,   default=None,
                         help="Override processed data directory")
+    parser.add_argument("--delta",    type=float, default=None,
+                        help="Override S2_DELTA (min IoU gain to accept a band, default: 0.005)")
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -551,4 +767,4 @@ if __name__ == "__main__":
         format="%(asctime)s %(levelname)s %(message)s",
         handlers=[logging.StreamHandler()],
     )
-    main(force=args.force, data_dir=args.data_dir)
+    main(force=args.force, data_dir=args.data_dir, stage=args.stage, delta=args.delta)

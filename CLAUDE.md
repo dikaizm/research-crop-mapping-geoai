@@ -12,12 +12,13 @@ Area: ~2,038 km² (as covered by the S2 export grid)
 
 ## Tech Stack
 
-- **Python** with virtual environment at `.venv/`
+- **Python** with virtual environment at `.venv/` (local) or `crop_mapping_pipeline/venv/` (GPU server)
 - **geoai** (`geoai/`) — git submodule, a geospatial AI library (opengeos/geoai). Provides U-Net training, tiled inference, chip generation, and Sentinel-2 download via Planetary Computer STAC.
 - **segmentation-models-pytorch** — U-Net, DeepLabV3+, SegFormer architectures
 - **rasterio** — raster I/O
-- **MLflow** — experiment tracking (remote server at `http://mlflow-geoai.stelarea.com`)
-- **Jupyter notebooks** — main workspace for experiments
+- **MLflow** — experiment tracking (remote server at `https://mlflow-geoai.stelarea.com`)
+- **Jupyter notebooks** — main workspace for local experiments
+- **crop_mapping_pipeline/** — standalone production pipeline for GPU server deployment
 
 ---
 
@@ -26,51 +27,65 @@ Area: ~2,038 km² (as covered by the S2 export grid)
 ```
 research-crop-mapping-geoai/
 ├── CLAUDE.md                   # This file
-├── s2_segmentation.py          # Legacy pipeline script
 ├── geoai/                      # Git submodule: opengeos/geoai library
 ├── notebooks/                  # Jupyter notebooks (numbered pipeline order)
-│   ├── 00_setup_env.ipynb          # Environment setup
-│   ├── 01_fetch_data.ipynb         # Data download (gdown from Google Drive)
-│   ├── 02_image_processing.ipynb   # Preprocessing (CRS alignment, NoData, filtering)
-│   ├── 03_image_analysis.ipynb     # EDA & visualization
-│   ├── 04_feature_analysis.ipynb   # 3-stage band selection
-│   ├── 05_train_segmentation_model.ipynb  # Model training
-│   ├── 06_segmentation_model_00.ipynb     # U-Net baseline
-│   ├── 07_segmentation_model_01.ipynb     # DeepLabV3+ experiments
-│   ├── 08_segmentation_model_01-1.ipynb   # DeepLabV3+ variants
-│   ├── 09_segmentation_model_02.ipynb     # SegFormer experiments
-│   ├── 10_eval_segmentation_model.ipynb   # Evaluation
-│   └── 11_mlflow_tracking.ipynb           # MLflow logging
+│   ├── 00_setup_env.ipynb
+│   ├── 01_fetch_data.ipynb
+│   ├── 02_image_processing.ipynb
+│   ├── 03_image_analysis.ipynb
+│   ├── 04_feature_analysis.ipynb       # Stage 1 global joint score (v1)
+│   ├── 04_feature_analysis_v2.ipynb    # Stage 1+2 per-crop binary selection (v2, active)
+│   ├── 05_train_segmentation_model.ipynb
+│   └── 06_mlflow_tracking.ipynb        # MLflow connectivity tests
+├── crop_mapping_pipeline/      # Standalone GPU pipeline repo (independent git repo)
+│   ├── pipeline.py             # CLI entry point
+│   ├── config.py               # All constants, hyperparams, GDrive IDs
+│   ├── requirements.txt
+│   ├── README.md
+│   ├── stages/
+│   │   ├── fetch_data.py       # Stage 0: download processed S2+CDL from GDrive
+│   │   ├── process_data.py     # Stage 0b: process raw S2+CDL, upload to GDrive
+│   │   ├── feature_analysis.py # Stage 1+2: per-crop binary CNN forward selection
+│   │   └── train_segmentation.py # Stage 3: Exp A/B/C × 2 archs = 6 runs
+│   ├── models/
+│   │   ├── cbam.py
+│   │   ├── deeplabv3plus.py    # DeepLabV3+ with CBAM attention
+│   │   └── segformer.py
+│   ├── utils/
+│   │   ├── band_selection.py   # GSI, RF importance, joint score, top-k
+│   │   ├── constants.py        # USDA_CDL_COLORS, USDA_CDL_NAMES
+│   │   ├── general.py          # GDrive download helper (gdown)
+│   │   └── label.py            # Label utilities
+│   └── ssh/                    # SSH keys + OAuth token (gitignored)
+│       ├── runpod-cropmap      # ed25519 private key for RunPod
+│       ├── runpod-cropmap.pub
+│       ├── client_secret_*.json  # OAuth 2.0 Desktop app credentials
+│       └── gdrive_token.pickle   # OAuth token (generated locally, transferred to VPS)
 ├── data/
 │   ├── raw/
+│   │   ├── s2/{year}/          # Raw S2 TIFs per year (temporary, deleted after processing)
 │   │   └── cdl/                # CDL rasters (2022/2023/2024, EPSG:5070, 30m)
 │   └── processed/
-│       ├── s2/                 # S2 with NoData assigned (*_processed.tif)
-│       └── cdl/                # CDL reprojected to S2 grid (EPSG:4326, ~10m)
-│           ├── cdl_2022_study_area.tif          # reprojected
-│           └── cdl_2022_study_area_filtered.tif # filtered (11 classes + background)
-├── models/                     # Saved model checkpoints
-├── utils/
-│   ├── constants.py            # USDA_CDL_COLORS, USDA_CDL_NAMES dicts
-│   ├── band_selection.py       # GSI, RF importance, joint score, top-k selection
-│   ├── general.py              # Google Drive download helper (gdown)
-│   └── label.py                # Label utilities (label_filtering with .copy() fix)
+│       ├── s2/{year}/          # S2 with NoData assigned (*_processed.tif), per year
+│       ├── cdl/                # CDL reprojected to S2 grid (EPSG:4326, ~10m)
+│       │   └── cdl_{year}_study_area_filtered.tif
+│       ├── stage2v2_per_crop_results.csv  # Stage 2 output: per-crop K*, IoU
+│       └── stage3_exp_c_bands.txt         # Exp C band list (union of per-crop selections)
 ├── mlflow-research/            # MLflow Docker (local fallback)
-│   ├── Dockerfile              # python:3.11-slim, mlflow==2.14.3, psycopg2-binary
-│   ├── docker-compose.yml      # PostgreSQL backend, port 8088→8080
-│   └── mlruns/
-│       └── artifacts/
+│   ├── Dockerfile              # mlflow==3.10.1, PostgreSQL backend
+│   ├── docker-compose.yml      # port 8088→8080
+│   └── mlruns/artifacts/
 ├── documents/
-│   ├── crop_mapping_pipeline.excalidraw
 │   ├── reports/                # Progress reports (report_YYYYMMDD.md)
 │   ├── paper/
 │   └── thesis/
 │       ├── main.tex
-│       ├── chapters/           # abstract, introduction, literature_review,
-│       │                       # methodology, results, conclusion
-│       ├── figures/            # publication-quality figures
+│       ├── chapters/
+│       ├── figures/
 │       └── references.bib
-└── ssh/                        # SSH configs (ignored by git)
+└── src/                        # Legacy local utilities (superseded by crop_mapping_pipeline/)
+    ├── models/
+    └── utils/
 ```
 
 ---
@@ -79,28 +94,29 @@ research-crop-mapping-geoai/
 
 ### Satellite Imagery
 - **Source**: Google Earth Engine — `COPERNICUS/S2_SR_HARMONIZED`
-- **Export folder**: `S2_Annual_15d_sacramento_3` (Google Drive File Stream)
+- **Export folder**: `S2_Annual_15d_sacramento_3` (Google Drive)
 - **Years**: 2022, 2023, 2024 — acquisition interval ~15 days
-- **Bands**: 11 bands (B1–B12, excluding B9/B10)
+- **Bands**: 11 bands (B1–B12, excluding B9/B10) → `S2_BAND_NAMES` in config.py
 - **Dimensions**: 5,596 × 4,684 px, ~10m pixel size
 - **CRS**: EPSG:4326 (WGS84)
 - **Cloud filter**: ≤10% cloud cover
 - **Best coverage date (2022)**: 2022-07-30 (99.6% valid pixels)
+- **Files per year**: ~25 dates × 11 bands = 275 channels
 
 ### Labels
 - **Source**: USDA NASS Cropland Data Layer (CDL)
 - **Original**: EPSG:5070 (NAD83 / Conus Albers), 30m resolution, USA-wide
 - **Processed**: reprojected + clipped + resampled to S2 grid in a single `rasterio.warp.reproject()` call
 
-### CDL Class Setup (11 classes + background)
+### CDL Class Setup (10 crops + background)
 ```python
-KEEP_CLASSES = [3, 6, 24, 36, 37, 54, 61, 69, 75, 76, 220]
-# Extended: [3, 6, 24, 33, 36, 37, 54, 61, 69, 75, 76, 204, 220]
+KEEP_CLASSES = [3, 6, 24, 36, 37, 54, 69, 75, 76, 220]   # Fallow/61 → background (0)
+CLASS_REMAP  = {cls_id: i+1 for i, cls_id in enumerate(KEEP_CLASSES)}
+NUM_CLASSES  = 11   # 0=background + 1–10=crops
 ```
 
 | ID | Class | Coverage |
 |---|---|---|
-| 61 | Fallow/Idle Cropland | 28.3% |
 | 75 | Almonds | 11.5% |
 | 76 | Walnuts | 9.1% |
 | 54 | Tomatoes | 7.4% |
@@ -112,92 +128,136 @@ KEEP_CLASSES = [3, 6, 24, 36, 37, 54, 61, 69, 75, 76, 220]
 | 37 | Other Hay/Non Alfalfa | 1.4% |
 | 69 | Grapes | 1.3% |
 
-### Preprocessing Pipeline (`02_image_processing.ipynb`)
-Order matters — NoData must be assigned BEFORE resampling to prevent interpolation artifacts:
+Note: Fallow/Idle Cropland (CDL id=61) is remapped to background (class 0), not a crop class.
+
+### Preprocessing Pipeline (`process_data.py` / `02_image_processing.ipynb`)
+Order matters — NoData must be assigned BEFORE resampling:
 ```
-CDL (EPSG:5070, 30m) → reproject+clip+resample to S2 grid → filter classes
-S2 files → assign NoData (invalid/neg/NaN → -9999, cast float32)
-Verify: same CRS, bounds, dimensions
+Raw S2 TIFs → assign NoData (invalid/neg/NaN → -9999, float32) → save *_processed.tif
+Raw CDL (EPSG:5070, 30m) → reproject+clip+resample to S2 grid → filter KEEP_CLASSES
+Verify: same CRS, bounds, dimensions → upload to GDrive → (optionally) delete raw
 ```
 
 ---
 
 ## Novel Method: 3-Stage Band Selection
 
-### Stage 1 — Filter Preselection (`04_feature_analysis.ipynb`)
-Scores all input channels using:
-- **GSI** (Global Separation Index): class separability per band
-- **RF Importance**: mean decrease in Gini impurity (`compute_rf_importance()`)
-- **Joint Score**: `Score_b = α·GSI_norm + (1-α)·RF_norm` (α=0.5, `compute_joint_score()`)
-- Top-K selection via `select_top_k()`
+### Stage 1 — Per-Crop Filter Preselection
+- Computes **per-crop SIglobal** (GSI per crop vs. rest) for all 275 channels
+- Produces `candidates_per_crop[crop_id]` — top-20 bands ranked by SIglobal per crop
+- Saves `stage1v2_candidates.json` to `data/processed/s2/2022/`
+- MLflow: experiment `cropmap_feature_analysis_s2`, run `stage1v2_...`
 
-### Stage 2 — CNN Forward Selection (Novel Contribution)
-- Evaluates features **in Stage 1 rank order** (O(N) vs O(N²) for pure greedy search)
-- Oracle: lightweight U-Net (ResNet-18 encoder), `RasterPatchDataset` (on-the-fly patches)
-- Accept band iff `mIoU_{t+1} > mIoU_t + δ` (δ=0.005)
-- Stop: 3 consecutive rejections or max 15 bands
-- Each iteration: 15 epochs, early stopping (patience=5)
-- **Stage 1 determines ORDER; Stage 2 determines HOW MANY (K\*)**
+### Stage 2 — Per-Crop Binary CNN Forward Selection (Novel Contribution)
+- For each crop: evaluates candidates in Stage 1 rank order (O(N), not O(N²))
+- Oracle: lightweight U-Net (ResNet-18 encoder), binary labels (crop vs. rest)
+- Accept band iff `IoU(class1)_{t+1} > IoU(class1)_t + δ` (δ=0.005)
+- Stop: `S2_NO_IMPROVE=5` consecutive rejections or `S2_MAX_BANDS=20`
+- Each iteration: `S2_EPOCHS=15` epochs, early stopping (`S2_PATIENCE=5`)
+- GPU optimisation: patches pre-loaded into `TensorDataset` → `num_workers=4 + pin_memory=True`
+- Output: `selected_per_crop[crop_id]` → union → `stage3_exp_c_bands.txt`
+- MLflow: nested runs — one parent + one child run per crop class
+- **Stage 1 determines ORDER; Stage 2 determines HOW MANY (K\* per crop)**
+- Uses 2022 data only as reference year
 
-### Stage 3 — Full Model Validation (Experiment Design)
+### Stage 3 — Full Model Validation
 
-| Config | Input | Channels | Purpose |
-|---|---|---|---|
-| **Exp A** | Single-date baseline (Jul 30, peak season) | 9 | No temporal info |
-| **Exp B** | 4 phenological dates (Jan, Mar, Jul, Nov) | 36 | Temporal, no selection |
-| **Exp C** | Stage 2 output (proposed method) | K* < 36 | Temporal + optimal selection |
+| Config | Input | Channels | exp_name | Purpose |
+|---|---|---|---|---|
+| **Exp A** | Single-date (Jul 30) | 9 | `exp_A_{arch}` | Conventional baseline |
+| **Exp B** | 4 phenological dates (Jan/Mar/Jul/Nov) | 36 | `exp_B_{arch}` | Multi-temporal naive |
+| **Exp C** | Stage 2 union of per-crop selections | K* | `exp_C_{arch}` | Proposed method |
 
-A→B: does temporal information help? B→C: does selection find a more compact subset?
-Each config × 2 architectures (DeepLabV3+CBAM, SegFormer) = **6 total runs**.
+- 2 architectures: `deeplabv3plus_cbam` (ResNet-50) + `segformer` (mit_b2)
+- **6 total runs**: Exp A/B/C × 2 archs
+- Train years: 2022 + 2023 | Test year: 2024
+- MLflow: experiment `cropmap_segmentation_s2`
+- Artifacts per run: `best_model.pth`, `last_model.pth`, `training_history.csv`, `training_curve.png`, `test_per_class_iou.csv`, `confusion_matrix.png`, `test_segmentation_map.png`
 
 ---
 
-## Key Workflows
+## Pipeline — GPU Server Deployment
 
-### 1. Notebooks Flow (in order)
-1. `00_setup_env.ipynb` — environment check
-2. `01_fetch_data.ipynb` — download from Google Drive (gdown)
-3. `02_image_processing.ipynb` → outputs to `data/processed/`
-4. `03_image_analysis.ipynb` — EDA, NDVI temporal analysis, figures
-5. `04_feature_analysis.ipynb` — Stage 1 + Stage 2 band selection (MLflow logged)
-6. `05–09` — model training (U-Net, DeepLabV3+, SegFormer)
-7. `10_eval_segmentation_model.ipynb` — evaluation
-8. `11_mlflow_tracking.ipynb` — MLflow experiment review
+### `crop_mapping_pipeline/` as standalone repo
 
-### 2. MLflow
-- **Remote server**: `http://mlflow-geoai.stelarea.com` (primary)
-- **Experiment name**: `research-crop-mapping`
+All path calculations are relative to `crop_mapping_pipeline/` (not the notebook repo root):
+```python
+_ROOT = Path(__file__).parent.parent   # → crop_mapping_pipeline/  (in stages/)
+sys.path.insert(0, str(_ROOT.parent))  # parent on sys.path so "from crop_mapping_pipeline.x" works
+```
+
+### Stage Commands
+
+```bash
+# Stage 0 — download processed S2 + CDL from GDrive
+python stages/fetch_data.py --years 2022
+python stages/fetch_data.py --verify-only
+
+# Stage 0b — process raw S2, upload processed, delete raw (storage-constrained)
+python stages/process_data.py --years 2022 --delete --shutdown
+python stages/process_data.py --auth   # generate OAuth token locally first
+
+# Stage 1+2 — per-crop feature analysis (GPU)
+python stages/feature_analysis.py --stage 1   # CPU, run locally
+python stages/feature_analysis.py --stage 2 --data-dir /workspace/crop_mapping_pipeline/data/processed
+
+# Stage 3 — full training (GPU)
+python stages/train_segmentation.py
+python stages/train_segmentation.py --exp A --arch segformer   # single run
+
+# Full pipeline
+python pipeline.py --stages all --shutdown
+python pipeline.py --stages feature train --years 2022
+```
+
+### Google Drive
+
+- **OAuth 2.0** (Desktop app) for uploads — token at `ssh/gdrive_token.pickle`
+- Token generated locally with `python stages/process_data.py --auth`, transferred via `0x0.st`
+- Processed S2 folder IDs per year in `config.py` → `GDRIVE_PROCESSED_S2_FOLDER_IDS`
+- Raw S2 folder IDs per year → `GDRIVE_RAW_S2_FOLDER_IDS`
+
+### Auto-Shutdown (RunPod)
+
+Set `RUNPOD_API_KEY` and `RUNPOD_POD_ID` in `crop_mapping_pipeline/.env`. The `--shutdown` flag calls RunPod GraphQL API `podStop` mutation (systemd unavailable in containers).
+
+```bash
+ssh -i ssh/runpod-cropmap h17406ec7sfiic-64411da1@ssh.runpod.io
+```
+
+---
+
+## MLflow
+
+- **Remote server**: `https://mlflow-geoai.stelarea.com` (primary, HTTPS required)
 - **Local Docker fallback**: `mlflow-research/` (PostgreSQL backend, port 8088)
   - Start: `cd mlflow-research && docker compose up -d`
-  - Stop: `docker compose down`
-- Stage 1 MLflow run: `stage1_gsi_rf_YYYYMMDD-HHMMSS`
-- Stage 2 MLflow run: `stage2_cnn_fwd_YYYYMMDD-HHMMSS` (linked to stage1_run_id)
-
----
-
-## Model Architectures
-- **U-Net** with ResNet encoder (baseline)
-- **DeepLabV3+** with CBAM attention
-- **SegFormer** (transformer-based)
-- All via segmentation-models-pytorch; tiled inference on large GeoTIFFs
+- **Experiments**:
+  - `cropmap_pipeline_runs` — pipeline log uploads
+  - `cropmap_feature_analysis_s2` — Stage 1 + Stage 2 runs
+  - `cropmap_segmentation_s2` — Stage 3 training runs
+- Set `MLFLOW_DISABLE_TELEMETRY=true` before `import mlflow` (prevents hang on MLflow 3.x)
 
 ---
 
 ## Dataset Scale
 
-| Dataset | Files | Patches (256×256) | Storage (float32) |
+| Dataset | Files | Channels | Storage (float32) |
 |---|---|---|---|
-| S2 2022 (20 files) | 20 | 7,560 | ~20 GB |
-| S2 2022–2024 full | ~60 | ~22,680 | ~60 GB |
+| S2 2022 (25 dates) | 25 | 275 | ~25 GB |
+| S2 2022–2024 full | ~73 | 803 | ~73 GB |
 
-**Hardware**: RTX 4090 (24GB VRAM) — sufficient for all configurations.
+**Hardware**: RTX 2000 Ada (16GB VRAM, 31GB RAM) on RunPod — sufficient for Stage 2 + Stage 3.
 
 ---
 
 ## Conventions
-- Data files are gitignored; download via `utils/general.py` (gdown) or mount Google Drive File Stream
+
+- Data files are gitignored; download via `stages/fetch_data.py` (gdown)
+- S2 files organised in year subdirs: `data/processed/s2/{year}/*_processed.tif`
+- Raw S2 also in year subdirs: `data/raw/s2/{year}/`
 - `geoai/` is a git submodule — work on it independently, then update the pointer
-- Use `.venv/` for the Python environment
-- Use subset/sample data for fast iteration before full-scale runs
-- CDL class mapping: sequential 1–11 via `CLASS_REMAP` / `REMAP_LUT` (CDL IDs → model indices)
+- CDL class mapping: sequential 1–10 via `CLASS_REMAP` / `REMAP_LUT` (CDL IDs → model indices)
 - Processed outputs always in `data/processed/` — never modify `data/raw/`
+- `crop_mapping_pipeline/` is its own independent git repo — deployed standalone on GPU server
+- Stage 2 uses 2022 data only as reference year for band selection
