@@ -1,3 +1,6 @@
 [submodule "crop_mapping_pipeline"]
 	path = crop_mapping_pipeline
 	url = https://github.com/dikaizm/crop_mapping_pipeline.git
+[submodule "geoai"]
+	path = geoai
+	url = https://github.com/dikaizm/geoai.git
