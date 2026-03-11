@@ -1,9 +1,0 @@
-__pycache__/
-secrets/
-ssh/
-venv/
-.venv/
-.env
-data/
-results/
-.DS_Store
