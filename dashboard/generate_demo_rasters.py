@@ -65,49 +65,51 @@ def main():
         print(f"No S2 data found in {S2_ROOT_DIR}")
         return
 
-    # Load model
-    ckpt_path = PROJECT_ROOT / "ml_models" / "stage3_smallscale" / "exp_C_segformer" / "best_model.pth"
-    if not os.path.exists(ckpt_path):
-        print(f"Model not found at {ckpt_path}")
-        return
+    experiments = ["A", "B", "C"]
     
-    checkpoint = torch.load(ckpt_path, map_location=DEVICE)
-    in_channels = checkpoint['in_channels']
-    band_indices = checkpoint['band_indices']
-    
-    # Checkpoint has 12 classes (background + 11 crops)
-    inference_num_classes = 12
-    
-    model = build_segformer(
-        encoder_name="mit_b2",
-        in_channels=in_channels,
-        num_classes=inference_num_classes
-    ).to(DEVICE)
-    model.load_state_dict(checkpoint['model_state_dict'])
-    
-    print(f"Running inference on {len(s2_files)} files...")
-    pred_map, profile = run_inference(model, s2_files, band_indices)
-    
-    # Save as TIF to dashboard/data
-    output_path = DASHBOARD_ROOT / "data" / "demo_prediction_exp_C.tif"
-    profile.update(count=1, dtype='uint8', nodata=0)
-    with rasterio.open(output_path, 'w', **profile) as dst:
-        dst.write(pred_map, 1)
-    
-    print(f"Saved demo prediction to {output_path}")
+    for exp in experiments:
+        ckpt_path = PROJECT_ROOT / "ml_models" / "stage3_smallscale" / f"exp_{exp}_segformer" / "best_model.pth"
+        if not ckpt_path.exists():
+            print(f"Model not found at {ckpt_path}, skipping Exp {exp}")
+            continue
+        
+        print(f"\nProcessing Experiment {exp}...")
+        checkpoint = torch.load(ckpt_path, map_location=DEVICE)
+        in_channels = checkpoint['in_channels']
+        band_indices = checkpoint['band_indices']
+        
+        # Checkpoint has 12 classes
+        inference_num_classes = 12
+        
+        model = build_segformer(
+            encoder_name="mit_b2",
+            in_channels=in_channels,
+            num_classes=inference_num_classes
+        ).to(DEVICE)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        
+        pred_map, profile = run_inference(model, s2_files, band_indices)
+        
+        # Save as TIF to dashboard/data
+        output_path = DASHBOARD_ROOT / "data" / f"demo_prediction_exp_{exp}.tif"
+        profile.update(count=1, dtype='uint8', nodata=0)
+        with rasterio.open(output_path, 'w', **profile) as dst:
+            dst.write(pred_map, 1)
+        
+        print(f"Saved demo prediction for Exp {exp} to {output_path}")
 
-    # Also save an RGB version for context
-    with rasterio.open(s2_files[0]) as src:
-        rgb = src.read([4, 3, 2])
-        rgb_profile = dict(src.profile)
-    
+    # Save an RGB version for context (only once)
     rgb_output = DASHBOARD_ROOT / "data" / "demo_s2_rgb.tif"
-    rgb_profile.update(count=3)
-    # Clip and normalize for visualization
-    rgb = np.clip(rgb, 0, 3000) / 3000 * 255
-    with rasterio.open(rgb_output, 'w', **rgb_profile) as dst:
-        dst.write(rgb.astype(np.uint8))
-    print(f"Saved demo RGB to {rgb_output}")
+    if not rgb_output.exists():
+        with rasterio.open(s2_files[0]) as src:
+            rgb = src.read([4, 3, 2])
+            rgb_profile = dict(src.profile)
+        
+        rgb_profile.update(count=3)
+        rgb = np.clip(rgb, 0, 3000) / 3000 * 255
+        with rasterio.open(rgb_output, 'w', **rgb_profile) as dst:
+            dst.write(rgb.astype(np.uint8))
+        print(f"Saved demo RGB to {rgb_output}")
 
 if __name__ == "__main__":
     main()

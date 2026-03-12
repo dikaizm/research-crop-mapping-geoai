@@ -115,13 +115,18 @@ Xie, E. et~al. (2021).
 \newblock Segformer: Simple and efficient design for semantic segmentation with transformers.
 \newblock {\em arXiv preprint arXiv:2105.15203}.
 
+\bibitem[Yang et~al., 2020]{yang2020}
+Yang, L., Li, X., Han, W., et~al. (2020).
+\newblock Crop classification using multi-temporal {Sentinel-2} data in the shiyang river basin of china.
+\newblock {\em Remote Sensing}, 12(24):4052.
+
 \bibitem[Yi et~al., 2020]{yi2020}
 Yi, Z., Jia, L., and Chen, Q. (2020).
 \newblock Crop classification using multi-temporal sentinel-2 data in the shiyang river basin of china.
 \newblock {\em Remote Sensing}, 12(24):4052.
 
-\bibitem[Yuan and Lin, 2021]{yuan2021}
-Yuan, Y. and Lin, L. (2021).
+\bibitem[yuan and Lin, 2021]{yuan2021}
+yuan, Y. and Lin, L. (2021).
 \newblock Self-supervised pretraining of transformers for satellite image time series classification.
 \newblock {\em IEEE J Sel Top Appl Earth Obs Remote Sens}, 14:474--487.
 

@@ -62,7 +62,8 @@ Data \textit{multi-temporal} Sentinel-2 menghasilkan ruang fitur berdimensi ting
 Redundansi spektral terjadi ketika band-band yang berdekatan (misalnya B5, B6, B7) memiliki korelasi tinggi dan memberikan informasi yang tumpang tindih.
 Redundansi temporal terjadi ketika citra dari tanggal yang berdekatan menangkap kondisi vegetasi yang hampir identik, terutama selama periode pertumbuhan yang lambat.
 
-Seleksi fitur pada data \textit{multi-temporal} bertujuan mengidentifikasi subset band-tanggal yang paling diskriminatif untuk tugas klasifikasi, sehingga mengurangi redundansi tanpa mengorbankan akurasi \citep{rs12010162}.
+Selain itu, penelitian sebelumnya melaporkan masalah umum yang disebut \textit{Hughes phenomenon} dalam klasifikasi penginderaan jauh. Fenomena ini merujuk pada observasi bahwa akurasi klasifikasi dapat menurun seiring dengan meningkatnya dimensionalitas data jika tidak dibarengi dengan penambahan jumlah sampel latih yang signifikan \citep{yang2020}.
+Seleksi fitur pada data \textit{multi-temporal} bertujuan mengidentifikasi subset band-tanggal yang paling diskriminatif untuk tugas klasifikasi, sehingga mengurangi redundansi tanpa mengorbankan akurasi serta menghindari efek negatif dari dimensionalitas tinggi \citep{rs12010162}.
 Metode seleksi fitur umumnya dikategorikan menjadi dua pendekatan: \textbf{metode filter} yang mengevaluasi fitur secara independen dari model, dan \textbf{metode \textit{wrapper}} yang menggunakan model sebagai evaluator kualitas subset fitur.
 
 \subsection{Metode Filter Berbasis Statistik}

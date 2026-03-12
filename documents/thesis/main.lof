@@ -2,7 +2,7 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Arsitektur DeepLabV3+ \citep {chen2018}.}}{21}{figure.caption.8}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Arsitektur SegFormer \citep {xie2021}.}}{21}{figure.caption.9}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Arsitektur SegFormer \citep {xie2021}.}}{22}{figure.caption.9}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Peta area studi Sacramento Valley, California. Kotak merah menunjukkan batas area penelitian ($122^{\circ }4'41''$ BB hingga $121^{\circ }34'31''$ BB, $38^{\circ }45'14''$ LU hingga $39^{\circ }10'29''$ LU) dengan luas 2.038,08 km$^2$.}}{27}{figure.caption.11}%
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Citra Sentinel-2 True Color (B4--B3--B2) pada enam tanggal representatif sepanjang tahun 2022 di Sacramento Valley, menunjukkan perubahan kondisi vegetasi dari masa dorman hingga masa panen.}}{29}{figure.caption.14}%
@@ -16,12 +16,13 @@
 \contentsline {figure}{\numberline {3.10}{\ignorespaces Distribusi kelas CDL dan strategi seleksi kelas untuk pelatihan model. Kelas dengan cakupan $\geq 1\%$ dipilih sebagai kelas target (hijau), kelas 0{,}5--1\% sebagai kandidat eksperimen lanjutan (oranye), dan kelas $<0{,}5\%$ dikecualikan (abu-abu).}}{38}{figure.caption.31}%
 \contentsline {figure}{\numberline {3.11}{\ignorespaces Perbandingan profil NDVI per kelas tanaman antar-tahun (2022, 2023, 2024) yang diselaraskan pada sumbu Day-of-Year. Kelas dengan profil tumpang tindih (Rice, Sunflower, Winter Wheat) menunjukkan stabilitas tinggi; kelas dengan profil menyebar (Alfalfa, Grapes, Plums) menunjukkan variabilitas biologis intrinsik.}}{42}{figure.caption.35}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Stage 1 --- \textit {Joint Score} setiap \textit {band-date} (GSI+RF, $\alpha =0.5$). Band jingga terpilih sebagai kandidat Top-$K$ untuk Stage 2.}}{55}{figure.caption.45}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Stage 1 --- RF \textit {Feature Importance} per band per kelas tanaman. Nilai lebih tinggi (warna lebih terang) menunjukkan band yang lebih penting untuk membedakan kelas tersebut dari kelas lainnya.}}{56}{figure.caption.46}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Stage 1 --- Peta panas nilai SIglobal per \textit {band-date} per kelas tanaman. Setiap sel menunjukkan kemampuan separabilitas band tersebut untuk membedakan satu kelas tanaman dari semua kelas lainnya. Band SWIR (B11, B12) dan \textit {Red Edge} (B5--B7) secara konsisten menunjukkan nilai tertinggi.}}{56}{figure.caption.47}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Stage 2 --- Kurva mIoU \textit {CNN forward selection}. Titik hijau = band diterima; tanda silang merah = band ditolak. Garis putus-putus = mIoU akhir pada $K^* = 4$ band.}}{57}{figure.caption.48}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Kurva pelatihan (kiri: \textit {loss}, kanan: Val mIoU) untuk Exp A, B, C. Biru = DeepLabV3+CBAM; jingga = SegFormer. Garis putus-putus = \textit {train loss}; garis penuh = \textit {val loss/mIoU}.}}{58}{figure.caption.49}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Peta segmentasi penuh set uji --- Exp A SegFormer (9 channel, \textit {single-date} 2024). Kiri: \textit {Ground Truth} CDL; Kanan: Prediksi model.}}{58}{figure.caption.50}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Peta segmentasi penuh set uji --- Exp B SegFormer (27 channel, \textit {multi-temporal naif}).}}{59}{figure.caption.51}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Peta segmentasi penuh set uji --- Exp C SegFormer ($K^* = 4$ channel, seleksi band). Peta yang lebih rapat secara spasial menunjukkan efek reduksi \textit {channel} terhadap batas antar kelas tanaman.}}{59}{figure.caption.52}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Perbandingan IoU per kelas tanaman pada set uji 2024. Exp A dan B menggunakan SegFormer (SF), sedangkan Exp C menggunakan DeepLabV3+CBAM (DLV3) dengan subset 20 band pilihan.}}{53}{figure.caption.45}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Stage 1 --- \textit {Joint Score} setiap \textit {band-date} (GSI+RF, $\alpha =0.5$). Band jingga terpilih sebagai kandidat Top-$K$ untuk Stage 2.}}{57}{figure.caption.48}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Stage 1 --- RF \textit {Feature Importance} per band per kelas tanaman. Nilai lebih tinggi (warna lebih terang) menunjukkan band yang lebih penting untuk membedakan kelas tersebut dari kelas lainnya.}}{58}{figure.caption.49}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Stage 1 --- Peta panas nilai SIglobal per \textit {band-date} per kelas tanaman. Setiap sel menunjukkan kemampuan separabilitas band tersebut untuk membedakan satu kelas tanaman dari semua kelas lainnya. Band SWIR (B11, B12) dan \textit {Red Edge} (B5--B7) secara konsisten menunjukkan nilai tertinggi.}}{58}{figure.caption.50}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Stage 2 --- Ilustrasi proses \textit {CNN forward selection}. Metode ini secara akumulatif mengidentifikasi 20 band unik dari total 792 kemungkinan (72 tanggal $\times $ 11 band), menghasilkan input yang jauh lebih efisien untuk pelatihan model segmentasi.}}{59}{figure.caption.51}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Kurva pelatihan DeepLabV3+CBAM.}}{60}{figure.caption.52}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Kurva pelatihan SegFormer.}}{61}{figure.caption.53}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Peta segmentasi penuh set uji menggunakan DeepLabV3+CBAM.}}{62}{figure.caption.54}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Peta segmentasi penuh set uji menggunakan SegFormer.}}{63}{figure.caption.55}%
 \addvspace {10\p@ }
