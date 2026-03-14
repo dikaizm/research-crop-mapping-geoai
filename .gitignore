@@ -1,4 +1,7 @@
 .venv/
+venv/
+__pycache__/
+notebooks/__pycache__/
 notebooks/buildings/
 data/
 ml_models/

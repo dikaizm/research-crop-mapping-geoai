@@ -9,12 +9,12 @@
 \contentsline {table}{\numberline {3.2}{\ignorespaces 30 Kelas CDL Teratas Berdasarkan Cakupan Area di Area Studi (2022)}}{36}{table.caption.27}%
 \contentsline {table}{\numberline {3.3}{\ignorespaces Rekapitulasi Cakupan Lahan berdasarkan Tipe Penggunaan}}{36}{table.caption.28}%
 \contentsline {table}{\numberline {3.4}{\ignorespaces Kelas CDL Terpilih untuk Pelatihan Model (10 tanaman aktif, $\geq 1\%$ cakupan area studi)}}{39}{table.caption.32}%
-\contentsline {table}{\numberline {3.5}{\ignorespaces Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm $7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$).}}{41}{table.caption.34}%
-\contentsline {table}{\numberline {3.6}{\ignorespaces Konfigurasi \textit {hyperparameter} pelatihan model}}{49}{table.caption.42}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm $7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$).}}{43}{table.caption.35}%
+\contentsline {table}{\numberline {3.6}{\ignorespaces Konfigurasi \textit {hyperparameter} pelatihan model}}{50}{table.caption.43}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}}{51}{table.caption.43}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces IoU per kelas tanaman pada set uji (\%)}}{53}{table.caption.44}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}}{55}{table.caption.46}%
-\contentsline {table}{\numberline {4.4}{\ignorespaces Contoh proyeksi tanggal seleksi Stage 2 untuk konsistensi multi-tahun}}{56}{table.caption.47}%
-\contentsline {table}{\numberline {4.5}{\ignorespaces Perbandingan waktu pelatihan per eksperimen (Skala Penuh, 50--100 Epoch)}}{65}{table.caption.56}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}}{52}{table.caption.44}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces IoU per kelas tanaman pada set uji (\%)}}{54}{table.caption.45}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}}{56}{table.caption.47}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Contoh proyeksi tanggal seleksi Stage 2 untuk konsistensi multi-tahun}}{57}{table.caption.48}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Perbandingan waktu pelatihan per eksperimen (Skala Penuh, 50--100 Epoch)}}{66}{table.caption.57}%
 \addvspace {10\p@ }

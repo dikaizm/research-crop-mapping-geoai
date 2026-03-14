@@ -160,86 +160,89 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4.5}Label Filtering}{40}{subsection.3.4.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4.6}Patching dan Normalisasi Citra}{41}{subsection.3.4.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4.7}Seleksi Band Spektral--Temporal}{41}{subsection.3.4.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Pemilihan Tahun Referensi: Analisis Stabilitas Fenologi NDVI}{41}{subsubsection*.33}\protected@file@percent }
-\newlabel{subsubsec:tahun_referensi}{{3.4.7}{41}{Pemilihan Tahun Referensi: Analisis Stabilitas Fenologi NDVI}{subsubsection*.33}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3.5}{\ignorespaces Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm $7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$).}}{41}{table.caption.34}\protected@file@percent }
-\newlabel{tab:ndvi_stability}{{3.5}{41}{Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm $7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$)}{table.caption.34}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.11}{\ignorespaces Perbandingan profil NDVI per kelas tanaman antar-tahun (2022, 2023, 2024) yang diselaraskan pada sumbu Day-of-Year. Kelas dengan profil tumpang tindih (Rice, Sunflower, Winter Wheat) menunjukkan stabilitas tinggi; kelas dengan profil menyebar (Alfalfa, Grapes, Plums) menunjukkan variabilitas biologis intrinsik.}}{42}{figure.caption.35}\protected@file@percent }
-\newlabel{fig:s2_ndvi_year_comparison}{{3.11}{42}{Perbandingan profil NDVI per kelas tanaman antar-tahun (2022, 2023, 2024) yang diselaraskan pada sumbu Day-of-Year. Kelas dengan profil tumpang tindih (Rice, Sunflower, Winter Wheat) menunjukkan stabilitas tinggi; kelas dengan profil menyebar (Alfalfa, Grapes, Plums) menunjukkan variabilitas biologis intrinsik}{figure.caption.35}{}}
-\@writefile{toc}{\contentsline {subsubsection}{Tahap 1 — Filter Preselection}{43}{subsubsection*.36}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Tahap 2 — CNN Forward Selection}{43}{subsubsection*.37}\protected@file@percent }
+\newlabel{subsec:band_selection}{{3.4.7}{41}{Seleksi Band Spektral--Temporal}{subsection.3.4.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Pemilihan Tahun Referensi: Analisis Stabilitas Fenologi NDVI}{41}{subsubsection*.34}\protected@file@percent }
+\newlabel{subsubsec:tahun_referensi}{{3.4.7}{41}{Pemilihan Tahun Referensi: Analisis Stabilitas Fenologi NDVI}{subsubsection*.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.11}{\ignorespaces Diagram alur penelitian terkini, mulai dari akuisisi dan prapemrosesan data, pemilihan tahun referensi 2022 untuk seleksi fitur, seleksi band spektral--temporal, proyeksi band antar-tahun, hingga validasi model penuh pada tiga konfigurasi eksperimen.}}{42}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:research_pipeline}{{3.11}{42}{Diagram alur penelitian terkini, mulai dari akuisisi dan prapemrosesan data, pemilihan tahun referensi 2022 untuk seleksi fitur, seleksi band spektral--temporal, proyeksi band antar-tahun, hingga validasi model penuh pada tiga konfigurasi eksperimen}{figure.caption.33}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.5}{\ignorespaces Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm $7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$).}}{43}{table.caption.35}\protected@file@percent }
+\newlabel{tab:ndvi_stability}{{3.5}{43}{Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm $7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$)}{table.caption.35}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.12}{\ignorespaces Perbandingan profil NDVI per kelas tanaman antar-tahun (2022, 2023, 2024) yang diselaraskan pada sumbu Day-of-Year. Kelas dengan profil tumpang tindih (Rice, Sunflower, Winter Wheat) menunjukkan stabilitas tinggi; kelas dengan profil menyebar (Alfalfa, Grapes, Plums) menunjukkan variabilitas biologis intrinsik.}}{43}{figure.caption.36}\protected@file@percent }
+\newlabel{fig:s2_ndvi_year_comparison}{{3.12}{43}{Perbandingan profil NDVI per kelas tanaman antar-tahun (2022, 2023, 2024) yang diselaraskan pada sumbu Day-of-Year. Kelas dengan profil tumpang tindih (Rice, Sunflower, Winter Wheat) menunjukkan stabilitas tinggi; kelas dengan profil menyebar (Alfalfa, Grapes, Plums) menunjukkan variabilitas biologis intrinsik}{figure.caption.36}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Tahap 1 — Filter Preselection}{44}{subsubsection*.37}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Tahap 2 — CNN Forward Selection}{45}{subsubsection*.38}\protected@file@percent }
 \citation{li2023hetao}
-\@writefile{toc}{\contentsline {subsubsection}{Proyeksi Band ke Tahun Lain}{45}{subsubsection*.38}\protected@file@percent }
-\newlabel{subsubsec:band_projection}{{3.4.7}{45}{Proyeksi Band ke Tahun Lain}{subsubsection*.38}{}}
-\@writefile{toc}{\contentsline {subsubsection}{Tahap 3 — Validasi Model Penuh}{45}{subsubsection*.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Proyeksi Band ke Tahun Lain}{46}{subsubsection*.39}\protected@file@percent }
+\newlabel{subsubsec:band_projection}{{3.4.7}{46}{Proyeksi Band ke Tahun Lain}{subsubsection*.39}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Tahap 3 — Validasi Model Penuh}{47}{subsubsection*.40}\protected@file@percent }
 \citation{chen2018deeplabv3}
-\@writefile{toc}{\contentsline {section}{\numberline {3.5}Pelatihan Model}{46}{section.3.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}Arsitektur Model}{46}{subsection.3.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{DeepLabV3+ dengan CBAM}{46}{subsubsection*.40}\protected@file@percent }
 \citation{hsu2022}
 \citation{xie2021}
-\@writefile{toc}{\contentsline {subsubsection}{SegFormer}{47}{subsubsection*.41}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.2}Fungsi \textit  {Loss} dan Penanganan Ketidakseimbangan Kelas}{47}{subsection.3.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}Pelatihan Model}{48}{section.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}Arsitektur Model}{48}{subsection.3.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{DeepLabV3+ dengan CBAM}{48}{subsubsection*.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{SegFormer}{49}{subsubsection*.42}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.2}Fungsi \textit  {Loss} dan Penanganan Ketidakseimbangan Kelas}{49}{subsection.3.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.3}Skenario Eksperimen}{49}{subsection.3.5.3}\protected@file@percent }
 \citation{thomasramos2024}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.3}Skenario Eksperimen}{48}{subsection.3.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.4}Konfigurasi \textit  {Hyperparameter}}{48}{subsection.3.5.4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3.6}{\ignorespaces Konfigurasi \textit  {hyperparameter} pelatihan model}}{49}{table.caption.42}\protected@file@percent }
-\newlabel{tab:hyperparams}{{3.6}{49}{Konfigurasi \textit {hyperparameter} pelatihan model}{table.caption.42}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.6}Evaluasi}{49}{section.3.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.1}Metrik Segmentasi}{49}{subsection.3.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.2}Analisis Efisiensi Komputasi}{50}{subsection.3.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.3}Analisis Error}{50}{subsection.3.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}HASIL DAN PEMBAHASAN}{51}{chapter.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.4}Konfigurasi \textit  {Hyperparameter}}{50}{subsection.3.5.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3.6}{\ignorespaces Konfigurasi \textit  {hyperparameter} pelatihan model}}{50}{table.caption.43}\protected@file@percent }
+\newlabel{tab:hyperparams}{{3.6}{50}{Konfigurasi \textit {hyperparameter} pelatihan model}{table.caption.43}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.6}Evaluasi}{50}{section.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.1}Metrik Segmentasi}{50}{subsection.3.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.2}Analisis Efisiensi Komputasi}{51}{subsection.3.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.3}Analisis Error}{51}{subsection.3.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}HASIL DAN PEMBAHASAN}{52}{chapter.4}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Hasil Eksperimen}{51}{section.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Ringkasan Performa Keseluruhan}{51}{subsection.4.1.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}}{51}{table.caption.43}\protected@file@percent }
-\newlabel{tab:hasil_utama}{{4.1}{51}{Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}{table.caption.43}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Perbandingan Konfigurasi Input}{52}{subsection.4.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}Performa Per Kelas Tanaman}{52}{subsection.4.1.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces IoU per kelas tanaman pada set uji (\%)}}{53}{table.caption.44}\protected@file@percent }
-\newlabel{tab:iou_per_kelas}{{4.2}{53}{IoU per kelas tanaman pada set uji (\%)}{table.caption.44}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Perbandingan IoU per kelas tanaman pada set uji 2024. Exp A dan B menggunakan SegFormer (SF), sedangkan Exp C menggunakan DeepLabV3+CBAM (DLV3) dengan subset 20 band pilihan.}}{53}{figure.caption.45}\protected@file@percent }
-\newlabel{fig:per_crop_comparison}{{4.1}{53}{Perbandingan IoU per kelas tanaman pada set uji 2024. Exp A dan B menggunakan SegFormer (SF), sedangkan Exp C menggunakan DeepLabV3+CBAM (DLV3) dengan subset 20 band pilihan}{figure.caption.45}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Analisis Hasil}{54}{section.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Perbandingan Performa Model}{54}{subsection.4.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Pengaruh Data Multi-Temporal}{54}{subsection.4.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Hasil Seleksi Fitur Tahap 2}{55}{subsection.4.2.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}}{55}{table.caption.46}\protected@file@percent }
-\newlabel{tab:stage2_results}{{4.3}{55}{Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}{table.caption.46}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Efisiensi Seleksi Band}{55}{subsection.4.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.5}Proyeksi Seleksi Band Antar-Tahun}{56}{subsection.4.2.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Contoh proyeksi tanggal seleksi Stage 2 untuk konsistensi multi-tahun}}{56}{table.caption.47}\protected@file@percent }
-\newlabel{tab:projection_samples}{{4.4}{56}{Contoh proyeksi tanggal seleksi Stage 2 untuk konsistensi multi-tahun}{table.caption.47}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.6}Log Pelatihan Seleksi Fitur}{56}{subsection.4.2.6}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Stage 1 --- \textit  {Joint Score} setiap \textit  {band-date} (GSI+RF, $\alpha =0.5$). Band jingga terpilih sebagai kandidat Top-$K$ untuk Stage 2.}}{57}{figure.caption.48}\protected@file@percent }
-\newlabel{fig:stage1_joint_score}{{4.2}{57}{Stage 1 --- \textit {Joint Score} setiap \textit {band-date} (GSI+RF, $\alpha =0.5$). Band jingga terpilih sebagai kandidat Top-$K$ untuk Stage 2}{figure.caption.48}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Stage 1 --- RF \textit  {Feature Importance} per band per kelas tanaman. Nilai lebih tinggi (warna lebih terang) menunjukkan band yang lebih penting untuk membedakan kelas tersebut dari kelas lainnya.}}{58}{figure.caption.49}\protected@file@percent }
-\newlabel{fig:stage1_rf_importance}{{4.3}{58}{Stage 1 --- RF \textit {Feature Importance} per band per kelas tanaman. Nilai lebih tinggi (warna lebih terang) menunjukkan band yang lebih penting untuk membedakan kelas tersebut dari kelas lainnya}{figure.caption.49}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Stage 1 --- Peta panas nilai SIglobal per \textit  {band-date} per kelas tanaman. Setiap sel menunjukkan kemampuan separabilitas band tersebut untuk membedakan satu kelas tanaman dari semua kelas lainnya. Band SWIR (B11, B12) dan \textit  {Red Edge} (B5--B7) secara konsisten menunjukkan nilai tertinggi.}}{58}{figure.caption.50}\protected@file@percent }
-\newlabel{fig:stage1v2_siglobal_heatmap}{{4.4}{58}{Stage 1 --- Peta panas nilai SIglobal per \textit {band-date} per kelas tanaman. Setiap sel menunjukkan kemampuan separabilitas band tersebut untuk membedakan satu kelas tanaman dari semua kelas lainnya. Band SWIR (B11, B12) dan \textit {Red Edge} (B5--B7) secara konsisten menunjukkan nilai tertinggi}{figure.caption.50}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Stage 2 --- Ilustrasi proses \textit  {CNN forward selection}. Metode ini secara akumulatif mengidentifikasi 20 band unik dari total 792 kemungkinan (72 tanggal $\times $ 11 band), menghasilkan input yang jauh lebih efisien untuk pelatihan model segmentasi.}}{59}{figure.caption.51}\protected@file@percent }
-\newlabel{fig:stage2_forward_selection}{{4.5}{59}{Stage 2 --- Ilustrasi proses \textit {CNN forward selection}. Metode ini secara akumulatif mengidentifikasi 20 band unik dari total 792 kemungkinan (72 tanggal $\times $ 11 band), menghasilkan input yang jauh lebih efisien untuk pelatihan model segmentasi}{figure.caption.51}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.7}Kurva Pelatihan Model}{59}{subsection.4.2.7}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Kurva pelatihan DeepLabV3+CBAM.}}{60}{figure.caption.52}\protected@file@percent }
-\newlabel{fig:training_curves_dlv3}{{4.6}{60}{Kurva pelatihan DeepLabV3+CBAM}{figure.caption.52}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Kurva pelatihan SegFormer.}}{61}{figure.caption.53}\protected@file@percent }
-\newlabel{fig:training_curves_sf}{{4.7}{61}{Kurva pelatihan SegFormer}{figure.caption.53}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.8}Visualisasi Hasil Segmentasi pada Set Uji}{61}{subsection.4.2.8}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Peta segmentasi penuh set uji menggunakan DeepLabV3+CBAM.}}{62}{figure.caption.54}\protected@file@percent }
-\newlabel{fig:seg_results_dlv3}{{4.8}{62}{Peta segmentasi penuh set uji menggunakan DeepLabV3+CBAM}{figure.caption.54}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces Peta segmentasi penuh set uji menggunakan SegFormer.}}{63}{figure.caption.55}\protected@file@percent }
-\newlabel{fig:seg_results_sf}{{4.9}{63}{Peta segmentasi penuh set uji menggunakan SegFormer}{figure.caption.55}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.9}Analisis Kesalahan}{64}{subsection.4.2.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.10}Waktu Pelatihan}{65}{subsection.4.2.10}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Perbandingan waktu pelatihan per eksperimen (Skala Penuh, 50--100 Epoch)}}{65}{table.caption.56}\protected@file@percent }
-\newlabel{tab:waktu_pelatihan}{{4.5}{65}{Perbandingan waktu pelatihan per eksperimen (Skala Penuh, 50--100 Epoch)}{table.caption.56}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}KESIMPULAN DAN SARAN}{66}{chapter.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Hasil Eksperimen}{52}{section.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Ringkasan Performa Keseluruhan}{52}{subsection.4.1.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}}{52}{table.caption.44}\protected@file@percent }
+\newlabel{tab:hasil_utama}{{4.1}{52}{Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}{table.caption.44}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Perbandingan Konfigurasi Input}{53}{subsection.4.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}Performa Per Kelas Tanaman}{53}{subsection.4.1.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces IoU per kelas tanaman pada set uji (\%)}}{54}{table.caption.45}\protected@file@percent }
+\newlabel{tab:iou_per_kelas}{{4.2}{54}{IoU per kelas tanaman pada set uji (\%)}{table.caption.45}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Perbandingan IoU per kelas tanaman pada set uji 2024. Exp A dan B menggunakan SegFormer (SF), sedangkan Exp C menggunakan DeepLabV3+CBAM (DLV3) dengan subset 20 band pilihan.}}{54}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:per_crop_comparison}{{4.1}{54}{Perbandingan IoU per kelas tanaman pada set uji 2024. Exp A dan B menggunakan SegFormer (SF), sedangkan Exp C menggunakan DeepLabV3+CBAM (DLV3) dengan subset 20 band pilihan}{figure.caption.46}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Analisis Hasil}{55}{section.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Perbandingan Performa Model}{55}{subsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Pengaruh Data Multi-Temporal}{55}{subsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Hasil Seleksi Fitur Tahap 2}{56}{subsection.4.2.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}}{56}{table.caption.47}\protected@file@percent }
+\newlabel{tab:stage2_results}{{4.3}{56}{Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}{table.caption.47}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Efisiensi Seleksi Band}{56}{subsection.4.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.5}Proyeksi Seleksi Band Antar-Tahun}{57}{subsection.4.2.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Contoh proyeksi tanggal seleksi Stage 2 untuk konsistensi multi-tahun}}{57}{table.caption.48}\protected@file@percent }
+\newlabel{tab:projection_samples}{{4.4}{57}{Contoh proyeksi tanggal seleksi Stage 2 untuk konsistensi multi-tahun}{table.caption.48}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.6}Log Pelatihan Seleksi Fitur}{57}{subsection.4.2.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Stage 1 --- \textit  {Joint Score} setiap \textit  {band-date} (GSI+RF, $\alpha =0.5$). Band jingga terpilih sebagai kandidat Top-$K$ untuk Stage 2.}}{58}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:stage1_joint_score}{{4.2}{58}{Stage 1 --- \textit {Joint Score} setiap \textit {band-date} (GSI+RF, $\alpha =0.5$). Band jingga terpilih sebagai kandidat Top-$K$ untuk Stage 2}{figure.caption.49}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Stage 1 --- RF \textit  {Feature Importance} per band per kelas tanaman. Nilai lebih tinggi (warna lebih terang) menunjukkan band yang lebih penting untuk membedakan kelas tersebut dari kelas lainnya.}}{59}{figure.caption.50}\protected@file@percent }
+\newlabel{fig:stage1_rf_importance}{{4.3}{59}{Stage 1 --- RF \textit {Feature Importance} per band per kelas tanaman. Nilai lebih tinggi (warna lebih terang) menunjukkan band yang lebih penting untuk membedakan kelas tersebut dari kelas lainnya}{figure.caption.50}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Stage 1 --- Peta panas nilai SIglobal per \textit  {band-date} per kelas tanaman. Setiap sel menunjukkan kemampuan separabilitas band tersebut untuk membedakan satu kelas tanaman dari semua kelas lainnya. Band SWIR (B11, B12) dan \textit  {Red Edge} (B5--B7) secara konsisten menunjukkan nilai tertinggi.}}{59}{figure.caption.51}\protected@file@percent }
+\newlabel{fig:stage1v2_siglobal_heatmap}{{4.4}{59}{Stage 1 --- Peta panas nilai SIglobal per \textit {band-date} per kelas tanaman. Setiap sel menunjukkan kemampuan separabilitas band tersebut untuk membedakan satu kelas tanaman dari semua kelas lainnya. Band SWIR (B11, B12) dan \textit {Red Edge} (B5--B7) secara konsisten menunjukkan nilai tertinggi}{figure.caption.51}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Stage 2 --- Ilustrasi proses \textit  {CNN forward selection}. Metode ini secara akumulatif mengidentifikasi 20 band unik dari total 792 kemungkinan (72 tanggal $\times $ 11 band), menghasilkan input yang jauh lebih efisien untuk pelatihan model segmentasi.}}{60}{figure.caption.52}\protected@file@percent }
+\newlabel{fig:stage2_forward_selection}{{4.5}{60}{Stage 2 --- Ilustrasi proses \textit {CNN forward selection}. Metode ini secara akumulatif mengidentifikasi 20 band unik dari total 792 kemungkinan (72 tanggal $\times $ 11 band), menghasilkan input yang jauh lebih efisien untuk pelatihan model segmentasi}{figure.caption.52}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.7}Kurva Pelatihan Model}{60}{subsection.4.2.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Kurva pelatihan DeepLabV3+CBAM.}}{61}{figure.caption.53}\protected@file@percent }
+\newlabel{fig:training_curves_dlv3}{{4.6}{61}{Kurva pelatihan DeepLabV3+CBAM}{figure.caption.53}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Kurva pelatihan SegFormer.}}{62}{figure.caption.54}\protected@file@percent }
+\newlabel{fig:training_curves_sf}{{4.7}{62}{Kurva pelatihan SegFormer}{figure.caption.54}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.8}Visualisasi Hasil Segmentasi pada Set Uji}{62}{subsection.4.2.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Peta segmentasi penuh set uji menggunakan DeepLabV3+CBAM.}}{63}{figure.caption.55}\protected@file@percent }
+\newlabel{fig:seg_results_dlv3}{{4.8}{63}{Peta segmentasi penuh set uji menggunakan DeepLabV3+CBAM}{figure.caption.55}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces Peta segmentasi penuh set uji menggunakan SegFormer.}}{64}{figure.caption.56}\protected@file@percent }
+\newlabel{fig:seg_results_sf}{{4.9}{64}{Peta segmentasi penuh set uji menggunakan SegFormer}{figure.caption.56}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.9}Analisis Kesalahan}{65}{subsection.4.2.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.10}Waktu Pelatihan}{66}{subsection.4.2.10}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Perbandingan waktu pelatihan per eksperimen (Skala Penuh, 50--100 Epoch)}}{66}{table.caption.57}\protected@file@percent }
+\newlabel{tab:waktu_pelatihan}{{4.5}{66}{Perbandingan waktu pelatihan per eksperimen (Skala Penuh, 50--100 Epoch)}{table.caption.57}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}KESIMPULAN DAN SARAN}{67}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Kesimpulan}{66}{section.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}Saran dan Pekerjaan Mendatang}{67}{section.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Kesimpulan}{67}{section.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Saran dan Pekerjaan Mendatang}{68}{section.5.2}\protected@file@percent }
 \bibstyle{apalike}
 \bibdata{references}
 \bibcite{ajibola2024}{{1}{2024}{{Ajibola and Cabral}}{{}}}
@@ -269,4 +272,4 @@
 \bibcite{yi2020}{{25}{2020}{{Yi et~al.}}{{}}}
 \bibcite{yuan2021}{{26}{2021}{{yuan and Lin}}{{}}}
 \bibcite{zhao2020}{{27}{2020}{{Zhao et~al.}}{{}}}
-\gdef \@abspage@last{72}
+\gdef \@abspage@last{73}
