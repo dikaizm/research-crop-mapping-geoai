@@ -27,15 +27,24 @@ Sementara itu, data label diperoleh dari dataset CDL tahun 2022, 2023, dan 2024 
 
 Tabel~\ref{tab:acquisition_dates} menampilkan seluruh tanggal akuisisi citra Sentinel-2 untuk ketiga tahun dataset yang digunakan dalam penelitian ini.
 
-\begin{table}[htbp]
-\centering
-\caption{Tanggal akuisisi citra Sentinel-2 per tahun (interval 15 hari). Tanda $^\dagger$ menandai citra yang dikecualikan karena cakupan awan $\geq$100\%.}
-\label{tab:acquisition_dates}
-\small
-\begin{tabular}{clll}
+\begin{center}
+\begin{longtable}{clll}
+\caption{Tanggal akuisisi citra Sentinel-2 per tahun (interval 15 hari). Tanda $^\dagger$ menandai citra yang dikecualikan karena cakupan awan $\geq$100\%.} \label{tab:acquisition_dates} \\
 \hline
 \textbf{No.} & \textbf{2022} & \textbf{2023} & \textbf{2024} \\
 \hline
+\endfirsthead
+\multicolumn{4}{c}%
+{{\bfseries \tablename\ \thetable{} -- lanjutan dari halaman sebelumnya}} \\
+\hline
+\textbf{No.} & \textbf{2022} & \textbf{2023} & \textbf{2024} \\
+\hline
+\endhead
+\hline
+\multicolumn{4}{r}{{Berlanjut ke halaman berikutnya}} \\
+\endfoot
+\hline
+\endlastfoot
 1  & 1 Januari   & 1 Januari   & 1 Januari   \\
 2  & 16 Januari  & 16 Januari  & 16 Januari  \\
 3  & 31 Januari  & 31 Januari  & 31 Januari  \\
@@ -63,9 +72,8 @@ Tabel~\ref{tab:acquisition_dates} menampilkan seluruh tanggal akuisisi citra Sen
 25 & 27 Desember$^\dagger$ & 27 Desember & 26 Desember \\
 \hline
 \textbf{Total valid} & \textbf{24} & \textbf{23} & \textbf{25} \\
-\hline
-\end{tabular}
-\end{table}
+\end{longtable}
+\end{center}
 
 \section{Eksplorasi Data}
 \subsection{Visualisasi Citra}
@@ -179,15 +187,23 @@ Setiap kelas diwakili oleh warna resmi USDA CDL untuk memudahkan identifikasi vi
 Distribusi kelas CDL pada area studi dianalisis berdasarkan jumlah piksel hasil reprojektion ke grid Sentinel-2 ($5.596 \times 4.684$ piksel, ukuran piksel $7{,}78 \times 10{,}00$ m$^2 \approx 77{,}8$ m$^2$/piksel).
 Tabel~\ref{tab:cdl_top30} menyajikan 30 kelas dengan cakupan tertinggi beserta konversinya ke satuan hektar dan kilometer persegi.
 
-\begin{table}[htbp]
-\centering
-\caption{30 Kelas CDL Teratas Berdasarkan Cakupan Area di Area Studi (2022)}
-\label{tab:cdl_top30}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{rlrrrr}
+\begin{longtable}{|r|p{4.5cm}|c|r|r|r|}
+\caption{30 Kelas CDL Teratas Berdasarkan Cakupan Area di Area Studi (2022)} \label{tab:cdl_top30} \\
 \hline
 \textbf{No.} & \textbf{Nama Kelas} & \textbf{ID} & \textbf{Piksel} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} \\
 \hline
+\endfirsthead
+\multicolumn{6}{c}%
+{{\bfseries \tablename\ \thetable{} -- lanjutan dari halaman sebelumnya}} \\
+\hline
+\textbf{No.} & \textbf{Nama Kelas} & \textbf{ID} & \textbf{Piksel} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} \\
+\hline
+\endhead
+\hline
+\multicolumn{6}{r}{{Berlanjut ke halaman berikutnya}} \\
+\endfoot
+\hline
+\endlastfoot
 1  & Fallow/Idle Cropland       & 61  & 7.426.247 & 57.742,5 & 577,42 \\
 2  & Almonds                    & 75  & 3.011.056 & 23.412,3 & 234,12 \\
 3  & Walnuts                    & 76  & 2.387.806 & 18.566,3 & 185,66 \\
@@ -222,9 +238,7 @@ Tabel~\ref{tab:cdl_top30} menyajikan 30 kelas dengan cakupan tertinggi beserta k
    & \textit{(+42 kelas minor)} &     & \multicolumn{3}{r}{\textit{cakupan gabungan $<$3\%}} \\
    & \textbf{Total}             &     & \textbf{26.211.664} & \textbf{203.807,7} & \textbf{2.038,08} \\
 \hline
-\end{tabular}%
-}
-\end{table}
+\end{longtable}
 
 Rekapitulasi berdasarkan tipe penggunaan lahan disajikan pada Tabel~\ref{tab:cdl_landtype}.
 
@@ -232,7 +246,7 @@ Rekapitulasi berdasarkan tipe penggunaan lahan disajikan pada Tabel~\ref{tab:cdl
 \centering
 \caption{Rekapitulasi Cakupan Lahan berdasarkan Tipe Penggunaan}
 \label{tab:cdl_landtype}
-\begin{tabular}{lrrr}
+\begin{tabularx}{\textwidth}{Xrrr}
 \hline
 \textbf{Tipe Lahan} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} & \textbf{\%} \\
 \hline
@@ -242,7 +256,7 @@ Non-pertanian (permukiman, air, lahan basah, semak) & $\approx$43.000 & $\approx
 \hline
 \textbf{Total}                            & \textbf{203.808} & \textbf{2.038} & \textbf{100\%} \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 Gambar~\ref{fig:cdl_class_distribution_area} menampilkan distribusi cakupan area (dalam hektar) untuk 20 kelas CDL teratas di area studi, menggunakan warna resmi USDA CDL untuk memudahkan identifikasi visual.
@@ -274,7 +288,7 @@ Tabel~\ref{tab:selected_classes} menampilkan 10 kelas tanaman aktif yang terpili
 \centering
 \caption{Kelas CDL Terpilih untuk Pelatihan Model (10 tanaman aktif, $\geq 1\%$ cakupan area studi)}
 \label{tab:selected_classes}
-\begin{tabular}{rlrrrr}
+\begin{tabularx}{\textwidth}{r X r r r r}
 \hline
 \textbf{No.} & \textbf{Kelas} & \textbf{ID} & \textbf{\% Tanaman} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} \\
 \hline
@@ -292,7 +306,7 @@ Tabel~\ref{tab:selected_classes} menampilkan 10 kelas tanaman aktif yang terpili
 \hline
 \multicolumn{3}{l}{\textbf{Total kelas terpilih}} & \textbf{59,5\%} & \textbf{101.533} & \textbf{1.015,3} \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 Terdapat tiga justifikasi ilmiah untuk konfigurasi kelas yang digunakan:

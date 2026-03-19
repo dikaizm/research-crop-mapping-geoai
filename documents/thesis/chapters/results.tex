@@ -16,9 +16,9 @@ Tabel~\ref{tab:hasil_utama} merangkum metrik evaluasi utama pada set uji.
     \centering
     \caption{Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}
     \label{tab:hasil_utama}
-    \begin{tabular}{|l|l|c|c|c|c|}
+    \begin{tabularx}{\textwidth}{|X|l|c|c|c|c|}
     \hline
-    \textbf{Eksperimen} & \textbf{Arsitektur} & \textbf{Channel} & \textbf{Val mIoU} & \textbf{Test mIoU} & \textbf{Test OA} \\
+    \textbf{Eksperimen} & \textbf{Arsitektur} & \textbf{Ch.} & \textbf{Val mIoU} & \textbf{Test mIoU} & \textbf{Test OA} \\
     \hline
     \multirow{2}{*}{Exp A --- Single-Date} & SegFormer        & 9  & 0.5056 & 0.1937 & 0.4392 \\
                                           & DeepLabV3+CBAM   & 9  & 0.4693 & 0.0511 & 0.3167 \\
@@ -29,7 +29,7 @@ Tabel~\ref{tab:hasil_utama} merangkum metrik evaluasi utama pada set uji.
     \multirow{2}{*}{Exp C --- Seleksi Band (Proposed)} & SegFormer       & 25 & 0.5082 & 0.0977 & 0.1646 \\
                                            & DeepLabV3+CBAM  & 25 & 0.4774 & 0.1045 & 0.3987 \\
     \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \textit{Catatan: Hasil di atas merepresentasikan evaluasi pada dataset skala penuh (2022--2024). 
@@ -155,7 +155,7 @@ untuk membedakan masing-masing kelas dari latar belakang dan tanaman lainnya.
     \centering
     \caption{Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}
     \label{tab:stage2_results}
-    \begin{tabular}{|l|c|l|l|c|}
+    \begin{tabularx}{\textwidth}{|l|c|X|X|c|}
     \hline
     \textbf{Kelas Tanaman} & \textbf{$K^*$} & \textbf{Tanggal Kunci} & \textbf{Band Kunci} & \textbf{Binary IoU} \\
     \hline
@@ -170,7 +170,7 @@ untuk membedakan masing-masing kelas dari latar belakang dan tanaman lainnya.
     Tomatoes          & 1  & 04/16               & B8A               & 0.0000 \\
     Plums             & 1  & 06/30               & B11               & 0.0000 \\
     \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 Berdasarkan Tabel~\ref{tab:stage2_results}, \textit{Rice} menunjukkan performa separabilitas 
