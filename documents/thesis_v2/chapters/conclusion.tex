@@ -1,0 +1,45 @@
+% ============================================================
+% BAB KESIMPULAN DAN SARAN
+% ============================================================
+
+\section{Kesimpulan}
+
+Berdasarkan hasil eksperimen skala penuh (2022--2024) dan analisis mendalam yang telah dilakukan, penelitian ini menghasilkan kesimpulan sebagai berikut:
+
+\begin{enumerate}
+
+    \item \textbf{Perbandingan akurasi \textit{single-date} versus \textit{multi-temporal}.}
+    Hasil evaluasi pada set uji independen tahun 2024 menunjukkan bahwa pendekatan \textit{single-date} (Exp A) menggunakan data puncak musim panas (30 Juli) masih memberikan performa tertinggi pada arsitektur berbasis \textit{Transformer} (SegFormer mIoU = 19,37\%). Sebaliknya, pendekatan \textit{multi-temporal} naif (Exp B) dan seleksi band (Exp C) mengalami penurunan performa pada SegFormer akibat sensitivitas mekanisme \textit{self-attention} terhadap \textit{noise} temporal dan dimensi fitur yang tinggi. Namun, pada arsitektur CNN (DeepLabV3+CBAM), pendekatan \textit{multi-temporal} terbukti lebih unggul, di mana Exp C (10,45\%) mengungguli Exp A (5,11\%) secara signifikan, menunjukkan bahwa informasi temporal sangat krusial bagi model konvolusional untuk membedakan fase pertumbuhan tanaman.
+
+    \item \textbf{Efektivitas \textit{pipeline} seleksi band tiga tahap.}
+    Metode seleksi band tiga tahap yang diusulkan berhasil melakukan reduksi fitur yang sangat signifikan, yakni sebesar 79,8\% (dari 124 channel potensial menjadi 25 channel unik). Pada arsitektur DeepLabV3+CBAM, subset 25 band ini tidak hanya lebih efisien tetapi juga menghasilkan mIoU yang lebih tinggi (10,45\%) dibandingkan penggunaan seluruh channel pada Exp B (7,57\%). Hal ini membuktikan bahwa \textit{feature selection} berbasis GSI, RF, dan \textit{CNN forward selection} efektif dalam mengeliminasi fitur redundan dan hanya mempertahankan informasi fenologi yang paling diskriminatif (terutama band SWIR B11-B12 dan \textit{Red Edge} B8A).
+
+    \item \textbf{Kekokohan (\textit{Robustness}) Lintas Tahun dan Jenis Tanaman.}
+    Penelitian ini mengidentifikasi bahwa tanaman permanen (\textit{Almonds} dan \textit{Walnuts}) serta tanaman dengan sinyal spektral unik seperti \textit{Rice} (fase \textit{flooding}) memiliki ketahanan tertinggi terhadap pergeseran domain temporal lintas tahun, dengan nilai IoU yang tetap stabil di atas 20\% pada Exp C. Sebaliknya, tanaman sayuran dan kelas minoritas sangat rentan terhadap \textit{temporal shift} dan \textit{class imbalance}, yang menjadi faktor utama rendahnya nilai mIoU global pada set uji 2024.
+
+    \item \textbf{Analisis Arsitektur Model.}
+    SegFormer terbukti unggul dalam menangkap konteks spasial pada input yang bersih (\textit{single-date}), namun DeepLabV3+CBAM menunjukkan stabilitas yang lebih baik saat menangani input \textit{multi-temporal} yang kompleks. Penggunaan modul CBAM pada DeepLabV3+ membantu model untuk memberikan bobot lebih pada kanal-kanal penting hasil seleksi Stage 2, menjadikannya pilihan yang lebih tangguh untuk skenario pemetaan tanaman berbasis seleksi fitur temporal.
+
+\end{enumerate}
+
+Secara keseluruhan, penelitian ini membuktikan bahwa optimasi input melalui seleksi fitur spektral-temporal dapat meningkatkan performa model konvolusional secara signifikan sekaligus meningkatkan efisiensi komputasi. Meskipun terdapat tantangan berupa pergeseran domain temporal pada evaluasi lintas tahun, metode yang diusulkan memberikan kerangka kerja yang solid untuk pemetaan komoditas pertanian strategis secara otomatis.
+
+\section{Saran dan Pekerjaan Mendatang}
+
+Berdasarkan temuan dan keterbatasan penelitian ini, berikut adalah saran untuk pengembangan selanjutnya:
+
+\begin{enumerate}
+
+    \item \textbf{Implementasi \textit{Temporal Jittering} pada Pelatihan.}
+    Untuk mengatasi masalah \textit{brittleness} model terhadap pergeseran kalender tanam antar tahun, disarankan untuk menerapkan augmentasi data berupa \textit{temporal jittering} (pemilihan acak gambar pada rentang $\pm$5--10 hari dari tanggal target). Hal ini akan memaksa model untuk mempelajari fase fenologi secara umum daripada menghafal tanda spektral pada tanggal kalender yang kaku.
+
+    \item \textbf{Penggunaan Label Dinamis.}
+    Rendahnya mIoU sebagian disebabkan oleh penggunaan label CDL tahunan yang statis terhadap realitas fenologi yang dinamis. Penelitian mendatang dapat menggunakan teknik \textit{label smoothing} atau masker temporal yang menonaktifkan \textit{loss} pada tanggal-tanggal di mana tanaman target secara biofisik belum tumbuh (\textit{pre-planting}) atau sudah dipanen (\textit{post-harvest}).
+
+    \item \textbf{Integrasi \textit{Stability-Aware Feature Selection}.}
+    Proses seleksi fitur pada Stage 2 dapat ditingkatkan dengan memasukkan metrik stabilitas spektral antar tahun (seperti korelasi NDVI lintas tahun) sebagai kriteria tambahan. Dengan memilih band yang tidak hanya diskriminatif tetapi juga stabil secara fenologis, model yang dihasilkan akan memiliki daya generalisasi lintas tahun yang lebih kuat.
+
+    \item \textbf{Eksplorasi Arsitektur \textit{Hybrid} CNN-Transformer.}
+    Mengingat CNN unggul dalam stabilitas fitur multi-temporal dan Transformer unggul dalam konteks spasial, penggunaan arsitektur \textit{hybrid} (seperti \textit{TransUNet} atau \textit{TopFormer}) dapat menjadi solusi untuk mendapatkan keunggulan dari kedua paradigma tersebut dalam pemetaan tanaman skala luas.
+
+\end{enumerate}

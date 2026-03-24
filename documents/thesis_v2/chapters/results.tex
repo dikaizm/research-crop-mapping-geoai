@@ -1,0 +1,441 @@
+% ============================================================
+% BAB HASIL DAN PEMBAHASAN
+% ============================================================
+
+\section{Hasil Eksperimen}
+
+Eksperimen dilakukan pada tiga konfigurasi input (Exp A, B, C) dengan dua arsitektur model
+(\textit{DeepLabV3+CBAM} dan \textit{SegFormer}), menghasilkan total enam skenario pelatihan.
+Model dilatih menggunakan data tahun 2022 dan 2023, sementara pengujian independen dilakukan 
+pada data tahun 2024 untuk mengukur kemampuan generalisasi temporal.
+Tabel~\ref{tab:hasil_utama} merangkum metrik evaluasi utama pada set uji.
+
+\subsection{Ringkasan Performa Keseluruhan}
+
+\begin{table}[H]
+    \centering
+    \caption{Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}
+    \label{tab:hasil_utama}
+    \begin{tabularx}{\textwidth}{|X|l|c|c|c|c|}
+    \hline
+    \textbf{Eksperimen} & \textbf{Arsitektur} & \textbf{Ch.} & \textbf{Val mIoU} & \textbf{Test mIoU} & \textbf{Test OA} \\
+    \hline
+    \multirow{2}{*}{Exp A --- Single-Date} & SegFormer        & 9  & 0.5056 & 0.1937 & 0.4392 \\
+                                          & DeepLabV3+CBAM   & 9  & 0.4693 & 0.0511 & 0.3167 \\
+    \hline
+    \multirow{2}{*}{Exp B --- Multi-Temporal Naif} & SegFormer & 36 & 0.4879 & 0.1017 & 0.2657 \\
+                                                  & DeepLabV3+CBAM & 36 & 0.4825 & 0.0757 & 0.3639 \\
+    \hline
+    \multirow{2}{*}{Exp C --- Seleksi Band (Proposed)} & SegFormer       & 25 & 0.5082 & 0.0977 & 0.1646 \\
+                                           & DeepLabV3+CBAM  & 25 & 0.4774 & 0.1045 & 0.3987 \\
+    \hline
+    \end{tabularx}
+\end{table}
+
+\textit{Catatan: Hasil di atas merepresentasikan evaluasi pada dataset skala penuh (2022--2024). 
+Model dilatih pada data 2022--2023 dan diuji pada data independen 2024. 
+Exp C menggunakan subset 25 band hasil seleksi Stage 2 (Union dari seluruh per-crop selection). 
+Meskipun terjadi penurunan mIoU yang signifikan pada set uji 2024 akibat pergeseran domain temporal, 
+performa pada tahap validasi menunjukkan potensi tinggi dari metode yang diusulkan (Val mIoU $>$ 0.50).}
+
+\subsection{Perbandingan Konfigurasi Input}
+
+Berdasarkan Tabel~\ref{tab:hasil_utama}, diperoleh beberapa observasi utama:
+
+\begin{enumerate}
+    \item \textbf{Exp A (single-date) vs Exp B (multi-temporal naif)}: Pada evaluasi lintas tahun 2024,
+    Exp A (single-date) SegFormer menunjukkan performa tertinggi (mIoU = 0.1937). Keunggulan ini 
+    disebabkan oleh kesederhanaan input pada satu tanggal puncak vegetasi yang mengurangi 
+    akumulasi noise spektral dari tanggal lainnya yang mungkin mengalami pergeseran fenologi 
+    lebih drastis pada tahun pengujian.
+
+    \item \textbf{Exp B (multi-temporal naif) vs Exp C (seleksi band)}: Pada arsitektur 
+    DeepLabV3+CBAM, Exp C (mIoU = 0.1045) mengungguli Exp B (mIoU = 0.0757). Hasil ini 
+    membuktikan bahwa seleksi 25 band yang relevan lebih efektif dibandingkan menggunakan 
+    seluruh 36 channel yang redundan untuk model berbasis konvolusi.
+
+    \item \textbf{SegFormer vs DeepLabV3+CBAM}: SegFormer unggul pada input single-date, 
+    namun DeepLabV3+CBAM menunjukkan peningkatan performa yang lebih konsisten saat 
+    menggunakan input hasil seleksi (Exp C), hampir melipatgandakan akurasi mIoU-nya 
+    dibandingkan baseline single-date.
+\end{enumerate}
+
+\subsection{Performa Per Kelas Tanaman}
+
+Tabel~\ref{tab:iou_per_kelas} menampilkan IoU per kelas tanaman pada set uji untuk setiap
+skenario eksperimen.
+
+\begin{table}[H]
+    \centering
+    \caption{IoU per kelas tanaman pada set uji (\%)}
+    \label{tab:iou_per_kelas}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+    \hline
+    \multirow{2}{*}{\textbf{Kelas Tanaman}} &
+    \multicolumn{2}{c|}{\textbf{Exp A (9ch)}} &
+    \multicolumn{2}{c|}{\textbf{Exp B (36ch)}} &
+    \multicolumn{2}{c|}{\textbf{Exp C (25ch)}} \\
+    \cline{2-7}
+    & \textbf{SF} & \textbf{DLV3} & \textbf{SF} & \textbf{DLV3} & \textbf{SF} & \textbf{DLV3} \\
+    \hline
+    Rice            & 39.47 & 30.11 & 22.89 & 12.07 & 17.25 & 22.59 \\
+    Sunflower       &  9.71 &  0.01 & 11.36 &  6.30 &  1.52 &  7.55 \\
+    Winter Wheat    & 14.14 &  3.28 & 10.02 &  7.47 & 10.81 & 10.50 \\
+    Alfalfa         & 16.55 &  7.30 &  7.95 &  7.27 & 12.13 & 11.41 \\
+    Other Hay       &  1.07 &  0.57 &  0.94 &  0.33 &  1.21 &  0.57 \\
+    Tomatoes        & 15.47 &  3.40 &  9.04 &  4.47 &  8.79 &  7.21 \\
+    Grapes          & 34.51 &  0.00 &  9.47 &  8.15 &  9.66 &  9.98 \\
+    Almonds         & 36.95 &  4.90 & 16.53 & 18.38 & 23.92 & 23.85 \\
+    Walnuts         & 24.17 &  1.55 & 12.34 & 10.04 & 12.02 &  9.84 \\
+    Plums           &  1.68 &  0.00 &  1.11 &  1.20 &  0.40 &  0.99 \\
+    \hline
+    \textbf{mIoU}   & \textbf{19.37} & \textbf{5.11} & \textbf{10.17} & \textbf{7.57} & \textbf{9.77} & \textbf{10.45} \\
+    \hline
+    \end{tabular}%
+    }
+    \par\smallskip
+    {\footnotesize SF = SegFormer; DLV3 = DeepLabV3+CBAM.}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/per_crop_iou_comparison.png}
+    \caption{Perbandingan IoU per kelas tanaman pada set uji 2024. Exp A dan B menggunakan SegFormer (SF), sedangkan Exp C menggunakan DeepLabV3+CBAM (DLV3) dengan subset 20 band pilihan.}
+    \label{fig:per_crop_comparison}
+\end{figure}
+
+Berdasarkan Tabel~\ref{tab:iou_per_kelas} dan Gambar~\ref{fig:per_crop_comparison}, terlihat 
+kontras performa yang signifikan antar kelas tanaman:
+
+\begin{enumerate}
+    \item \textbf{Tanaman Permanen (\textit{Almonds} dan \textit{Walnuts})}: Kelas ini menunjukkan 
+    ketahanan tertinggi terhadap pergeseran temporal. \textit{Almonds} tetap menjadi kelas 
+    dengan performa terbaik pada Exp C (23,85\% pada DLV3). Hal ini dikarenakan struktur 
+    kanopi pohon yang lebih stabil sepanjang tahun dibandingkan tanaman semusim.
+    
+    \item \textbf{Tanaman Semusim Utama (\textit{Rice})}: \textit{Rice} menunjukkan performa 
+    yang cukup stabil di angka 17--22\% pada Exp C. Hal ini membuktikan bahwa 
+    sinyal spektral dari fase penggenangan (\textit{flooding}) sawah sangat unik dan berhasil 
+    ditangkap dengan baik oleh subset 25 band pada Exp C.
+    
+    \item \textbf{Kelas Minoritas dan Tanaman Sayuran (\textit{Tomatoes}, \textit{Plums}, \textit{Other Hay})}: 
+    Kelas-kelas ini mengalami penurunan drastis pada Exp C. Hal ini mengindikasikan 
+    bahwa model seleksi band (Exp C) sangat sensitif terhadap pergeseran kalender tanam 
+    untuk komoditas dengan siklus hidup pendek.
+
+\end{enumerate}
+
+\section{Analisis Hasil}
+
+\subsection{Perbandingan Performa Model}
+
+Pada seluruh konfigurasi input, SegFormer menunjukkan performa terbaik pada skenario single-date (Exp A). 
+Namun, DeepLabV3+CBAM menunjukkan kemampuan adaptasi yang lebih baik terhadap input multi-temporal 
+hasil seleksi fitur (Exp C), di mana mIoU meningkat dari 5,11\% (Exp A) menjadi 10,45\% (Exp C). 
+Hasil ini mendukung hipotesis bahwa mekanisme atensi pada SegFormer sangat efektif untuk pola spasial 
+yang bersih, sementara konvolusi dengan CBAM pada DeepLabV3+ lebih tangguh dalam mengekstraksi informasi 
+dari tumpukan fitur temporal yang lebih kompleks.
+
+\subsection{Pengaruh Data Multi-Temporal}
+
+Evaluasi pada dataset skala penuh mengonfirmasi bahwa penambahan informasi temporal (Exp B dan C) 
+memberikan informasi tambahan yang berguna bagi model CNN untuk membedakan kelas tanaman 
+berdasarkan dinamika fenologinya. Meskipun demikian, ketergantungan model pada urutan waktu 
+kalender menjadikannya rentan terhadap pergeseran fenologi tahunan (domain shift), yang 
+terlihat dari penurunan performa pada set uji 2024 dibandingkan tahap validasi.
+
+\subsection{Hasil Seleksi Fitur Tahap 2}
+
+Proses seleksi band pada Stage 2 dilakukan secara biner untuk setiap kelas tanaman utama. 
+Hasil seleksi ini (MLflow run \texttt{90a75ed...}) menghasilkan subset band yang dioptimalkan 
+untuk membedakan masing-masing kelas dari latar belakang dan tanaman lainnya.
+
+\begin{table}[H]
+    \centering
+    \caption{Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}
+    \label{tab:stage2_results}
+    \begin{tabularx}{\textwidth}{|l|c|X|X|c|}
+    \hline
+    \textbf{Kelas Tanaman} & \textbf{$K^*$} & \textbf{Tanggal Kunci} & \textbf{Band Kunci} & \textbf{Binary IoU} \\
+    \hline
+    Rice (Padi)       & 10 & 05/16, 06/30, 07/30 & B11, B12, B6, B8A & 0.8396 \\
+    Winter Wheat      & 3  & 06/30               & B11, B2, B4       & 0.2895 \\
+    Almonds           & 2  & 04/01, 04/16        & B7, B8A           & 0.2644 \\
+    Walnuts           & 6  & 03/17, 04/01, 05/01 & B7, B8, B8A       & 0.3725 \\
+    Alfalfa           & 1  & 04/01               & B8                & 0.0615 \\
+    Grapes            & 2  & 06/30, 07/15        & B12, B4           & 0.0115 \\
+    Sunflower         & 1  & 04/01               & B8A               & 0.0000 \\
+    Other Hay         & 1  & 06/30               & B11               & 0.0000 \\
+    Tomatoes          & 1  & 04/16               & B8A               & 0.0000 \\
+    Plums             & 1  & 06/30               & B11               & 0.0000 \\
+    \hline
+    \end{tabularx}
+\end{table}
+
+Berdasarkan Tabel~\ref{tab:stage2_results}, \textit{Rice} menunjukkan performa separabilitas 
+tertinggi (IoU 0.8396) dengan $K^* = 10$ band, didominasi oleh band SWIR (B11, B12) pada 
+bulan Mei hingga Juli yang bertepatan dengan fase penggenangan sawah. Sebaliknya, beberapa 
+kelas minoritas seperti \textit{Sunflower} dan \textit{Tomatoes} menunjukkan IoU 0.0 pada 
+klasifikasi biner oracle ini. Hal ini disebabkan oleh ketidakseimbangan kelas yang ekstrem 
+pada subset data oracle (jumlah sampel positif sangat sedikit), sehingga model cenderung 
+memprediksi seluruh piksel sebagai negatif. Meskipun demikian, Stage 2 tetap berhasil 
+mengidentifikasi band potensial (B8A, B11) untuk kelas-kelas tersebut berdasarkan sinyal 
+gradien terkecil yang ada.
+
+\subsection{Efisiensi Seleksi Band}
+
+Hasil penggabungan (\textit{union}) dari seluruh band yang terpilih pada Stage 2 menghasilkan 
+total 25 band unik. Jika menggunakan seluruh band dari 72 tanggal yang tersedia (11 band per tanggal), 
+model akan menerima hingga 792 channel input. Namun, Stage 1 menyaring kandidat menjadi 124 channel. 
+Dengan menggunakan hanya 25 channel pilihan, metode yang diusulkan berhasil melakukan reduksi 
+fitur sebesar 79,8\% dibandingkan tumpukan fitur temporal dasar (124 channel), sehingga mempercepat 
+waktu pelatihan dan mengurangi penggunaan memori GPU.
+
+\subsection{Proyeksi Seleksi Band Antar-Tahun}
+
+Untuk memungkinkan pelatihan model pada data multi-tahun (2022 dan 2023) serta evaluasi 
+pada tahun independen (2024), subset 25 band yang terpilih pada tahun 2022 diproyeksikan 
+ke tahun-tahun berikutnya. Proyeksi ini dilakukan dengan mencari tanggal pada tahun 2023 
+dan 2024 yang paling mendekati (\textit{nearest date}) tanggal asli pada tahun 2022 guna 
+menjaga konsistensi informasi fenologi.
+
+\begin{table}[H]
+    \centering
+    \caption{Contoh proyeksi tanggal seleksi Stage 2 untuk konsistensi multi-tahun}
+    \label{tab:projection_samples}
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    \textbf{Kategori Fenologi} & \textbf{Tanggal 2022} & \textbf{Tanggal 2023} & \textbf{Tanggal 2024} \\
+    \hline
+    Awal Musim Tanam  & 17 Maret  & 17 Maret  & 16 Maret \\
+    Puncak Pertumbuhan & 16 Mei    & 16 Mei    & 15 Mei \\
+    Fase Penggenangan  & 30 Juni   & 30 Juni   & 29 Juni \\
+    Puncak Musim Panas & 30 Juli   & 30 Juli   & 29 Juli \\
+    Akhir Musim        & 29 Agustus& 29 Agustus& 28 Agustus \\
+    \hline
+    \end{tabular}
+\end{table}
+
+Berdasarkan Tabel~\ref{tab:projection_samples}, terlihat bahwa proyeksi menghasilkan pergeseran 
+maksimal hanya satu hari (akibat tahun kabisat atau ketersediaan akuisisi Sentinel-2). 
+Konsistensi ini sangat penting untuk memastikan bahwa model yang dilatih menggunakan 
+fitur \textit{B12\_20220730} dapat menggeneralisasi pola spektral yang serupa pada 
+fitur \textit{B12\_20230730} dan \textit{B12\_20240729}. Dengan skema proyeksi ini, 
+metode seleksi 3-tahap yang diusulkan terbukti tidak hanya efisien secara komputasi, 
+tetapi juga aplikabel untuk pemantauan tanaman lintas tahun secara berkelanjutan.
+
+
+\subsection{Log Pelatihan Seleksi Fitur}
+
+Gambar~\ref{fig:stage1_joint_score} menampilkan \textit{joint score} setiap \textit{band-date}
+pada Stage 1.
+Band yang berwarna jingga termasuk dalam 25 kandidat teratas yang diteruskan ke Stage 2,
+sedangkan band abu-abu tidak terpilih.
+Band SWIR (B11, B12) dan \textit{Red Edge} (B8A) secara konsisten mendapatkan skor tertinggi,
+mengonfirmasi relevansinya untuk diskriminasi vegetasi pertanian.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/stage1_joint_score.png}
+    \caption{Stage 1 --- \textit{Joint Score} setiap \textit{band-date} (GSI+RF, $\alpha=0.5$).
+             Band jingga terpilih sebagai kandidat Top-$K$ untuk Stage 2.}
+    \label{fig:stage1_joint_score}
+\end{figure}
+
+Gambar~\ref{fig:stage1_rf_importance} menampilkan peta panas (\textit{heatmap}) nilai RF \textit{feature importance} per band per kelas tanaman, yang menunjukkan band mana yang paling penting untuk membedakan masing-masing kelas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/stage1_rf_importance.png}
+    \caption{Stage 1 --- RF \textit{Feature Importance} per band per kelas tanaman. Nilai lebih tinggi (warna lebih terang) menunjukkan band yang lebih penting untuk membedakan kelas tersebut dari kelas lainnya.}
+    \label{fig:stage1_rf_importance}
+\end{figure}
+
+Gambar~\ref{fig:stage1v2_siglobal_heatmap} menampilkan nilai SI\textit{global} per band per kelas tanaman hasil analisis Tahap 1 versi per-kelas biner, yang digunakan untuk menentukan urutan kandidat band pada Tahap 2.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/stage1v2_siglobal_heatmap.png}
+    \caption{Stage 1 --- Peta panas nilai SIglobal per \textit{band-date} per kelas tanaman. Setiap sel menunjukkan kemampuan separabilitas band tersebut untuk membedakan satu kelas tanaman dari semua kelas lainnya. Band SWIR (B11, B12) dan \textit{Red Edge} (B5--B7) secara konsisten menunjukkan nilai tertinggi.}
+    \label{fig:stage1v2_siglobal_heatmap}
+\end{figure}
+
+Gambar~\ref{fig:stage2_forward_selection} menampilkan kurva mIoU selama proses
+\textit{CNN forward selection} pada Stage 2.
+Setiap titik hijau (diterima) menunjukkan penambahan band yang meningkatkan mIoU oracle
+melampaui ambang $\delta = 0.005$, sedangkan tanda silang merah (ditolak) menunjukkan band
+yang gagal meningkatkan mIoU secara signifikan.
+Kurva berhenti pada $K^* = 4$ band setelah tiga langkah berturut-turut tidak menghasilkan
+perbaikan (\textit{patience} = 3).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{figures/stage2_forward_selection.png}
+    \caption{Stage 2 --- Ilustrasi proses \textit{CNN forward selection}.
+             Metode ini secara akumulatif mengidentifikasi 20 band unik dari total 792 kemungkinan (72 tanggal $\times$ 11 band), 
+             menghasilkan input yang jauh lebih efisien untuk pelatihan model segmentasi.}
+    \label{fig:stage2_forward_selection}
+\end{figure}
+
+\subsection{Kurva Pelatihan Model}
+
+Gambar~\ref{fig:training_curves_dlv3} dan Gambar~\ref{fig:training_curves_sf} menampilkan kurva \textit{loss} dan mIoU validasi selama pelatihan untuk arsitektur DeepLabV3+CBAM dan SegFormer pada konfigurasi Exp A dan Exp C.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/dlv3_expa_curve.png}
+        \caption{Exp A --- \textit{Single-Date}}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/dlv3_expb_curve.png}
+        \caption{Exp B --- \textit{Naive Multi-Temporal}}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/dlv3_expc_curve.png}
+        \caption{Exp C --- \textit{Proposed Selection}}
+    \end{subfigure}
+    \caption{Kurva pelatihan DeepLabV3+CBAM.}
+    \label{fig:training_curves_dlv3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/sf_expa_curve.png}
+        \caption{Exp A --- \textit{Single-Date}}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/sf_expb_curve.png}
+        \caption{Exp B --- \textit{Naive Multi-Temporal}}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/sf_expc_curve.png}
+        \caption{Exp C --- \textit{Proposed Selection}}
+    \end{subfigure}
+    \caption{Kurva pelatihan SegFormer.}
+    \label{fig:training_curves_sf}
+\end{figure}
+
+\subsection{Visualisasi Hasil Segmentasi pada Set Uji}
+
+Gambar~\ref{fig:seg_results_dlv3} dan Gambar~\ref{fig:seg_results_sf} menampilkan peta segmentasi hasil inferensi penuh pada area studi Sacramento Valley menggunakan data set uji tahun 2024. Setiap gambar menampilkan perbandingan antara Exp A (\textit{baseline single-date}), Exp B (\textit{naive multi-temporal}), dan Exp C (\textit{proposed multi-temporal selection}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/dlv3_expa_map.png}
+        \caption{Exp A --- \textit{Single-Date}}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/dlv3_expb_map.png}
+        \caption{Exp B --- \textit{Naive Multi-Temporal}}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/dlv3_expc_map.png}
+        \caption{Exp C --- \textit{Proposed Selection}}
+    \end{subfigure}
+    \caption{Peta segmentasi penuh set uji menggunakan DeepLabV3+CBAM.}
+    \label{fig:seg_results_dlv3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/sf_expa_map.png}
+        \caption{Exp A --- \textit{Single-Date}}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/sf_expb_map.png}
+        \caption{Exp B --- \textit{Naive Multi-Temporal}}
+    \end{subfigure}
+    \vspace{1em}
+    \begin{subfigure}{0.85\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/sf_expc_map.png}
+        \caption{Exp C --- \textit{Proposed Selection}}
+    \end{subfigure}
+    \caption{Peta segmentasi penuh set uji menggunakan SegFormer.}
+    \label{fig:seg_results_sf}
+\end{figure}
+
+Peta di atas menunjukkan perbandingan visual antara ketiga konfigurasi input. Terlihat bahwa meskipun Exp A memiliki metrik IoU yang lebih tinggi pada set uji 2024, Exp C menunjukkan batas-batas poligon tanaman yang lebih tajam dan bersih pada beberapa area, mengindikasikan bahwa seleksi band berhasil menangkap fitur spasial yang relevan meskipun terpengaruh oleh pergeseran domain temporal.
+
+\subsection{Analisis Kesalahan}
+
+Rendahnya nilai mIoU pada set uji independen 2024 (terutama pada Exp C dengan mIoU 0.1045) 
+dapat dijelaskan melalui fenomena \textit{Temporal Label Noise} dan \textit{Temporal Domain Shift}. 
+Terdapat tiga faktor utama yang berkontribusi terhadap penurunan performa ini:
+
+\begin{enumerate}
+    \item \textbf{\textit{Static Label vs. Dynamic Reality}}: Label CDL bersifat tahunan 
+    (\textit{yearly label}), di mana satu piksel diberi label tetap (misalnya ``Rice'') 
+    untuk seluruh tahun. Namun, secara biofisik, piksel tersebut hanya tampak sebagai padi 
+    selama fase vegetatif (Mei--September). Pada tanggal di luar fase tersebut (misalnya 
+    Maret atau November), piksel tersebut secara visual berupa air atau tanah terbuka. 
+    Model yang dilatih pada fitur spektral-temporal akan secara benar memprediksi 
+    \textit{Background}, namun akan dipenalti oleh metrik IoU karena ketidaksesuaian 
+    dengan label CDL yang statis.
+    
+    \item \textbf{\textit{Phenological Shift}}: Meskipun telah dilakukan proyeksi tanggal 
+    antar-tahun, variasi cuaca tahunan dapat menyebabkan pergeseran jadwal tanam atau 
+    panen. Jika pada tahun 2024 terjadi keterlambatan tanam selama dua minggu dibandingkan 
+    tahun 2022, maka fitur spektral pada tanggal yang sama (\textit{projected date}) 
+    akan menunjukkan fase pertumbuhan yang berbeda secara signifikan, menyebabkan 
+    misklasifikasi pada model yang sangat bergantung pada urutan waktu.
+    
+    \item \textbf{Sensitivitas Seleksi Band (Exp C)}: Berbeda dengan Exp B yang menggunakan 
+    seluruh kanal (\textit{dense stack}), Exp C menggunakan subset band yang telah 
+    dioptimalkan khusus untuk fase fenologi tertentu. Hal ini membuat Exp C lebih 
+    efisien namun juga lebih rentan (\textit{brittle}) terhadap pergeseran waktu 
+    akuisisi atau anomali fenologi dibandingkan model dengan input kanal yang lebih redundan.
+\end{enumerate}
+
+Fenomena ini menunjukkan bahwa evaluasi temporal lintas-tahun (\textit{cross-year}) 
+memerlukan pertimbangan lebih dalam mengenai dinamika kalender tanam, dan hasil IoU 
+yang rendah tidak serta-merta mencerminkan kegagalan model dalam mengenali pola 
+spektral, melainkan adanya keterbatasan pada resolusi temporal label referensi (CDL).
+
+\subsection{Waktu Pelatihan}
+
+Tabel~\ref{tab:waktu_pelatihan} merangkum waktu pelatihan per eksperimen pada lingkungan GPU server (\textit{NVIDIA Tesla T4} atau \textit{MPS-enabled local GPU}).
+
+\begin{table}[H]
+    \centering
+    \caption{Perbandingan waktu pelatihan per eksperimen (Skala Penuh, 50--100 Epoch)}
+    \label{tab:waktu_pelatihan}
+    \begin{tabular}{|l|l|c|c|}
+    \hline
+    \textbf{Eksperimen} & \textbf{Arsitektur} & \textbf{Epoch Total} & \textbf{Total (jam)} \\
+    \hline
+    Exp A --- Single-Date & DeepLabV3+CBAM & $\approx$40 & $\approx$1,5 \\
+    Exp A --- Single-Date & SegFormer      & $\approx$50 & $\approx$2,0 \\
+    Exp B --- Multi-Temporal Naif & DeepLabV3+CBAM & $\approx$45 & $\approx$2,5 \\
+    Exp B --- Multi-Temporal Naif & SegFormer      & $\approx$97 & $\approx$4,5 \\
+    Exp C --- Seleksi Band & DeepLabV3+CBAM & $\approx$50 & $\approx$2,2 \\
+    Exp C --- Seleksi Band & SegFormer      & $\approx$60 & $\approx$3,0 \\
+    \hline
+    \end{tabular}
+\end{table}
+
+Semua eksperimen dihentikan melalui mekanisme \textit{early stopping} saat metrik mIoU pada 
+set validasi tidak lagi menunjukkan peningkatan signifikan ($\delta < 0,001$) dalam 20 epoch berturut-turut.

@@ -1,0 +1,652 @@
+\section{Area Studi Sacramento Valley}
+Area studi penelitian ini adalah Sacramento Valley dalam daerah Central Valley, California, pada koordinat geografis ($122^{\circ}4'41''$ BB hingga $121^{\circ}34'31''$ BB, $38^{\circ}45'14''$ LU hingga $39^{\circ}10'29''$ LU) dengan total luas area 2.038,08 km$^2$. 
+Kawasan ini memiliki bentang alam dan jenis tanaman yang sangat beragam karena variasi iklim dan topografinya, juga menjadi salah satu wilayah pertanian paling produktif di Amerika Serikat dengan jenis tanaman pertanian yang beragam. 
+Iklim di wilayah ini termasuk minim hujan di musim panas, sehingga memungkinkan pengamatan spektral tanaman sepanjang musim tanam \citep{yuan2021}. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/study_area_map.png}
+    \caption{Peta area studi Sacramento Valley, California. Kotak merah menunjukkan batas area penelitian ($122^{\circ}4'41''$ BB hingga $121^{\circ}34'31''$ BB, $38^{\circ}45'14''$ LU hingga $39^{\circ}10'29''$ LU) dengan luas 2.038,08 km$^2$.}
+    \label{fig:study_area_map}
+\end{figure}
+
+\section{Pengumpulan Data}
+Data pada penelitian ini menggunakan citra satelit Sentinel-2 dan data label tutupan lahan dari Cropland Data Layer (CDL). 
+Data citra diambil dari koleksi Sentinel-2 Surface Reflectance (COPERNICUS/S2\_SR\_HARMONIZED) melalui platform Google Earth Engine (GEE) dengan batas persentase awan kurang dari 10\% pada area studi. 
+Citra dikumpulkan secara multi-temporal sepanjang tahun 2022, 2023, dan 2024 dengan interval komposit setiap 15 hari sekali.
+Pemilihan interval 15 hari didasarkan pada dua pertimbangan.
+Pertama, interval ini cukup rapat untuk menangkap transisi fenologi antar fase pertumbuhan tanaman (vegetatif, berbunga, pematangan, panen) yang umumnya berlangsung dalam skala beberapa minggu \citep{phiri2020}.
+Kedua, interval 15 hari memberikan jendela kompositing yang cukup lebar untuk memperbesar peluang mendapatkan piksel bebas awan dari beberapa lintasan Sentinel-2, mengingat \textit{revisit time} efektif Sentinel-2A+2B di lintang Sacramento Valley (${\approx}38^{\circ}$LU) mencapai 2--5 hari \citep{phiri2020}.
+Griffiths et al. (2019) menunjukkan bahwa komposit 10 hari dari gabungan Sentinel-2 dan Landsat menghasilkan akurasi pemetaan tanaman tertinggi dibandingkan interval bulanan dan musiman, mengonfirmasi bahwa resolusi temporal yang lebih rapat dari satu bulan penting untuk membedakan jenis tanaman \citep{griffiths2019}.
+Interval 15 hari dipilih sebagai kompromi antara resolusi temporal yang memadai dan volume data yang dapat dikelola secara komputasi.
+Periode akuisisi mencakup satu tahun penuh, menghasilkan total 72 citra komposit yang terdiri dari 24 citra pada 2022, 23 citra pada 2023, dan 25 citra pada 2024.
+Terdapat tiga interval citra yang melebihi batas persentase awan, sehingga tidak digunakan sebagai dataset. 
+
+Untuk mendapatkan citra multispektral, dipilih sembilan band (B2, B3, B4, B5, B6, B7, B8, B11, B12) yang relevan terhadap karakteristik vegetasi.
+Sementara itu, data label diperoleh dari dataset CDL tahun 2022, 2023, dan 2024 yang diunduh melalui situs resmi USDA NASS yang terdiri dari 134 kelas dengan resolusi spasial 30 meter per piksel.
+
+Tabel~\ref{tab:acquisition_dates} menampilkan seluruh tanggal akuisisi citra Sentinel-2 untuk ketiga tahun dataset yang digunakan dalam penelitian ini.
+
+\begin{center}
+\begin{longtable}{clll}
+\caption{Tanggal akuisisi citra Sentinel-2 per tahun (interval 15 hari). Tanda $^\dagger$ menandai citra yang dikecualikan karena cakupan awan $\geq$100\%.} \label{tab:acquisition_dates} \\
+\hline
+\textbf{No.} & \textbf{2022} & \textbf{2023} & \textbf{2024} \\
+\hline
+\endfirsthead
+\multicolumn{4}{c}%
+{{\bfseries \tablename\ \thetable{} -- lanjutan dari halaman sebelumnya}} \\
+\hline
+\textbf{No.} & \textbf{2022} & \textbf{2023} & \textbf{2024} \\
+\hline
+\endhead
+\hline
+\multicolumn{4}{r}{{Berlanjut ke halaman berikutnya}} \\
+\endfoot
+\hline
+\endlastfoot
+1  & 1 Januari   & 1 Januari   & 1 Januari   \\
+2  & 16 Januari  & 16 Januari  & 16 Januari  \\
+3  & 31 Januari  & 31 Januari  & 31 Januari  \\
+4  & 15 Februari & 15 Februari & 15 Februari \\
+5  & 2 Maret     & 2 Maret     & 1 Maret     \\
+6  & 17 Maret    & 17 Maret    & 16 Maret    \\
+7  & 1 April     & 1 April     & 31 Maret    \\
+8  & 16 April    & 16 April    & 15 April    \\
+9  & 1 Mei       & 1 Mei       & 30 April    \\
+10 & 16 Mei      & 16 Mei      & 15 Mei      \\
+11 & 31 Mei      & 31 Mei      & 30 Mei      \\
+12 & 15 Juni     & 15 Juni     & 14 Juni     \\
+13 & 30 Juni     & 30 Juni     & 29 Juni     \\
+14 & 15 Juli     & 15 Juli     & 14 Juli     \\
+15 & 30 Juli     & 30 Juli     & 29 Juli     \\
+16 & 14 Agustus  & 14 Agustus  & 13 Agustus  \\
+17 & 29 Agustus  & 29 Agustus  & 28 Agustus  \\
+18 & 13 September & 13 September & 12 September \\
+19 & 28 September & 28 September & 27 September \\
+20 & 13 Oktober  & 13 Oktober  & 12 Oktober  \\
+21 & 28 Oktober  & 28 Oktober  & 27 Oktober  \\
+22 & 12 November & 12 November & 11 November \\
+23 & 27 November & 27 November & 26 November \\
+24 & 12 Desember & 12 Desember & 11 Desember \\
+25 & 27 Desember$^\dagger$ & 27 Desember & 26 Desember \\
+\hline
+\textbf{Total valid} & \textbf{24} & \textbf{23} & \textbf{25} \\
+\end{longtable}
+\end{center}
+
+\section{Eksplorasi Data}
+\subsection{Visualisasi Citra}
+Visualisasi citra Sentinel-2 dilakukan secara representatif menggunakan beberapa tanggal akuisisi yang mencerminkan fase pertumbuhan tanaman yang berbeda sepanjang tahun 2022.
+Tujuan visualisasi adalah untuk memverifikasi kualitas data, memahami karakteristik spektral masing-masing band, dan menunjukkan dinamika temporal yang menjadi dasar pendekatan \textit{multi-temporal} pada penelitian ini.
+
+\subsubsection{Citra True Color (RGB)}
+Citra \textit{True Color} menggunakan kombinasi Band B4 (\textit{Red}), Band B3 (\textit{Green}), dan Band B2 (\textit{Blue}) untuk menghasilkan representasi visual yang tampak pada mata manusia.
+Gambar~\ref{fig:s2_rgb_temporal} menampilkan enam tanggal representatif yang dipilih untuk mencerminkan fase fenologi tanaman: masa dorman (Januari), persiapan lahan (Maret), pertumbuhan awal (Mei), puncak vegetasi (Juli), pematangan (September), dan masa panen (Oktober).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_rgb_temporal.png}
+    \caption{Citra Sentinel-2 True Color (B4--B3--B2) pada enam tanggal representatif sepanjang tahun 2022 di Sacramento Valley, menunjukkan perubahan kondisi vegetasi dari masa dorman hingga masa panen.}
+    \label{fig:s2_rgb_temporal}
+\end{figure}
+
+\subsubsection{Komposit Band Spektral}
+Dataset Sentinel-2 yang digunakan mencakup 11 band spektral hasil ekspor dari Google Earth Engine: B1 (Coastal Aerosol, 443 nm), B2--B4 (Visible), B5--B7 dan B8A (\textit{Red Edge}), B8 (NIR), serta B11 dan B12 (SWIR).
+Gambar~\ref{fig:s2_band_grid} menampilkan seluruh 11 band pada tanggal puncak musim tanam (30 Juli 2022) untuk mengilustrasikan karakteristik pantulan (\textit{reflectance}) pada setiap panjang gelombang.
+Band \textit{Red Edge} dan NIR menunjukkan kontras tertinggi antara area bervegetasi dan non-vegetasi, mengonfirmasi relevansinya untuk klasifikasi tanaman.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_band_grid.png}
+    \caption{Komposit 11 band spektral Sentinel-2 pada tanggal puncak musim tanam (30 Juli 2022). Setiap panel menampilkan satu band dalam skala abu-abu ternormalisasi. Band NIR (B8) dan \textit{Red Edge} (B5--B7) menunjukkan kontras tertinggi untuk vegetasi.}
+    \label{fig:s2_band_grid}
+\end{figure}
+
+\subsubsection{Perubahan Indeks Vegetasi Temporal}
+Normalized Difference Vegetation Index (NDVI) dihitung dari seluruh 24 tanggal akuisisi yang tersedia pada tahun 2022 menggunakan formula:
+\begin{equation}
+    \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}} = \frac{B8 - B4}{B8 + B4}
+\end{equation}
+
+Gambar~\ref{fig:s2_ndvi_temporal} menampilkan profil rata-rata NDVI seluruh area studi sepanjang 24 tanggal akuisisi yang tersedia pada tahun 2022.
+Pola temporal yang terlihat mencerminkan sistem pertanian ganda (\textit{dual cropping}) Sacramento Valley:
+NDVI bernilai tinggi pada bulan Januari--Februari ($\approx$0,43) karena tanaman musim dingin seperti \textit{Winter Wheat} dan \textit{Alfalfa} sedang aktif tumbuh.
+NDVI kemudian menurun pada Maret--Mei ($\approx$0,33--0,34) seiring masa persiapan lahan untuk tanaman musim panas (\textit{Rice}, \textit{Tomatoes}, \textit{Sunflower}) yang meninggalkan lahan dalam kondisi bera.
+Pada Juni--Oktober, NDVI kembali meningkat secara bertahap seiring pertumbuhan tanaman musim panas.
+Pola dua puncak ini memvalidasi pendekatan \textit{multi-temporal} karena setiap jenis tanaman memiliki trajektori NDVI yang khas dan berbeda dari tanaman lainnya.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_ndvi_temporal.png}
+    \caption{Profil rata-rata NDVI temporal Sacramento Valley 2022 (24 tanggal akuisisi). NDVI tinggi di awal tahun ($\approx$0,43) mencerminkan tanaman musim dingin (\textit{Winter Wheat}, \textit{Alfalfa}), sedangkan penurunan pada Maret--Mei menunjukkan persiapan lahan untuk tanaman musim panas.}
+    \label{fig:s2_ndvi_temporal}
+\end{figure}
+
+\subsubsection{Profil NDVI Per Kelas Tanaman}
+Gambar~\ref{fig:s2_ndvi_per_class} menampilkan profil rata-rata NDVI untuk setiap kelas tanaman target sepanjang 24 tanggal akuisisi tahun 2022.
+Setiap kelas menunjukkan pola fenologi yang berbeda: \textit{Rice} mengalami kenaikan tajam pada Juni--Juli seiring transplantasi bibit ke sawah; \textit{Winter Wheat} memuncak pada Januari--Maret kemudian menurun seiring panen musim semi; tanaman pohon tahunan (\textit{Almonds}, \textit{Walnuts}, \textit{Plums}) menunjukkan kurva lebih landai karena kanopi permanen.
+\textit{Alfalfa} menunjukkan pola berulang akibat siklus potong hingga empat kali setahun, sedangkan \textit{Sunflower} dan \textit{Tomatoes} mencapai puncak NDVI pada Juli--September.
+Keragaman profil fenologi antar kelas ini mengonfirmasi bahwa setiap tanggal akuisisi membawa informasi diskriminatif yang unik, sekaligus menjadi motivasi empiris pendekatan \textit{multi-temporal} pada penelitian ini.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_ndvi_per_class.png}
+    \caption{Profil rata-rata NDVI per kelas tanaman sepanjang 24 tanggal akuisisi Sentinel-2 tahun 2022. Setiap kelas menunjukkan trajektori fenologi yang khas, mengonfirmasi nilai informasi temporal untuk diskriminasi jenis tanaman.}
+    \label{fig:s2_ndvi_per_class}
+\end{figure}
+
+\subsubsection{Profil Spektral per Band}
+Gambar~\ref{fig:s2_spectral_profile} menampilkan rata-rata nilai reflektansi untuk setiap band Sentinel-2 pada tiga tanggal representatif yang mewakili tiga fase musim berbeda: Januari (musim dingin, tanaman aktif), Mei (persiapan lahan, biomassa rendah), dan Juli (puncak musim panas, tanaman aktif).
+Perbedaan antar musim terlihat jelas terutama pada band NIR (B8) yang menunjukkan nilai reflektansi tertinggi pada Januari, mencerminkan biomassa tanaman musim dingin yang sedang tumbuh.
+Pada band SWIR (B11, B12), nilai relatif lebih tinggi di bulan Mei berkaitan dengan kelembaban tanah yang lebih rendah dan lahan bera.
+Profil spektral yang khas per musim ini memvalidasi keunggulan pendekatan \textit{multi-temporal}: setiap tanggal akuisisi memberikan informasi spektral yang berbeda dan saling melengkapi untuk membedakan jenis tanaman.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_spectral_profile.png}
+    \caption{Profil rata-rata reflektansi per band Sentinel-2 pada tiga fase musim tahun 2022: Januari (musim dingin), Mei (persiapan lahan), dan Juli (puncak musim panas). Band NIR (B8) menunjukkan nilai tertinggi pada Januari, mengonfirmasi adanya biomassa tanaman musim dingin yang aktif.}
+    \label{fig:s2_spectral_profile}
+\end{figure}
+
+\subsubsection{Kualitas Data dan Cakupan Valid}
+Gambar~\ref{fig:s2_data_coverage} menampilkan persentase piksel valid (bebas dari awan dan \textit{nodata}) untuk setiap tanggal akuisisi pada tahun 2022.
+Dari total 25 citra yang dikumpulkan, sebanyak 24 citra memiliki cakupan valid $\geq 70\%$ dan digunakan dalam analisis, sedangkan satu citra pada 27 Desember 2022 sepenuhnya tertutup awan (0\% valid) dan dikecualikan.
+Rata-rata cakupan valid keseluruhan mencapai 95,1\%, dengan nilai tertinggi pada 30 Juli 2022 (99,6\%) dan terendah pada 27 November 2022 (71,3\%).
+Distribusi kualitas data yang tinggi ini mengonfirmasi bahwa dataset 2022 memiliki keandalan yang memadai untuk pelatihan model.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_data_coverage.png}
+    \caption{Persentase piksel valid per tanggal akuisisi Sentinel-2 tahun 2022. Rata-rata cakupan valid mencapai 95,1\%. Satu citra pada 27 Desember 2022 dikecualikan karena tertutup awan sepenuhnya.}
+    \label{fig:s2_data_coverage}
+\end{figure}
+
+\subsection{Statistik Deskriptif}
+Setiap citra mencakup 26.211.664 piksel ($5.596 \times 4.684$).
+Pada data preprocessing, akan dilakukan pembagian patch berukuran $256\times256$ piksel dengan langkah (\textit{stride}) seukuran patch, sehingga setiap citra akan menghasilkan sekitar 378 patch ($\lfloor5.596/256\rfloor \times \lfloor4.684/256\rfloor = 21 \times 18$).
+Total citra yang diambil dari tahun 2022--2024 adalah 72 citra, sehingga akan diperoleh total sekitar 27.216 patch.
+
+\subsection{Data Label CDL}
+Dataset CDL tahun 2022 pada area studi memiliki 72 kelas aktif yang terbagi menjadi 48 kelas tanaman (\textit{cropland}) dan 16 kelas non-tanaman (permukiman, perairan, lahan basah, semak, dan lainnya).
+Lahan pertanian (\textit{cropland}) mencakup 83,8\% dari total area studi, sedangkan sisanya (16,2\%) merupakan lahan non-pertanian.
+Label CDL menggunakan proyeksi EPSG:5070 (NAD83/Conus Albers) dengan resolusi spasial 30 meter per piksel, sedangkan Sentinel-2 menggunakan proyeksi EPSG:4326 (WGS84) dengan resolusi spasial $\approx$10 meter per piksel, sehingga diperlukan proses reprojektion dan \textit{resampling} sebelum digunakan sebagai label pelatihan.
+
+Gambar~\ref{fig:cdl_label_map} menampilkan peta label CDL 2022 pada area studi setelah proses seleksi kelas, menunjukkan distribusi spasial 11 kelas tanaman target yang digunakan untuk pelatihan model beserta kelas \textit{background}.
+Setiap kelas diwakili oleh warna resmi USDA CDL untuk memudahkan identifikasi visual.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/cdl_label_map.png}
+    \caption{Peta label USDA Cropland Data Layer (CDL) 2022 pada area studi Sacramento Valley setelah seleksi kelas. Ditampilkan 11 kelas tanaman target ($\geq$1\% cakupan) dan kelas \textit{background} (abu-abu). Warna mengikuti standar warna resmi USDA CDL.}
+    \label{fig:cdl_label_map}
+\end{figure}
+
+\subsubsection{Distribusi Kelas CDL di Area Studi}
+
+Distribusi kelas CDL pada area studi dianalisis berdasarkan jumlah piksel hasil reprojektion ke grid Sentinel-2 ($5.596 \times 4.684$ piksel, ukuran piksel $7{,}78 \times 10{,}00$ m$^2 \approx 77{,}8$ m$^2$/piksel).
+Tabel~\ref{tab:cdl_top30} menyajikan 30 kelas dengan cakupan tertinggi beserta konversinya ke satuan hektar dan kilometer persegi.
+
+\begin{longtable}{|r|p{4.5cm}|c|r|r|r|}
+\caption{30 Kelas CDL Teratas Berdasarkan Cakupan Area di Area Studi (2022)} \label{tab:cdl_top30} \\
+\hline
+\textbf{No.} & \textbf{Nama Kelas} & \textbf{ID} & \textbf{Piksel} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} \\
+\hline
+\endfirsthead
+\multicolumn{6}{c}%
+{{\bfseries \tablename\ \thetable{} -- lanjutan dari halaman sebelumnya}} \\
+\hline
+\textbf{No.} & \textbf{Nama Kelas} & \textbf{ID} & \textbf{Piksel} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} \\
+\hline
+\endhead
+\hline
+\multicolumn{6}{r}{{Berlanjut ke halaman berikutnya}} \\
+\endfoot
+\hline
+\endlastfoot
+1  & Fallow/Idle Cropland       & 61  & 7.426.247 & 57.742,5 & 577,42 \\
+2  & Almonds                    & 75  & 3.011.056 & 23.412,3 & 234,12 \\
+3  & Walnuts                    & 76  & 2.387.806 & 18.566,3 & 185,66 \\
+4  & Tomatoes                   & 54  & 1.942.579 & 15.104,4 & 151,04 \\
+5  & Rice                       & 3   & 1.731.503 & 13.463,2 & 134,63 \\
+6  & Grass/Pasture              & 176 & 1.359.253 & 10.568,8 & 105,69 \\
+7  & Winter Wheat               & 24  & 1.231.983 &  9.579,2 &  95,79 \\
+8  & Sunflower                  & 6   &   913.565 &  7.103,4 &  71,03 \\
+9  & Developed/Low Intensity    & 122 &   632.042 &  4.914,4 &  49,14 \\
+10 & Alfalfa                    & 36  &   575.672 &  4.476,1 &  44,76 \\
+11 & Developed/Med Intensity    & 123 &   570.466 &  4.435,6 &  44,36 \\
+12 & Plums                      & 220 &   560.637 &  4.359,2 &  43,59 \\
+13 & Developed/Open Space       & 121 &   536.853 &  4.174,3 &  41,74 \\
+14 & Herbaceous Wetlands        & 195 &   381.008 &  2.962,5 &  29,63 \\
+15 & Other Hay/Non Alfalfa      & 37  &   375.842 &  2.922,3 &  29,22 \\
+16 & Open Water                 & 111 &   331.675 &  2.578,9 &  25,79 \\
+17 & Grapes                     & 69  &   327.883 &  2.549,4 &  25,49 \\
+18 & Safflower                  & 33  &   240.323 &  1.868,6 &  18,69 \\
+19 & Pistachios                 & 204 &   203.826 &  1.584,8 &  15,85 \\
+20 & Woody Wetlands             & 190 &   173.782 &  1.351,2 &  13,51 \\
+21 & Developed/High Intensity   & 124 &   127.919 &    994,6 &   9,95 \\
+22 & Watermelons                & 48  &   118.805 &    923,8 &   9,24 \\
+23 & Oats                       & 28  &    96.406 &    749,6 &   7,50 \\
+24 & Shrubland                  & 152 &    95.610 &    743,4 &   7,43 \\
+25 & Barley                     & 21  &    88.582 &    688,8 &   6,89 \\
+26 & Corn                       & 1   &    86.009 &    668,8 &   6,69 \\
+27 & Olives                     & 211 &    77.289 &    601,0 &   6,01 \\
+28 & Prunes                     & 210 &    76.737 &    596,7 &   5,97 \\
+29 & Dry Beans                  & 42  &    64.263 &    499,7 &   5,00 \\
+30 & Other Crops                & 44  &    63.890 &    496,8 &   4,97 \\
+\hline
+   & \textit{(+42 kelas minor)} &     & \multicolumn{3}{r}{\textit{cakupan gabungan $<$3\%}} \\
+   & \textbf{Total}             &     & \textbf{26.211.664} & \textbf{203.807,7} & \textbf{2.038,08} \\
+\hline
+\end{longtable}
+
+Rekapitulasi berdasarkan tipe penggunaan lahan disajikan pada Tabel~\ref{tab:cdl_landtype}.
+
+\begin{table}[htbp]
+\centering
+\caption{Rekapitulasi Cakupan Lahan berdasarkan Tipe Penggunaan}
+\label{tab:cdl_landtype}
+\begin{tabularx}{\textwidth}{Xrrr}
+\hline
+\textbf{Tipe Lahan} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} & \textbf{\%} \\
+\hline
+Tanaman aktif (annual \& perennial crops) & $\approx$103.000 & $\approx$1.030 & 50,5\% \\
+Lahan bero (\textit{Fallow/Idle})         &       57.742     &        577     & 28,3\% \\
+Non-pertanian (permukiman, air, lahan basah, semak) & $\approx$43.000 & $\approx$430 & 21,2\% \\
+\hline
+\textbf{Total}                            & \textbf{203.808} & \textbf{2.038} & \textbf{100\%} \\
+\hline
+\end{tabularx}
+\end{table}
+
+Gambar~\ref{fig:cdl_class_distribution_area} menampilkan distribusi cakupan area (dalam hektar) untuk 20 kelas CDL teratas di area studi, menggunakan warna resmi USDA CDL untuk memudahkan identifikasi visual.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/cdl_class_distribution_area.png}
+    \caption{Distribusi cakupan area (hektar) untuk 20 kelas CDL teratas di area studi Sacramento Valley tahun 2022. Kelas \textit{Fallow/Idle Cropland} mendominasi dengan $\approx$57.742 ha (33,8\% dari total cropland). Warna batang mengikuti standar warna resmi USDA CDL.}
+    \label{fig:cdl_class_distribution_area}
+\end{figure}
+
+\subsubsection{Seleksi Kelas Optimal untuk Pelatihan Model}
+\label{subsec:class_selection}
+
+Dari 72 kelas CDL yang teridentifikasi di area studi, dilakukan seleksi kelas untuk pelatihan model berdasarkan ambang batas cakupan area minimum $\geq 1\%$ dari total area studi. Visualisasi distribusi kelas dan strategi seleksi ditampilkan pada Gambar~\ref{fig:cdl_class_selection}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/cdl_class_selection_strategy.png}
+    \caption{Distribusi kelas CDL dan strategi seleksi kelas untuk pelatihan model. Kelas dengan cakupan $\geq 1\%$ dipilih sebagai kelas target (hijau), kelas 0{,}5--1\% sebagai kandidat eksperimen lanjutan (oranye), dan kelas $<0{,}5\%$ dikecualikan (abu-abu).}
+    \label{fig:cdl_class_selection}
+\end{figure}
+
+Seleksi kelas difokuskan pada \textbf{jenis tanaman aktif} --- yaitu tanaman yang sedang dalam siklus pertumbuhan --- karena tujuan penelitian adalah mengidentifikasi \textit{tipe tanaman} yang ditanam, bukan mengklasifikasikan area pertanian secara umum.
+Oleh karena itu, kelas \textit{Fallow/Idle Cropland} (ID 61) --- yang merupakan lahan pertanian yang tidak ditanami --- dimasukkan ke dalam kelas \textit{background} meskipun cakupan areanya besar (33,8\% dari total cropland).
+Tabel~\ref{tab:selected_classes} menampilkan 10 kelas tanaman aktif yang terpilih.
+
+\begin{table}[htbp]
+\centering
+\caption{Kelas CDL Terpilih untuk Pelatihan Model (10 tanaman aktif, $\geq 1\%$ cakupan area studi)}
+\label{tab:selected_classes}
+\begin{tabularx}{\textwidth}{r X r r r r}
+\hline
+\textbf{No.} & \textbf{Kelas} & \textbf{ID} & \textbf{\% Tanaman} & \textbf{Area (ha)} & \textbf{Area (km$^2$)} \\
+\hline
+1  & Almonds               & 75  & 13,7\% & 23.412 & 234,12 \\
+2  & Walnuts               & 76  & 10,9\% & 18.566 & 185,66 \\
+3  & Tomatoes              & 54  &  8,8\% & 15.104 & 151,04 \\
+4  & Rice                  & 3   &  7,9\% & 13.463 & 134,63 \\
+5  & Winter Wheat          & 24  &  5,6\% &  9.579 &  95,79 \\
+6  & Sunflower             & 6   &  4,2\% &  7.103 &  71,03 \\
+7  & Alfalfa               & 36  &  2,6\% &  4.476 &  44,76 \\
+8  & Plums                 & 220 &  2,6\% &  4.359 &  43,59 \\
+9  & Other Hay/Non Alfalfa & 37  &  1,7\% &  2.922 &  29,22 \\
+10 & Grapes                & 69  &  1,5\% &  2.549 &  25,49 \\
+-- & Background (Fallow/Idle, non-pertanian, lainnya) & 0 & -- & -- & -- \\
+\hline
+\multicolumn{3}{l}{\textbf{Total kelas terpilih}} & \textbf{59,5\%} & \textbf{101.533} & \textbf{1.015,3} \\
+\hline
+\end{tabularx}
+\end{table}
+
+Terdapat tiga justifikasi ilmiah untuk konfigurasi kelas yang digunakan:
+
+\begin{enumerate}
+    \item \textbf{Fokus pada identifikasi tipe tanaman aktif.}
+    Tujuan penelitian adalah menjawab pertanyaan \textit{"jenis tanaman apa yang ditanam?"}, bukan \textit{"di mana letak lahan pertanian?"}.
+    Kelas \textit{Fallow/Idle Cropland} tidak merepresentasikan tipe tanaman melainkan kondisi lahan (tidak ditanami), sehingga dimasukkan ke \textit{background} bersama kelas non-pertanian lainnya.
+    Pendekatan ini konsisten dengan studi pemetaan tanaman yang memfokuskan klasifikasi pada komoditas pertanian aktif \citep{yi2020, li2023}.
+
+    \item \textbf{Kecukupan sampel untuk \textit{deep learning}.}
+    Kelas dengan cakupan $\geq 1\%$ menempati $\geq 2.038$ ha di area studi.
+    Pada ukuran patch $256 \times 256$ piksel dengan resolusi 10 m ($\approx 510$ ha/patch), cakupan tersebut menghasilkan representasi spasial yang memadai dari ratusan petak lahan pertanian yang berbeda, sehingga model dapat mempelajari fitur spektral dan spasial yang dapat digeneralisasi.
+    Kelas di bawah 1\% ($<$2.000 ha) umumnya tampil sebagai fragmen poligon yang tersebar dan kecil, sehingga tidak menyediakan keragaman spasial yang cukup untuk pelatihan segmentasi berbasis CNN \citep{alamimachichi2023}.
+
+    \item \textbf{Ketidakseimbangan kelas yang dapat ditangani.}
+    Dengan \textit{Fallow/Idle} dipindahkan ke \textit{background}, rasio ketidakseimbangan kelas maksimum menjadi 9{,}2:1 (Almonds 23.412 ha vs.\ Grapes 2.549 ha) --- jauh lebih baik dari 22{,}6:1 jika \textit{Fallow} dipertahankan sebagai kelas.
+    Rasio 9{,}2:1 dapat ditangani langsung dengan \textit{inverse-frequency class weighting} tanpa teknik tambahan \citep{luo2024}.
+\end{enumerate}
+
+Dua kelas tambahan, yaitu \textit{Safflower} (ID 33, 0{,}92\%) dan \textit{Pistachios} (ID 204, 0{,}78\%), berada di batas ambang dan akan dievaluasi dalam eksperimen lanjutan dengan 12 kelas untuk menilai apakah fenologi khasnya dapat mengompensasi jumlah sampel yang lebih kecil.
+
+\section{Data Preprocessing}
+Tahap \textit{preprocessing} data bertujuan untuk memastikan citra satelit dan data label tutupan lahan memiliki kualitas spasial dan spektral yang konsisten sebelum digunakan untuk pelatihan model.
+Alur preprocessing diterapkan secara berurutan sebagaimana dijelaskan pada subbagian berikut.
+
+\subsection{Cloud Masking dan Shadow Masking}
+Tahap awal dilakukan sebelum data diunduh, yaitu \textit{cloud masking} dan \textit{shadow masking} pada citra Sentinel-2 menggunakan fungsi bawaan GEE.
+Citra dengan persentase tutupan awan (CLOUDY\_PIXEL\_PERCENTAGE) melebihi 10\% dikecualikan dari dataset.
+Penggunaan ambang batas ini menghasilkan 24 citra valid pada tahun 2022 dari 25 citra yang dikumpulkan.
+
+\subsection{Citra Komposit Temporal}
+Citra dikompositkan secara temporal menggunakan fungsi \textit{median reducer} GEE untuk menghasilkan satu citra komposit per interval 15 hari.
+Penggunaan median meredam pengaruh piksel berawanan sisa yang lolos dari masker awan, tanpa memerlukan interpolasi yang dapat mengubah nilai reflektansi asli.
+
+\subsection{Reprojeksi dan Resampling CDL}
+Data label CDL menggunakan proyeksi EPSG:5070 (NAD83/Conus Albers) dengan resolusi spasial 30 meter, sedangkan citra Sentinel-2 menggunakan proyeksi EPSG:4326 (WGS84) dengan resolusi $\approx$10 meter per piksel.
+Proses reprojeksi dan \textit{resampling} dilakukan dalam satu langkah menggunakan grid Sentinel-2 sebagai referensi, sehingga kedua data memiliki sistem koordinat, batas area, dan dimensi piksel yang identik.
+Metode \textit{nearest neighbour} digunakan untuk menjaga integritas nilai label kelas integer (tanpa interpolasi yang dapat menciptakan nilai kelas baru yang tidak valid).
+
+\subsection{Penanganan Nilai NoData}
+Piksel yang tidak valid pada citra Sentinel-2---bernilai negatif, NaN, atau tak terhingga---ditetapkan nilai sentinel \texttt{-9999} sebagai penanda \textit{nodata}, kemudian seluruh citra dikonversi ke tipe data \texttt{float32}.
+Langkah ini memastikan bahwa piksel tidak valid tidak berkontribusi pada perhitungan statistik maupun gradien pelatihan.
+
+\subsection{Label Filtering}
+Berdasarkan seleksi kelas yang dijelaskan pada Subbagian~\ref{subsec:class_selection}, diterapkan proses \textit{label filtering} pada data CDL.
+Sepuluh kelas tanaman aktif dengan cakupan $\geq 1\%$ (ID: 3, 6, 24, 36, 37, 54, 69, 75, 76, 220) dipertahankan sebagai kelas target, sedangkan seluruh kelas lainnya---termasuk \textit{Fallow/Idle Cropland} (ID 61), perairan, permukiman, lahan basah, dan kelas tanaman minor---diubah menjadi kelas \textit{background} (nilai 0).
+
+\subsection{Patching dan Normalisasi Citra}
+Citra dan data label dipotong menjadi patch berukuran $256\times256$ piksel dengan langkah (\textit{stride}) seukuran patch sehingga tidak terjadi tumpang tindih.
+Setiap patch dinormalisasi menggunakan \textit{min-max normalization} ke rentang $[0, 1]$:
+\begin{equation}
+    x_{norm} = \frac{x - x_{min}}{x_{max} - x_{min}}
+\end{equation}
+
+\subsection{Seleksi Band Spektral--Temporal}
+
+Penelitian ini mengusulkan metode seleksi band spektral--temporal dua tahap yang sederhana dan efisien, dirancang khusus untuk citra Sentinel-2 multi-temporal pada tugas \textit{semantic segmentation}.
+Metode ini menggantikan pendekatan \textit{forward selection} berbasis CNN yang memerlukan ratusan iterasi pelatihan model oracle, dengan pendekatan berbasis statistik separabilitas spektral yang diikuti \textit{k-sweep} langsung pada model penuh.
+Tujuannya adalah mengurangi redundansi spektral dan temporal tanpa mengorbankan performa segmentasi, sekaligus menekan biaya komputasi secara signifikan.
+
+\subsubsection{Pemilihan Tahun Referensi: Analisis Stabilitas Fenologi NDVI}
+\label{subsubsec:tahun_referensi}
+
+Seleksi fitur pada Tahap 1 membutuhkan satu tahun data citra sebagai referensi.
+Untuk memvalidasi pilihan tahun referensi secara kuantitatif, dilakukan analisis stabilitas fenologi NDVI antar-tahun: profil NDVI per kelas dihitung untuk setiap tahun (2022, 2023, 2024), diselaraskan pada sumbu Day-of-Year (DOY), lalu dihitung korelasi Pearson $r$ pada pasangan tanggal yang berdekatan ($\pm$7 hari).
+
+Tabel~\ref{tab:ndvi_stability} merangkum nilai korelasi antar-tahun untuk setiap kelas tanaman.
+
+\begin{table}[htbp]
+\centering
+\caption{Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm$7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$).}
+\label{tab:ndvi_stability}
+\begin{tabular}{lrrrl}
+\hline
+\textbf{Tanaman} & \textbf{$r$(22 vs 23)} & \textbf{$r$(22 vs 24)} & \textbf{$r$(23 vs 24)} & \textbf{Stabilitas} \\
+\hline
+Rice         & $+0{,}949$ & $+0{,}949$ & $+0{,}981$ & Tinggi \\
+Sunflower    & $+0{,}911$ & $+0{,}879$ & $+0{,}977$ & Tinggi \\
+Winter Wheat & $+0{,}861$ & $+0{,}918$ & $+0{,}938$ & Tinggi \\
+Tomatoes     & $+0{,}872$ & $+0{,}914$ & $+0{,}901$ & Tinggi \\
+Walnuts      & $+0{,}805$ & $+0{,}800$ & $+0{,}920$ & Sedang \\
+Almonds      & $+0{,}475$ & $+0{,}742$ & $+0{,}721$ & Rendah \\
+Other Hay    & $+0{,}431$ & $+0{,}779$ & $+0{,}615$ & Rendah \\
+Grapes       & $+0{,}115$ & $+0{,}014$ & $+0{,}755$ & Tidak Stabil \\
+Alfalfa      & $-0{,}025$ & $+0{,}769$ & $+0{,}174$ & Tidak Stabil \\
+Plums        & $-0{,}370$ & $+0{,}680$ & $-0{,}271$ & Tidak Stabil \\
+\hline
+\end{tabular}
+\end{table}
+
+Gambar~\ref{fig:s2_ndvi_year_comparison} menampilkan perbandingan visual profil NDVI ketiga tahun untuk setiap kelas tanaman.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/s2_ndvi_year_comparison.png}
+    \caption{Perbandingan profil NDVI per kelas tanaman antar-tahun (2022, 2023, 2024) yang diselaraskan pada sumbu Day-of-Year. Kelas dengan profil tumpang tindih (Rice, Sunflower, Winter Wheat) menunjukkan stabilitas tinggi; kelas dengan profil menyebar (Alfalfa, Grapes, Plums) menunjukkan variabilitas biologis intrinsik.}
+    \label{fig:s2_ndvi_year_comparison}
+\end{figure}
+
+Hasil analisis menunjukkan bahwa kelas dengan korelasi rendah ($r < 0{,}5$) seperti \textit{Alfalfa}, \textit{Grapes}, dan \textit{Plums} bukan disebabkan oleh kekurangan data, melainkan oleh variabilitas biologis intrinsik:
+\textit{Alfalfa} merupakan tanaman tahunan multi-potong (3--5 kali/tahun) dengan jadwal pemotongan yang berbeda antar-tahun;
+\textit{Grapes} menunjukkan anomali pada 2022 ($r$(22 vs 23) $= +0{,}115$) yang mereda pada pasangan 2023--2024 ($r = +0{,}755$);
+\textit{Plums} hanya mencakup 2{,}1\% area studi sehingga profil NDVI-nya didominasi oleh \textit{noise} piksel campuran pada resolusi 10 m.
+Menambahkan data 2023 ke tahap seleksi tidak akan memperbaiki stabilitas kelas-kelas ini.
+Berdasarkan pertimbangan di atas, \textbf{tahun 2022 dipilih sebagai satu-satunya tahun referensi} untuk Tahap 1, dengan alasan: (1) menghindari kebocoran data (\textit{data leakage}) terhadap tahun 2023 dan 2024 yang digunakan pada pelatihan dan pengujian model penuh; dan (2) penambahan tahun referensi tidak memberikan manfaat yang signifikan untuk kelas-kelas yang tidak stabil.
+
+\subsubsection{Tahap 1 — Peringkat Band Berbasis GSI Per Kelas Per Tanggal}
+\label{subsubsec:stage1}
+
+Tahap pertama bertujuan mengurutkan seluruh kombinasi band--tanggal berdasarkan daya pisah spektral untuk \textbf{setiap kelas tanaman secara terpisah}.
+Dengan $B = 9$ band spektral dan $T$ tanggal akuisisi per tahun referensi, ruang fitur yang dievaluasi adalah $N = B \times T$ kombinasi band--tanggal.
+
+\textbf{Global Separation Index (GSI).}
+Untuk setiap kombinasi band $b$ pada tanggal $t$, dihitung nilai separabilitas kelas tanaman $s$ terhadap semua kelas lainnya:
+\begin{equation}
+    \text{GSI}_{s}^{(b,t)} = \frac{|\mu_s^{(b,t)} - \mu_o^{(b,t)}|}{1{,}96 \times (\sigma_s^{(b,t)} + \sigma_o^{(b,t)})}
+\end{equation}
+di mana $\mu_s$, $\sigma_s$ adalah rata-rata dan standar deviasi nilai reflektansi piksel kelas tanaman $s$, dan $\mu_o$, $\sigma_o$ untuk seluruh piksel kelas lainnya. Nilai $\text{GSI}_{s}^{(b,t)}$ dihitung secara mandiri untuk setiap kelas tanaman $s$ dan digunakan untuk menghasilkan dua jenis peringkat:
+
+\textbf{Phase A — Band Sweep.}
+Untuk setiap kelas, ditetapkan tanggal terbaik (tanggal dengan nilai $\text{GSI}_{s}$ tertinggi) dan diurutkan seluruh band pada tanggal tersebut berdasarkan GSI menurun.
+Top-$K$ band dari tanggal terbaik kemudian di-\textit{union} lintas semua kelas untuk membentuk himpunan channel Eksperimen~C\_v3 dengan $K$ band per tanggal.
+
+\textbf{Phase B — Date Sweep.}
+Untuk setiap kelas, digunakan seluruh 9 band dan diurutkan seluruh tanggal berdasarkan nilai GSI tertinggi yang dicapai band terbaiknya.
+Top-$K$ tanggal dari seluruh band tersebut kemudian di-\textit{union} lintas semua kelas untuk membentuk himpunan channel Eksperimen~C\_v3 dengan $K$ tanggal $\times$ 9 band.
+
+Himpunan channel untuk nilai $K$ tertentu didefinisikan sebagai:
+\begin{equation}
+    S_{\text{C\_v3}}(K) = \bigcup_{c \in \mathcal{C}} S_c(K)
+\end{equation}
+di mana $S_c(K)$ adalah top-$K$ fitur terpilih untuk kelas $c$ berdasarkan peringkat GSI, dan $\mathcal{C}$ adalah himpunan seluruh kelas tanaman.
+
+\subsubsection{Tahap 2 — K-Sweep: Validasi Langsung pada Model Penuh}
+\label{subsubsec:stage2_ksweep}
+
+Tahap kedua mengevaluasi dampak jumlah fitur $K$ terhadap performa segmentasi secara langsung, tanpa oracle CNN perantara.
+Untuk setiap nilai $K \in \{1, 2, \ldots, K_{\max}\}$, dilatih model segmentasi penuh (DeepLabV3+CBAM dan SegFormer) menggunakan himpunan $S_{\text{C\_v3}}(K)$ hasil Tahap 1.
+
+Pendekatan ini menghasilkan \textbf{kurva IoU terhadap jumlah channel} yang memungkinkan:
+\begin{itemize}
+    \item Pemilihan $K$ optimal secara empiris berdasarkan titik \textit{elbow} kurva IoU--$K$
+    \item Analisis efisiensi: berapa channel minimum yang diperlukan untuk menyamai performa Eksperimen B (36 channel)?
+    \item Perbandingan Phase A (sweep band) vs.\ Phase B (sweep tanggal) pada channel count yang setara
+\end{itemize}
+
+Berbeda dengan \textit{CNN forward selection} yang memerlukan ratusan iterasi pelatihan model oracle secara sekuensial, pendekatan \textit{k-sweep} ini bersifat \textit{embarrassingly parallel} — setiap nilai $K$ dapat dilatih secara independen, sehingga total komputasi setara dengan jumlah titik $K$ yang dievaluasi dikalikan satu pelatihan penuh.
+
+Metode ini merupakan kontribusi penelitian ini yang membedakannya dari pendekatan \textit{forward selection} berbasis CNN pada studi sebelumnya. Pada studi terdahulu \citep{li2023hetao}, seleksi band menggunakan GSI dan RF sebagai \textit{filter} statis, sedangkan penelitian ini mengintegrasikan peringkat GSI langsung ke dalam desain eksperimen ablasi berbasis model penuh.
+
+\subsubsection{Proyeksi Band ke Tahun Lain}
+\label{subsubsec:band_projection}
+
+Band-band terpilih disimpan dalam format \texttt{BAND\_YYYYMMDD} (contoh: \texttt{B4\_20220730}) yang mengacu pada tanggal akuisisi spesifik tahun referensi 2022.
+Untuk pelatihan model pada tahun 2023 dan pengujian pada tahun 2024, setiap band diproyeksikan ke tanggal akuisisi yang paling dekat secara Day-of-Year (DOY):
+
+\begin{equation}
+    d^*(b, y) = \underset{d \in D_y}{\arg\min}\; \left| \text{DOY}(d) - \text{DOY}(\text{ref}_b) \right|
+\end{equation}
+
+di mana $\text{ref}_b$ adalah tanggal referensi band $b$ pada tahun 2022, $D_y$ adalah himpunan tanggal akuisisi yang tersedia pada tahun $y$, dan $\text{DOY}(\cdot)$ adalah hari ke-$n$ dalam tahun.
+Proyeksi ini menghasilkan pemetaan per-tahun yang disimpan dalam format JSON:
+\begin{verbatim}
+{"2022": ["B4_20220730", ...],
+ "2023": ["B4_20230801", ...],
+ "2024": ["B4_20240730", ...]}
+\end{verbatim}
+
+Apabila jarak DOY antar tanggal terdekat melebihi 15 hari, peringatan diberikan sebagai catatan keterbatasan.
+Pendekatan ini memastikan bahwa jumlah \textit{channel} masukan $K^*$ tetap konsisten untuk semua tahun pelatihan dan pengujian, sehingga arsitektur model yang sama dapat digunakan tanpa modifikasi.
+
+\subsubsection{Tahap 3 — Validasi Model Penuh}
+\label{subsec:stage3_validation}
+
+Tahap ketiga mengevaluasi dampak pendekatan \textit{multi-temporal} dan seleksi band menggunakan model segmentasi penuh.
+Empat konfigurasi input dirancang untuk menjawab tiga pertanyaan penelitian secara bertahap:
+(1) apakah pendekatan \textit{multi-temporal} memberikan keunggulan atas citra tanggal tunggal?
+(2) apakah pemilihan jendela fenologi yang tepat memengaruhi performa tanggal tunggal?
+(3) berapa jumlah channel optimal $K$ yang menghasilkan efisiensi terbaik?
+
+\begin{enumerate}
+    \item \textbf{Eksperimen A — Single-Date Baseline}:
+    Menggunakan semua 9 band spektral dari satu tanggal terbaik berdasarkan kualitas data (puncak musim tanam, 30 Juli) sebagai \textit{baseline} tanggal tunggal.
+    Konfigurasi ini merepresentasikan pendekatan konvensional tanpa informasi temporal.
+    Total: \textbf{9 channel}.
+
+    \item \textbf{Eksperimen A\_v2 — Per-Window Phenological Baseline}:
+    Menggunakan semua 9 band dari satu tanggal, namun tanggal dipilih berdasarkan jendela fenologi optimal, bukan kualitas data.
+    Dijalankan empat kali secara terpisah, masing-masing untuk satu jendela: musim dingin (Januari), musim semi (Maret), puncak musim panas (Juli), dan musim gugur (November).
+    Konfigurasi ini menjawab pertanyaan: \textit{"apakah pemilihan tanggal yang tepat secara fenologi meningkatkan performa tanggal tunggal?"}
+    Total: \textbf{9 channel} per jendela.
+
+    \item \textbf{Eksperimen B — Multi-Temporal Baseline}:
+    Menggunakan semua 9 band dari empat tanggal yang mencakup fase fenologi utama (Januari, Maret, Juli, November) secara bersamaan.
+    Tanggal dipilih berdasarkan kalender fenologi, bukan algoritma seleksi, sehingga berfungsi sebagai \textit{baseline} temporal naif.
+    Total: \textbf{36 channel} (4 tanggal $\times$ 9 band).
+
+    \item \textbf{Eksperimen C\_v3 — Multi-Temporal Seleksi K-Sweep (Metode Usulan)}:
+    Menggunakan top-$K$ fitur hasil peringkat GSI Tahap 1, untuk berbagai nilai $K$.
+    Dijalankan dua \textit{phase}: Phase A (\textit{band sweep} — variasi jumlah band pada tanggal terbaik) dan Phase B (\textit{date sweep} — variasi jumlah tanggal dengan seluruh band).
+    Setiap pasangan (phase, $K$) merupakan satu eksperimen terpisah.
+    Kurva IoU--$K$ yang dihasilkan memungkinkan identifikasi $K$ optimal secara empiris.
+    Total: \textbf{$|S_{\text{C\_v3}}(K)|$ channel} per titik sweep.
+\end{enumerate}
+
+Setiap eksperimen dilatih menggunakan dua arsitektur segmentasi, DeepLabV3+CBAM dan SegFormer, selama 100 epoch.
+Perbandingan A $\to$ B mengukur \textbf{nilai informasi temporal}, perbandingan A $\to$ A\_v2 mengukur \textbf{sensitivitas terhadap jendela fenologi}, dan kurva C\_v3 mengukur \textbf{efisiensi seleksi band} sebagai fungsi dari $K$.
+Metrik yang dibandingkan meliputi mIoU, IoU per kelas, F1-score, waktu pelatihan per epoch, dan penggunaan memori GPU.
+
+\section{Pelatihan Model}
+
+\subsection{Arsitektur Model}
+
+Penelitian ini membandingkan dua arsitektur \textit{semantic segmentation} yang merepresentasikan dua paradigma berbeda: \textbf{DeepLabV3+} berbasis CNN konvolusional dengan modul \textit{attention} tambahan, dan \textbf{SegFormer} berbasis \textit{Vision Transformer} dengan \textit{self-attention} bawaan.
+
+\subsubsection{DeepLabV3+ dengan CBAM}
+
+DeepLabV3+ terdiri dari tiga komponen utama \citep{chen2018deeplabv3}:
+
+\begin{enumerate}
+    \item \textbf{Encoder (Backbone)}: ResNet-50 yang telah dilatih pada ImageNet digunakan sebagai ekstraktor fitur hierarkis. Fitur \textit{low-level} dari lapisan awal (stride 4) dan fitur \textit{high-level} dari lapisan akhir (stride 16) diekstrak untuk digunakan pada decoder.
+
+    \item \textbf{Atrous Spatial Pyramid Pooling (ASPP)}: Modul ASPP menerapkan konvolusi \textit{atrous} (dilated) dengan laju dilatasi $r \in \{6, 12, 18\}$ secara paralel untuk menangkap konteks multi-skala tanpa mengurangi resolusi spasial.
+
+    \item \textbf{Decoder}: Fitur dari ASPP digabungkan dengan fitur \textit{low-level} dari encoder melalui operasi \textit{bilinear upsampling} dan konvolusi $1\times1$, menghasilkan peta segmentasi beresolusi penuh.
+\end{enumerate}
+
+Sebagai kontribusi tambahan, diterapkan \textit{Convolutional Block Attention Module} (CBAM) setelah lapisan ASPP \citep{hsu2022}. CBAM terdiri dari dua submodul berurutan:
+
+\begin{itemize}
+    \item \textbf{Channel Attention}: menghitung bobot kepentingan per channel menggunakan \textit{global average pooling} dan \textit{global max pooling} yang dimasukkan ke \textit{shared MLP}, sehingga model dapat fokus pada band spektral yang paling informatif.
+    \item \textbf{Spatial Attention}: menghitung bobot kepentingan per posisi spasial menggunakan konvolusi $7\times7$ atas gabungan channel-wise average dan max, sehingga model dapat fokus pada region spasial yang relevan.
+\end{itemize}
+
+\subsubsection{SegFormer}
+
+SegFormer menggunakan arsitektur \textit{encoder-decoder} berbasis \textit{Transformer} tanpa \textit{positional encoding} yang kaku \citep{xie2021}. Encoder menggunakan \textit{Mix Transformer} (MiT-B2) yang menghasilkan representasi fitur hierarkis pada empat skala resolusi. Setiap tahap encoder menggunakan \textit{Efficient Self-Attention} dengan pengurangan sekuens (\textit{sequence reduction ratio} $R$) untuk menjaga efisiensi komputasi. Decoder menggunakan modul \textit{All-MLP} yang menggabungkan fitur dari keempat tahap encoder tanpa konvolusi tambahan, menghasilkan prediksi segmentasi final.
+
+\subsection{Fungsi \textit{Loss} dan Penanganan Ketidakseimbangan Kelas}
+
+Ketidakseimbangan kelas pada dataset (rasio maksimum 9,2:1 antara \textit{Almonds} dan \textit{Grapes}) ditangani menggunakan \textit{weighted Cross-Entropy Loss}:
+
+\begin{equation}
+    \mathcal{L} = -\sum_{c=0}^{C-1} w_c \cdot y_c \cdot \log(\hat{y}_c)
+\end{equation}
+
+di mana bobot per kelas $w_c$ dihitung sebagai invers frekuensi relatif:
+
+\begin{equation}
+    w_c = \frac{1 / f_c}{\sum_{c'} 1 / f_{c'}}
+\end{equation}
+
+dengan $f_c$ adalah frekuensi piksel kelas $c$ pada set pelatihan. Pendekatan ini memberikan penalti lebih besar untuk kesalahan prediksi pada kelas minoritas.
+
+\subsection{Skenario Eksperimen}
+
+Skenario pelatihan dirancang selaras dengan empat konfigurasi input yang didefinisikan pada Tahap 3 seleksi band (Subbagian~\ref{subsec:stage3_validation}):
+
+\begin{enumerate}
+    \item \textbf{Eksperimen A — Single-Date Baseline}: Menggunakan 9 band spektral dari satu tanggal puncak musim tanam (30 Juli). Merepresentasikan pendekatan konvensional tanpa informasi temporal (9 channel).
+
+    \item \textbf{Eksperimen A\_v2 — Per-Window Phenological Baseline}: Menggunakan 9 band dari satu tanggal per jendela fenologi (Januari, Maret, Juli, November), dilatih secara terpisah. Mengukur sensitivitas performa terhadap pemilihan tanggal (4 $\times$ 9 channel).
+
+    \item \textbf{Eksperimen B — Multi-Temporal Baseline}: Menggunakan 9 band dari empat tanggal fenologi (Januari, Maret, Juli, November) yang dipilih berdasarkan kalender fenologi tanpa algoritma seleksi. Berfungsi sebagai \textit{baseline} temporal naif (36 channel).
+
+    \item \textbf{Eksperimen C\_v3 — Multi-Temporal Seleksi K-Sweep}: Menggunakan top-$K$ fitur hasil peringkat GSI Tahap 1, dijalankan untuk berbagai nilai $K$ dalam dua \textit{phase} (band sweep dan date sweep). Merupakan output metode seleksi dua tahap yang diusulkan.
+\end{enumerate}
+
+Setiap eksperimen dijalankan pada kedua arsitektur (DeepLabV3+CBAM dan SegFormer).
+Perbandingan A $\to$ B mengukur nilai informasi temporal, A $\to$ A\_v2 mengukur sensitivitas jendela fenologi, dan kurva C\_v3 mengukur efisiensi seleksi band sebagai fungsi $K$.
+
+\subsection{Konfigurasi \textit{Hyperparameter}}
+
+Konfigurasi \textit{hyperparameter} yang digunakan pada seluruh eksperimen disajikan pada Tabel~\ref{tab:hyperparams}.
+
+\begin{table}[htbp]
+\centering
+\caption{Konfigurasi \textit{hyperparameter} pelatihan model}
+\label{tab:hyperparams}
+\begin{tabular}{lll}
+\hline
+\textbf{Parameter} & \textbf{DeepLabV3+} & \textbf{SegFormer} \\
+\hline
+Optimizer          & AdamW               & AdamW \\
+\textit{Learning rate} & $1 \times 10^{-4}$ & $6 \times 10^{-5}$ \\
+\textit{Weight decay}  & $1 \times 10^{-4}$ & $1 \times 10^{-2}$ \\
+\textit{LR Scheduler}  & \textit{PolynomialLR} (power=0.9) & \textit{PolynomialLR} (power=0.9) \\
+\textit{Batch size}    & 8                  & 8 \\
+Ukuran patch       & $256\times256$      & $256\times256$ \\
+Maks. epoch        & 100                 & 100 \\
+\textit{Early stopping} & patience = 10   & patience = 10 \\
+\textit{Backbone}      & ResNet-50          & MiT-B2 \\
+\textit{Pretrained}    & ImageNet-1K        & ImageNet-1K \\
+\hline
+\end{tabular}
+\end{table}
+
+Data dibagi menjadi set pelatihan (70\%), validasi (15\%), dan pengujian (15\%) secara stratifikasi berdasarkan kelas untuk memastikan distribusi kelas yang representatif pada setiap subset.
+
+\section{Evaluasi}
+
+\subsection{Metrik Segmentasi}
+
+Evaluasi model menggunakan empat metrik utama yang umum digunakan pada tugas \textit{semantic segmentation} \citep{thomasramos2024}:
+
+\textbf{Mean Intersection over Union (mIoU)} merupakan metrik utama yang mengukur tumpang tindih antara prediksi dan label acuan pada level kelas:
+\begin{equation}
+    \text{IoU}_c = \frac{TP_c}{TP_c + FP_c + FN_c}, \qquad
+    \text{mIoU} = \frac{1}{C} \sum_{c=0}^{C-1} \text{IoU}_c
+\end{equation}
+
+\textbf{Overall Accuracy (OA)} mengukur proporsi piksel yang diprediksi dengan benar dari seluruh piksel:
+\begin{equation}
+    \text{OA} = \frac{\sum_{c} TP_c}{N}
+\end{equation}
+di mana $N$ adalah total piksel pada set pengujian.
+
+\textbf{F1-Score} per kelas dan rata-rata makro (\textit{macro-averaged}) dihitung sebagai rata-rata harmonik \textit{precision} dan \textit{recall}:
+\begin{equation}
+    F1_c = \frac{2 \cdot \text{Precision}_c \cdot \text{Recall}_c}{\text{Precision}_c + \text{Recall}_c}, \qquad
+    \overline{F1} = \frac{1}{C} \sum_{c} F1_c
+\end{equation}
+
+\textbf{IoU per Kelas} dilaporkan secara individual untuk mengidentifikasi kelas yang paling sulit diprediksi, memungkinkan analisis mendalam terhadap kelas dengan ketidakseimbangan tinggi.
+
+\subsection{Analisis Efisiensi Komputasi}
+
+Selain metrik akurasi, dilakukan pengukuran efisiensi komputasi untuk mengevaluasi kelayakan penerapan model:
+\begin{itemize}
+    \item \textbf{Jumlah parameter model} (juta parameter) untuk mengukur kompleksitas arsitektur.
+    \item \textbf{Waktu pelatihan per epoch} (detik) pada GPU yang digunakan.
+    \item \textbf{\textit{Inference throughput}} (patch/detik) untuk mengukur kecepatan prediksi pada data baru.
+    \item \textbf{Penggunaan memori GPU} (GB) selama pelatihan.
+\end{itemize}
+
+\subsection{Analisis Error}
+
+Untuk memahami pola kesalahan model secara kualitatif dan kuantitatif, dilakukan:
+\begin{itemize}
+    \item \textbf{\textit{Confusion matrix}} antar kelas untuk mengidentifikasi pasangan kelas yang paling sering tertukar (misalnya \textit{Alfalfa} vs.\ \textit{Other Hay}, atau \textit{Almonds} vs.\ \textit{Walnuts}).
+    \item \textbf{Visualisasi prediksi spasial} dengan membandingkan peta prediksi model terhadap label CDL pada beberapa patch representatif.
+\end{itemize}

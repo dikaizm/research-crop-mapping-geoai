@@ -1,0 +1,20 @@
+\babel@toc {bahasa}{}\relax 
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {1.1}{\ignorespaces Jadwal Kegiatan Penelitian}}{14}{table.caption.6}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Band Spektral Sentinel-2 yang Digunakan dalam Penelitian}}{16}{table.caption.7}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Metode, Kelebihan, dan Kekurangan Penelitian Terkait}}{23}{table.caption.10}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Tanggal akuisisi citra Sentinel-2 per tahun (interval 15 hari). Tanda $^\dagger $ menandai citra yang dikecualikan karena cakupan awan $\geq $100\%.}}{27}{table.3.1}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces 30 Kelas CDL Teratas Berdasarkan Cakupan Area di Area Studi (2022)}}{33}{table.3.2}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Rekapitulasi Cakupan Lahan berdasarkan Tipe Penggunaan}}{34}{table.caption.26}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Kelas CDL Terpilih untuk Pelatihan Model (10 tanaman aktif, $\geq 1\%$ cakupan area studi)}}{38}{table.caption.30}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Korelasi Pearson profil NDVI antar-tahun per kelas tanaman (diselaraskan berdasarkan DOY, $\pm $7 hari). Kriteria stabilitas: Tinggi ($r \geq 0{,}85$), Sedang ($0{,}70 \leq r < 0{,}85$), Rendah ($r < 0{,}70$).}}{41}{table.caption.32}%
+\contentsline {table}{\numberline {3.6}{\ignorespaces Konfigurasi \textit {hyperparameter} pelatihan model}}{48}{table.caption.40}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Hasil evaluasi mIoU dan OA pada set uji (dataset independen 2024)}}{51}{table.caption.41}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces IoU per kelas tanaman pada set uji (\%)}}{53}{table.caption.42}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Hasil seleksi fitur Stage 2 per-kelas tanaman (Biner)}}{55}{table.caption.44}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Contoh proyeksi tanggal seleksi Stage 2 untuk konsistensi multi-tahun}}{56}{table.caption.45}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Perbandingan waktu pelatihan per eksperimen (Skala Penuh, 50--100 Epoch)}}{66}{table.caption.54}%
+\addvspace {10\p@ }
