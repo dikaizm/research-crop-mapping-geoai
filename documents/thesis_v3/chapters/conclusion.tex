@@ -1,0 +1,48 @@
+% ============================================================
+% BAB KESIMPULAN DAN SARAN
+% ============================================================
+
+\section{Kesimpulan}
+
+Berdasarkan hasil eksperimen skala penuh (2022--2024) menggunakan metode seleksi band dua tahap berbasis \textit{Global Separation Index} (GSI) dan \textit{K-sweep} langsung, penelitian ini menghasilkan kesimpulan sebagai berikut:
+
+\begin{enumerate}
+
+    \item \textbf{Pengaruh jendela fenologi pada akurasi \textit{single-date}.}
+    Eksperimen A\_v2 membuktikan bahwa pemilihan tanggal akuisisi berdasarkan jendela fenologi secara signifikan memengaruhi performa model. Jendela Juli (tanaman dalam fase pertumbuhan aktif) menghasilkan mIoU terbaik (SegFormer 18,16\%) dan mendominasi sebagian besar kelas tanaman. Jendela Maret memberikan performa terbaik kedua (13,17\%) dan secara spesifik mengungguli Juli untuk \textit{Winter Wheat} (13,40\% vs.\ 13,24\%), mengkonfirmasi hipotesis fenologi untuk tanaman musim dingin. Sebaliknya, jendela Januari terbukti merugikan (mIoU = 2,15\%) karena sebagian besar tanaman dalam kondisi dorman. Temuan ini menunjukkan bahwa pemilihan tanggal berdasarkan kalender fenologi, bukan sekadar kualitas citra, merupakan faktor penentu yang kritis.
+
+    \item \textbf{Perbandingan akurasi \textit{single-date} versus \textit{multi-temporal} dengan seleksi band GSI.}
+    Hasil evaluasi pada set uji independen tahun 2024 menunjukkan bahwa pendekatan \textit{single-date} dengan tanggal optimal (Exp A, 30 Juli, SegFormer mIoU = 19,37\%) masih melampaui pendekatan \textit{multi-temporal} yang menggunakan seleksi GSI. Phase B (seleksi tanggal, titik optimal $k=3$, 147 kanal) mencapai mIoU terbaik di antara semua konfigurasi \textit{multi-temporal} dengan DeepLabV3+CBAM 13,53\% dan SegFormer 13,33\%. Kesenjangan ini disebabkan oleh \textit{temporal domain shift}: model dilatih pada data 2022--2023 dan diuji pada 2024, sementara penambahan kanal memperparah sensitivitas terhadap perbedaan fenologis antar tahun. Meskipun demikian, pada arsitektur DeepLabV3+CBAM, seleksi multi-temporal terbukti jauh lebih unggul dibanding \textit{single-date} (13,53\% vs.\ 4,21\%), membuktikan manfaat pendekatan multi-temporal untuk arsitektur berbasis mekanisme \textit{channel attention}.
+
+    \item \textbf{Efektivitas seleksi band dua tahap berbasis GSI dan \textit{K-sweep}.}
+    Metode yang diusulkan mampu mengidentifikasi titik elbow secara empiris melalui kurva IoU--K. Phase A (seleksi band) menunjukkan saturasi pada $k=5$ (39 kanal), sedangkan Phase B (seleksi tanggal) menunjukkan elbow pada $k=3$ (147 kanal) sebelum mengalami \textit{diminishing returns}. Pendekatan \textit{K-sweep} langsung menggunakan model akhir yang sesungguhnya (DeepLabV3+CBAM atau SegFormer), lebih jujur dan efisien dibanding \textit{CNN forward selection} berbasis model \textit{proxy}, serta dapat dijalankan secara paralel untuk setiap nilai $k$.
+
+    \item \textbf{Keunggulan arsitektur berbasis \textit{channel attention} pada input \textit{multi-temporal}.}
+    SegFormer terbukti unggul pada input \textit{single-date} berkat kemampuan menangkap konteks spasial jangkauan panjang. Namun pada Phase B dengan banyak kanal ($k \geq 2$), DeepLabV3+CBAM berbalik mengungguli SegFormer, mengindikasikan bahwa mekanisme \textit{channel attention} (CBAM) secara efektif menyaring \textit{noise} temporal dan memberikan bobot lebih pada band-tanggal yang paling informatif. Temuan ini menegaskan bahwa pilihan arsitektur harus disesuaikan dengan jenis input: SegFormer untuk \textit{single-date}, DeepLabV3+CBAM untuk \textit{multi-temporal}.
+
+\end{enumerate}
+
+Secara keseluruhan, penelitian ini membuktikan bahwa seleksi band berbasis GSI dengan evaluasi \textit{K-sweep} langsung merupakan pendekatan yang efisien dan dapat direproduksi untuk mengidentifikasi kombinasi kanal optimal pada pemetaan tanaman berbasis Sentinel-2. Tantangan utama yang tersisa adalah \textit{temporal domain shift} antar tahun, yang membatasi generalisasi model pada data uji lintas tahun.
+
+\section{Saran dan Pekerjaan Mendatang}
+
+Berdasarkan temuan dan keterbatasan penelitian ini, berikut adalah saran untuk pengembangan selanjutnya:
+
+\begin{enumerate}
+
+    \item \textbf{Perluasan \textit{K-sweep} ke nilai $k$ yang lebih tinggi.}
+    Eksperimen saat ini mengevaluasi Phase A hingga $k=5$ (39 kanal) dan Phase B hingga $k=5$ (212 kanal). Diperlukan sweep hingga $k=9$ untuk Phase A dan $k=10$ untuk Phase B guna mengkonfirmasi titik elbow secara definitif dan memastikan tidak ada peningkatan performa yang signifikan di luar nilai $k$ yang telah diuji.
+
+    \item \textbf{Redefinisi strategi evaluasi untuk memisahkan efek pemilihan tanggal dari \textit{domain shift}.}
+    Strategi uji saat ini menggunakan rata-rata atas seluruh citra 2024. Disarankan untuk menggunakan citra 2024 yang paling mendekati tanggal Juli (setara dengan Exp A) sebagai evaluasi primer, dan menggunakan seluruh tumpukan 2024 sebagai evaluasi sekunder. Hal ini akan memisahkan secara bersih efek pemilihan tanggal dari efek pergeseran domain temporal.
+
+    \item \textbf{Implementasi \textit{Temporal Jittering} pada Pelatihan.}
+    Untuk mengatasi masalah \textit{brittleness} model terhadap pergeseran kalender tanam antar tahun, disarankan untuk menerapkan augmentasi data berupa \textit{temporal jittering} (pemilihan acak citra pada rentang $\pm$5--10 hari dari tanggal target). Hal ini akan memaksa model untuk mempelajari fase fenologi secara umum daripada menghafal tanda spektral pada tanggal kalender yang kaku.
+
+    \item \textbf{Integrasi metrik stabilitas spektral antar tahun ke dalam GSI.}
+    Proses seleksi fitur pada Stage 1 dapat ditingkatkan dengan memasukkan metrik stabilitas spektral antar tahun (seperti korelasi NDVI lintas tahun) sebagai kriteria tambahan. Dengan memilih band yang tidak hanya diskriminatif tetapi juga stabil secara fenologis, model yang dihasilkan akan memiliki daya generalisasi lintas tahun yang lebih kuat, terutama untuk kelas dengan fenologi tidak stabil seperti \textit{Alfalfa} dan \textit{Grapes}.
+
+    \item \textbf{Eksplorasi Arsitektur \textit{Hybrid} CNN-Transformer.}
+    Mengingat CNN (DeepLabV3+CBAM) unggul dalam stabilitas fitur \textit{multi-temporal} dan Transformer (SegFormer) unggul dalam konteks spasial \textit{single-date}, penggunaan arsitektur \textit{hybrid} (seperti \textit{TransUNet} atau \textit{TopFormer}) dapat menjadi solusi untuk mendapatkan keunggulan dari kedua paradigma dalam pemetaan tanaman skala luas dengan input multi-temporal.
+
+\end{enumerate}

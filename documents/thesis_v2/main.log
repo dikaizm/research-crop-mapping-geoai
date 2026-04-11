@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.9)  19 MAR 2026 19:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.9)  27 MAR 2026 17:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis/main.tex
-(/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis/main.tex
+**/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis_v2/main.tex
+(/Users/dikaizm/Documents/PROGRAMMING/ml-ai/research-crop-mapping-thesis/research-crop-mapping-geoai/documents/thesis_v2/main.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/base/report.cls
@@ -478,38 +478,42 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has b
 l.106 \chapter
               *{Abstrak} [1
 
-] (./chapters/abstract.tex)
+] (./chapters/abstract.tex
 
 [2
 
-] (./main.toc
+])
 
-[3
+[3] (./main.toc
+
+[4
 
 ]
 
-[4])
+[5])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
 
 
-[5] (./main.lot)
+[6] (./main.lot
+
+[7
+
+])
 \tf@lot=\write5
 \openout5 = `main.lot'.
 
 
 
-[6
-
-] (./main.lof
+[8] (./main.lof
 Overfull \hbox (19.56596pt too wide) in paragraph at lines 7--7
  \OT1/cmr/m/n/12 me-nun-jukk-an ba-tas area pe-ne-li-ti-an ($122[]4[]41[]$ BB hing-ga $121[]34[]31[]$ 
  []
 
 
 
-[7
+[9
 
 ]
 Overfull \hbox (3.36131pt too wide) in paragraph at lines 14--14
@@ -522,22 +526,25 @@ Overfull \hbox (1.40048pt too wide) in paragraph at lines 17--17
  []
 
 
+Overfull \hbox (23.39601pt too wide) in paragraph at lines 22--22
+ [][] [][]\OT1/cmr/m/n/12 Peta se-gmen-ta-si pe-nuh set uji 2024 meng-gu-nak-an De-e-pLa-bV3+CBAM.[] []  
+ []
 
-[8])
+)
 \tf@lof=\write6
 \openout6 = `main.lof'.
 
 
 
-[9]
+[10]
 Bab 1.
 (./chapters/introduction.tex
 
-Package natbib Warning: Citation `chen2018deeplabv3' on page 10 undefined on input line 12.
+Package natbib Warning: Citation `chen2018deeplabv3' on page 11 undefined on input line 12.
 
 
 
-[10
+[11
 
 ]
 Overfull \hbox (1.43895pt too wide) in paragraph at lines 24--25
@@ -551,18 +558,18 @@ Overfull \hbox (5.33891pt too wide) in paragraph at lines 30--31
 
 
 
-[11]
+[12]
 Overfull \hbox (0.82703pt too wide) in paragraph at lines 38--39
 []\OT1/cmr/bx/n/12 Data\OT1/cmr/m/n/12 : Pe-ne-li-ti-an meng-gu-nak-an ci-tra Sentinel-2 Sur-fa-ce Re-fle-ctan-ce (CO-
  []
 
 
 
-[12]
+[13]
 
-[13{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}])
+[14{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}])
 
-[14]
+[15]
 Bab 2.
 (./chapters/literature_review.tex
 Overfull \hbox (13.06964pt too wide) in paragraph at lines 2--4
@@ -576,7 +583,7 @@ Overfull \hbox (0.30865pt too wide) in paragraph at lines 5--8
 
 
 
-[15
+[16
 
 ]
 Underfull \hbox (badness 3568) in paragraph at lines 35--35
@@ -585,22 +592,22 @@ Underfull \hbox (badness 3568) in paragraph at lines 35--35
 
 
 
-[16]
-
 [17]
 
 [18]
 
 [19]
-<figures/arch_deeplabv3+.png, id=652, 955.57pt x 506.89375pt>
+
+[20]
+<figures/arch_deeplabv3+.png, id=648, 955.57pt x 506.89375pt>
 File: figures/arch_deeplabv3+.png Graphic file (type png)
 <use figures/arch_deeplabv3+.png>
 Package pdftex.def Info: figures/arch_deeplabv3+.png  used on input line 113.
 (pdftex.def)             Requested size: 338.59023pt x 179.60435pt.
 
 
-[20 <./figures/arch_deeplabv3+.png>]
-<figures/arch_segformer.png, id=664, 1047.915pt x 558.085pt>
+[21 <./figures/arch_deeplabv3+.png>]
+<figures/arch_segformer.png, id=660, 1047.915pt x 558.085pt>
 File: figures/arch_segformer.png Graphic file (type png)
 <use figures/arch_segformer.png>
 Package pdftex.def Info: figures/arch_segformer.png  used on input line 126.
@@ -612,7 +619,7 @@ Overfull \hbox (0.8975pt too wide) in paragraph at lines 131--133
 
 
 
-[21 <./figures/arch_segformer.png>]
+[22 <./figures/arch_segformer.png>]
 Underfull \hbox (badness 1014) in paragraph at lines 167--167
 \OT1/cmr/m/n/10 (fo-kus pa-da chan-nel dan spa-si-al).
  []
@@ -694,52 +701,52 @@ Underfull \hbox (badness 1436) in paragraph at lines 167--167
 
 
 
-[22]
+[23]
 Overfull \vbox (159.13568pt too high) has occurred while \output is active []
 
 
 
-[23])
+[24])
 
-[24]
+[25]
 Bab 3.
 (./chapters/methodology.tex
-<figures/study_area_map.png, id=733, 856.19875pt x 532.99126pt>
+<figures/study_area_map.png, id=729, 856.19875pt x 532.99126pt>
 File: figures/study_area_map.png Graphic file (type png)
 <use figures/study_area_map.png>
 Package pdftex.def Info: figures/study_area_map.png  used on input line 8.
 (pdftex.def)             Requested size: 398.3386pt x 247.96849pt.
 
 
-[25
+[26
 
  <./figures/study_area_map.png>]
 
-[26]
-
 [27]
-<figures/s2_rgb_temporal.png, id=755, 1148.73164pt x 728.4816pt>
+
+[28]
+<figures/s2_rgb_temporal.png, id=751, 1148.73164pt x 728.4816pt>
 File: figures/s2_rgb_temporal.png Graphic file (type png)
 <use figures/s2_rgb_temporal.png>
 Package pdftex.def Info: figures/s2_rgb_temporal.png  used on input line 89.
 (pdftex.def)             Requested size: 398.3386pt x 252.60474pt.
 
 
-[28 <./figures/s2_rgb_temporal.png>]
-<figures/s2_band_grid.png, id=764, 1141.1433pt x 782.32275pt>
+[29 <./figures/s2_rgb_temporal.png>]
+<figures/s2_band_grid.png, id=760, 1141.1433pt x 782.32275pt>
 File: figures/s2_band_grid.png Graphic file (type png)
 <use figures/s2_band_grid.png>
 Package pdftex.def Info: figures/s2_band_grid.png  used on input line 101.
 (pdftex.def)             Requested size: 398.3386pt x 273.08888pt.
 
 
-[29 <./figures/s2_band_grid.png>]
-<figures/s2_ndvi_temporal.png, id=773, 931.92165pt x 353.03896pt>
+[30 <./figures/s2_band_grid.png>]
+<figures/s2_ndvi_temporal.png, id=770, 931.92165pt x 353.03896pt>
 File: figures/s2_ndvi_temporal.png Graphic file (type png)
 <use figures/s2_ndvi_temporal.png>
 Package pdftex.def Info: figures/s2_ndvi_temporal.png  used on input line 121.
 (pdftex.def)             Requested size: 398.3386pt x 150.90416pt.
-<figures/s2_ndvi_per_class.png, id=775, 1004.19165pt x 425.6703pt>
+<figures/s2_ndvi_per_class.png, id=772, 1004.19165pt x 425.6703pt>
 File: figures/s2_ndvi_per_class.png Graphic file (type png)
 <use figures/s2_ndvi_per_class.png>
 Package pdftex.def Info: figures/s2_ndvi_per_class.png  used on input line 134.
@@ -751,23 +758,23 @@ Overfull \hbox (0.7156pt too wide) in paragraph at lines 140--144
 
 
 
-[30 <./figures/s2_ndvi_temporal.png>]
-<figures/s2_spectral_profile.png, id=784, 859.65166pt x 353.03896pt>
+[31 <./figures/s2_ndvi_temporal.png>]
+<figures/s2_spectral_profile.png, id=780, 859.65166pt x 353.03896pt>
 File: figures/s2_spectral_profile.png Graphic file (type png)
 <use figures/s2_spectral_profile.png>
 Package pdftex.def Info: figures/s2_spectral_profile.png  used on input line 147.
 (pdftex.def)             Requested size: 398.3386pt x 163.5904pt.
-<figures/s2_data_coverage.png, id=786, 1004.19165pt x 280.76895pt>
+<figures/s2_data_coverage.png, id=782, 1004.19165pt x 280.76895pt>
 File: figures/s2_data_coverage.png Graphic file (type png)
 <use figures/s2_data_coverage.png>
 Package pdftex.def Info: figures/s2_data_coverage.png  used on input line 160.
 (pdftex.def)             Requested size: 398.3386pt x 111.37163pt.
 
 
-[31 <./figures/s2_ndvi_per_class.png>]
+[32 <./figures/s2_ndvi_per_class.png>]
 
-[32 <./figures/s2_spectral_profile.png> <./figures/s2_data_coverage.png>]
-<figures/cdl_label_map.png, id=801, 686.565pt x 682.9515pt>
+[33 <./figures/s2_spectral_profile.png> <./figures/s2_data_coverage.png>]
+<figures/cdl_label_map.png, id=797, 686.565pt x 682.9515pt>
 File: figures/cdl_label_map.png Graphic file (type png)
 <use figures/cdl_label_map.png>
 Package pdftex.def Info: figures/cdl_label_map.png  used on input line 180.
@@ -797,20 +804,20 @@ Overfull \hbox (28.7279pt too wide) in alignment at lines 206--241
  [] [] [] [] [] [] 
  []
 
-[33]
-<figures/cdl_class_distribution_area.png, id=810, 787.38165pt x 569.4876pt>
+[34]
+<figures/cdl_class_distribution_area.png, id=806, 787.38165pt x 569.4876pt>
 File: figures/cdl_class_distribution_area.png Graphic file (type png)
 <use figures/cdl_class_distribution_area.png>
 Package pdftex.def Info: figures/cdl_class_distribution_area.png  used on input line 266.
 (pdftex.def)             Requested size: 398.3386pt x 288.106pt.
 
 
-[34]
+[35]
 
-[35 <./figures/cdl_label_map.png>]
+[36 <./figures/cdl_label_map.png>]
 
-[36 <./figures/cdl_class_distribution_area.png>]
-<figures/cdl_class_selection_strategy.png, id=827, 1239.6714pt x 761.244pt>
+[37 <./figures/cdl_class_distribution_area.png>]
+<figures/cdl_class_selection_strategy.png, id=823, 1239.6714pt x 761.244pt>
 File: figures/cdl_class_selection_strategy.png Graphic file (type png)
 <use figures/cdl_class_selection_strategy.png>
 Package pdftex.def Info: figures/cdl_class_selection_strategy.png  used on input line 278.
@@ -837,242 +844,177 @@ Underfull \hbox (badness 10000) in paragraph at lines 309--309
 
 
 
-[37 <./figures/cdl_class_selection_strategy.png>]
+[38 <./figures/cdl_class_selection_strategy.png>]
 Overfull \hbox (11.8801pt too wide) in paragraph at lines 325--328
 []\OT1/cmr/bx/n/12 Ketidakseimbangan ke-las yang da-pat di-ta-nga-ni. \OT1/cmr/m/n/12 De-ngan \OT1/cmr/m/it/12 Fa-llow/Idle
  []
 
 
 
-[38]
+[39]
 Overfull \hbox (1.89491pt too wide) in paragraph at lines 342--344
 \OT1/cmr/m/n/12 Citra di-kom-po-sitk-an se-ca-ra tem-po-ral meng-gu-nak-an fung-si \OT1/cmr/m/it/12 me-di-an re-du-cer \OT1/cmr/m/n/12 GEE
  []
 
 
 
-[39]
-<figures/s2_ndvi_year_comparison.png, id=854, 1294.0345pt x 879.285pt>
-File: figures/s2_ndvi_year_comparison.png Graphic file (type png)
-<use figures/s2_ndvi_year_comparison.png>
-Package pdftex.def Info: figures/s2_ndvi_year_comparison.png  used on input line 403.
-(pdftex.def)             Requested size: 398.3386pt x 270.65694pt.
-
-
 [40]
 
 [41]
+<figures/s2_ndvi_year_comparison.png, id=857, 1294.0345pt x 879.285pt>
+File: figures/s2_ndvi_year_comparison.png Graphic file (type png)
+<use figures/s2_ndvi_year_comparison.png>
+Package pdftex.def Info: figures/s2_ndvi_year_comparison.png  used on input line 405.
+(pdftex.def)             Requested size: 398.3386pt x 270.65694pt.
 
-[42 <./figures/s2_ndvi_year_comparison.png>]
 
-[43]
-Overfull \hbox (19.16046pt too wide) in paragraph at lines 477--479
+[42]
+
+[43 <./figures/s2_ndvi_year_comparison.png>]
+
+[44]
+Overfull \hbox (19.16046pt too wide) in paragraph at lines 464--466
 \OT1/cmr/m/n/12 Band-band ter-pi-lih di-simp-an da-lam for-mat \OT1/cmtt/m/n/12 BAND[]YYYYMMDD \OT1/cmr/m/n/12 (con-toh: \OT1/cmtt/m/n/12 B4[]20220730\OT1/cmr/m/n/12 )
  []
 
 
 
-[44]
-
 [45]
 
-Package natbib Warning: Citation `chen2018deeplabv3' on page 46 undefined on input line 532.
-
-
-
 [46]
-Overfull \hbox (0.74907pt too wide) in paragraph at lines 551--552
-\OT1/cmr/m/n/12 SegFormer meng-gu-nak-an ar-si-tek-tur \OT1/cmr/m/it/12 encoder-decoder \OT1/cmr/m/n/12 ber-ba-sis \OT1/cmr/m/it/12 Tran-sfor-mer \OT1/cmr/m/n/12 tan-
- []
 
-
-LaTeX Warning: Reference `subsec:band_selection' on page 47 undefined on input line 571.
+Package natbib Warning: Citation `chen2018deeplabv3' on page 47 undefined on input line 528.
 
 
 
 [47]
+Overfull \hbox (0.74907pt too wide) in paragraph at lines 547--548
+\OT1/cmr/m/n/12 SegFormer meng-gu-nak-an ar-si-tek-tur \OT1/cmr/m/it/12 encoder-decoder \OT1/cmr/m/n/12 ber-ba-sis \OT1/cmr/m/it/12 Tran-sfor-mer \OT1/cmr/m/n/12 tan-
+ []
+
+
 
 [48]
 
-[49])
+[49]
 
-[50]
+[50])
+
+[51]
 Bab 4.
 (./chapters/results.tex
-Overfull \hbox (42.51732pt too wide) in paragraph at lines 32--32
-[]|\OT1/cmr/bx/n/12 Eksperimen| 
- []
 
-
-Overfull \hbox (85.26616pt too wide) in paragraph at lines 32--32
-[]|[]| 
- []
-
-
-Overfull \hbox (132.2615pt too wide) in paragraph at lines 32--32
-[]|[]| 
- []
-
-
-Overfull \hbox (151.81825pt too wide) in paragraph at lines 32--32
-[]|[]| 
- []
-
-
-
-[51
+[52
 
 ]
-
-[52]
-<figures/per_crop_iou_comparison.png, id=955, 867.24pt x 433.62pt>
-File: figures/per_crop_iou_comparison.png Graphic file (type png)
-<use figures/per_crop_iou_comparison.png>
-Package pdftex.def Info: figures/per_crop_iou_comparison.png  used on input line 103.
-(pdftex.def)             Requested size: 398.3386pt x 199.16988pt.
+<figures/stage1v2_siglobal_heatmap.png, id=944, 828.2142pt x 424.4658pt>
+File: figures/stage1v2_siglobal_heatmap.png Graphic file (type png)
+<use figures/stage1v2_siglobal_heatmap.png>
+Package pdftex.def Info: figures/stage1v2_siglobal_heatmap.png  used on input line 90.
+(pdftex.def)             Requested size: 378.42044pt x 193.94832pt.
 
 
-[53 <./figures/per_crop_iou_comparison.png>]
-Overfull \hbox (7.87128pt too wide) in paragraph at lines 122--126
-[]\OT1/cmr/bx/n/12 Kelas Mi-no-ri-tas dan Ta-nam-an Sa-yur-an (\OT1/cmr/bx/it/12 To-ma-to-es\OT1/cmr/bx/n/12 , \OT1/cmr/bx/it/12 Plums\OT1/cmr/bx/n/12 , \OT1/cmr/bx/it/12 Other
- []
+[53]
 
-
-
-[54]
-Underfull \hbox (badness 10000) in paragraph at lines 173--173
-[]|\OT1/cmr/m/n/12 05/16, 06/30,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 173--173
-[]|\OT1/cmr/m/n/12 03/17, 04/01,
- []
-
-
+[54 <./figures/stage1v2_siglobal_heatmap.png>]
 
 [55]
-<figures/stage1_joint_score.png, id=979, 642.7212pt x 5555.6358pt>
-File: figures/stage1_joint_score.png Graphic file (type png)
-<use figures/stage1_joint_score.png>
-Package pdftex.def Info: figures/stage1_joint_score.png  used on input line 240.
-(pdftex.def)             Requested size: 378.42044pt x 3271.01506pt.
-
 
 [56]
 
 [57]
-Overfull \vbox (2635.68472pt too high) has occurred while \output is active []
+
+[58]
+Overfull \hbox (4.99602pt too wide) in paragraph at lines 380--385
+[]\OT1/cmr/bx/n/12 SegFormer ung-gul pa-da in-put \OT1/cmr/bx/it/12 single-date\OT1/cmr/m/n/12 : Me-ka-nis-me \OT1/cmr/m/it/12 self-attention
+ []
+
+
+Overfull \hbox (0.92766pt too wide) in paragraph at lines 386--394
+\OT1/cmr/m/n/12 yang ti-dak in-for-ma-tif. Hal ini men-je-lask-an meng-a-pa De-e-pLa-bV3+CBAM
+ []
 
 
 
-[58 <./figures/stage1_joint_score.png>]
-<figures/stage1_rf_importance.png, id=994, 643.203pt x 352.1958pt>
-File: figures/stage1_rf_importance.png Graphic file (type png)
-<use figures/stage1_rf_importance.png>
-Package pdftex.def Info: figures/stage1_rf_importance.png  used on input line 250.
-(pdftex.def)             Requested size: 378.42044pt x 207.21332pt.
-<figures/stage1v2_siglobal_heatmap.png, id=996, 828.2142pt x 424.4658pt>
-File: figures/stage1v2_siglobal_heatmap.png Graphic file (type png)
-<use figures/stage1v2_siglobal_heatmap.png>
-Package pdftex.def Info: figures/stage1v2_siglobal_heatmap.png  used on input line 259.
-(pdftex.def)             Requested size: 378.42044pt x 193.94832pt.
+[59]
 
+[60]
 
-[59 <./figures/stage1_rf_importance.png> <./figures/stage1v2_siglobal_heatmap.png>]
-<figures/stage2_forward_selection.png, id=1004, 712.5822pt x 352.6776pt>
-File: figures/stage2_forward_selection.png Graphic file (type png)
-<use figures/stage2_forward_selection.png>
-Package pdftex.def Info: figures/stage2_forward_selection.png  used on input line 274.
-(pdftex.def)             Requested size: 358.50229pt x 177.43617pt.
-<figures/dlv3_expa_curve.png, id=1007, 867.24pt x 289.08pt>
+[61]
+<figures/dlv3_expa_curve.png, id=1011, 867.24pt x 289.08pt>
 File: figures/dlv3_expa_curve.png Graphic file (type png)
 <use figures/dlv3_expa_curve.png>
-Package pdftex.def Info: figures/dlv3_expa_curve.png  used on input line 289.
+Package pdftex.def Info: figures/dlv3_expa_curve.png  used on input line 508.
 (pdftex.def)             Requested size: 338.59023pt x 112.86424pt.
-<figures/dlv3_expb_curve.png, id=1008, 867.24pt x 289.08pt>
+<figures/dlv3_expb_curve.png, id=1012, 867.24pt x 289.08pt>
 File: figures/dlv3_expb_curve.png Graphic file (type png)
 <use figures/dlv3_expb_curve.png>
-Package pdftex.def Info: figures/dlv3_expb_curve.png  used on input line 295.
+Package pdftex.def Info: figures/dlv3_expb_curve.png  used on input line 514.
 (pdftex.def)             Requested size: 338.59023pt x 112.86424pt.
-<figures/dlv3_expc_curve.png, id=1009, 867.24pt x 289.08pt>
+<figures/dlv3_expc_curve.png, id=1013, 867.24pt x 289.08pt>
 File: figures/dlv3_expc_curve.png Graphic file (type png)
 <use figures/dlv3_expc_curve.png>
-Package pdftex.def Info: figures/dlv3_expc_curve.png  used on input line 301.
+Package pdftex.def Info: figures/dlv3_expc_curve.png  used on input line 520.
 (pdftex.def)             Requested size: 338.59023pt x 112.86424pt.
 
 
-[60 <./figures/stage2_forward_selection.png>]
-<figures/sf_expa_curve.png, id=1016, 867.24pt x 289.08pt>
+[62]
+<figures/sf_expa_curve.png, id=1018, 867.24pt x 289.08pt>
 File: figures/sf_expa_curve.png Graphic file (type png)
 <use figures/sf_expa_curve.png>
-Package pdftex.def Info: figures/sf_expa_curve.png  used on input line 312.
+Package pdftex.def Info: figures/sf_expa_curve.png  used on input line 531.
 (pdftex.def)             Requested size: 338.59023pt x 112.86424pt.
-<figures/sf_expb_curve.png, id=1017, 867.24pt x 289.08pt>
+<figures/sf_expb_curve.png, id=1019, 867.24pt x 289.08pt>
 File: figures/sf_expb_curve.png Graphic file (type png)
 <use figures/sf_expb_curve.png>
-Package pdftex.def Info: figures/sf_expb_curve.png  used on input line 318.
+Package pdftex.def Info: figures/sf_expb_curve.png  used on input line 537.
 (pdftex.def)             Requested size: 338.59023pt x 112.86424pt.
-<figures/sf_expc_curve.png, id=1018, 867.24pt x 289.08pt>
+<figures/sf_expc_curve.png, id=1020, 867.24pt x 289.08pt>
 File: figures/sf_expc_curve.png Graphic file (type png)
 <use figures/sf_expc_curve.png>
-Package pdftex.def Info: figures/sf_expc_curve.png  used on input line 324.
+Package pdftex.def Info: figures/sf_expc_curve.png  used on input line 543.
 (pdftex.def)             Requested size: 338.59023pt x 112.86424pt.
 
 
-[61 <./figures/dlv3_expa_curve.png> <./figures/dlv3_expb_curve.png> <./figures/dlv3_expc_curve.png>]
-<figures/dlv3_expa_map.png, id=1029, 1149.093pt x 599.3592pt>
+[63 <./figures/dlv3_expa_curve.png> <./figures/dlv3_expb_curve.png> <./figures/dlv3_expc_curve.png>]
+<figures/dlv3_expa_map.png, id=1032, 1149.093pt x 599.3592pt>
 File: figures/dlv3_expa_map.png Graphic file (type png)
 <use figures/dlv3_expa_map.png>
-Package pdftex.def Info: figures/dlv3_expa_map.png  used on input line 339.
+Package pdftex.def Info: figures/dlv3_expa_map.png  used on input line 560.
 (pdftex.def)             Requested size: 338.59023pt x 176.60823pt.
-<figures/dlv3_expb_map.png, id=1030, 1149.093pt x 599.3592pt>
+<figures/dlv3_expb_map.png, id=1033, 1149.093pt x 599.3592pt>
 File: figures/dlv3_expb_map.png Graphic file (type png)
 <use figures/dlv3_expb_map.png>
-Package pdftex.def Info: figures/dlv3_expb_map.png  used on input line 345.
+Package pdftex.def Info: figures/dlv3_expb_map.png  used on input line 566.
 (pdftex.def)             Requested size: 338.59023pt x 176.60823pt.
-<figures/dlv3_expc_map.png, id=1031, 1149.093pt x 599.3592pt>
+<figures/dlv3_expc_map.png, id=1034, 1149.093pt x 599.3592pt>
 File: figures/dlv3_expc_map.png Graphic file (type png)
 <use figures/dlv3_expc_map.png>
-Package pdftex.def Info: figures/dlv3_expc_map.png  used on input line 351.
+Package pdftex.def Info: figures/dlv3_expc_map.png  used on input line 572.
 (pdftex.def)             Requested size: 338.59023pt x 176.60823pt.
 
-Underfull \hbox (badness 3009) in paragraph at lines 354--354
-[]\OT1/cmr/m/n/12 Gambar 4.8: |Pe-ta se-gmen-ta-si pe-nuh set uji meng-gu-nak-an De-e-pLa-
- []
 
-
-
-[62 <./figures/sf_expa_curve.png> <./figures/sf_expb_curve.png> <./figures/sf_expc_curve.png>]
-<figures/sf_expa_map.png, id=1039, 1149.093pt x 599.3592pt>
+[64 <./figures/sf_expa_curve.png> <./figures/sf_expb_curve.png> <./figures/sf_expc_curve.png>]
+<figures/sf_expa_map.png, id=1042, 1149.093pt x 599.3592pt>
 File: figures/sf_expa_map.png Graphic file (type png)
 <use figures/sf_expa_map.png>
-Package pdftex.def Info: figures/sf_expa_map.png  used on input line 362.
+Package pdftex.def Info: figures/sf_expa_map.png  used on input line 583.
 (pdftex.def)             Requested size: 338.59023pt x 176.60823pt.
-<figures/sf_expb_map.png, id=1040, 1149.093pt x 599.3592pt>
+<figures/sf_expb_map.png, id=1043, 1149.093pt x 599.3592pt>
 File: figures/sf_expb_map.png Graphic file (type png)
 <use figures/sf_expb_map.png>
-Package pdftex.def Info: figures/sf_expb_map.png  used on input line 368.
+Package pdftex.def Info: figures/sf_expb_map.png  used on input line 589.
 (pdftex.def)             Requested size: 338.59023pt x 176.60823pt.
-<figures/sf_expc_map.png, id=1041, 1149.093pt x 599.3592pt>
+<figures/sf_expc_map.png, id=1044, 1149.093pt x 599.3592pt>
 File: figures/sf_expc_map.png Graphic file (type png)
 <use figures/sf_expc_map.png>
-Package pdftex.def Info: figures/sf_expc_map.png  used on input line 374.
+Package pdftex.def Info: figures/sf_expc_map.png  used on input line 595.
 (pdftex.def)             Requested size: 338.59023pt x 176.60823pt.
-
-
-[63 <./figures/dlv3_expa_map.png> <./figures/dlv3_expb_map.png> <./figures/dlv3_expc_map.png>]
-
-[64 <./figures/sf_expa_map.png> <./figures/sf_expb_map.png> <./figures/sf_expc_map.png>]
-
-[65]
-Overfull \hbox (56.3948pt too wide) in paragraph at lines 426--438
- [][] 
- []
-
 )
 
-[66]
+[65 <./figures/dlv3_expa_map.png> <./figures/dlv3_expb_map.png> <./figures/dlv3_expc_map.png>]
+
+[66 <./figures/sf_expa_map.png> <./figures/sf_expb_map.png> <./figures/sf_expc_map.png>]
 Bab 5.
 (./chapters/conclusion.tex
 
@@ -1081,8 +1023,13 @@ Bab 5.
 ]
 
 [68]
-Overfull \hbox (4.23535pt too wide) in paragraph at lines 42--44
+Overfull \hbox (4.23535pt too wide) in paragraph at lines 45--47
 []\OT1/cmr/bx/n/12 Eksplorasi Ar-si-tek-tur \OT1/cmr/bx/it/12 Hybrid \OT1/cmr/bx/n/12 CNN-Transformer. \OT1/cmr/m/n/12 Meng-i-ngat CNN
+ []
+
+
+Overfull \hbox (0.3292pt too wide) in paragraph at lines 45--47
+\OT1/cmr/m/n/12 Tran-sfor-mer (Se-gFor-mer) ung-gul da-lam kon-teks spa-si-al \OT1/cmr/m/it/12 single-date\OT1/cmr/m/n/12 , peng-
  []
 
 ) (./main.bbl
@@ -1104,26 +1051,22 @@ Package natbib Warning: There were undefined citations.
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: FF0D14C46D4B35C2B90915AC1FC8FE19;12181.
+(rerunfilecheck)             Checksum: B0C95D379FF1A2A92C66F711C7AD62BE;12334.
  ) 
 Here is how much of TeX's memory you used:
- 14568 strings out of 473190
- 234567 string characters out of 5715800
- 668533 words of memory out of 5000000
- 37323 multiletter control sequences out of 15000+600000
- 569816 words of font info for 78 fonts, out of 8000000 for 9000
+ 14552 strings out of 473190
+ 233567 string characters out of 5715800
+ 667549 words of memory out of 5000000
+ 37299 multiletter control sequences out of 15000+600000
+ 570437 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,11n,79p,981b,649s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on main.pdf (73 pages, 29440816 bytes).
+ 75i,12n,79p,1091b,649s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on main.pdf (73 pages, 28383200 bytes).
 PDF statistics:
- 1248 PDF objects out of 1440 (max. 8388607)
- 1044 compressed objects within 11 object streams
- 291 named destinations out of 1000 (max. 500000)
- 687 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1253 PDF objects out of 1440 (max. 8388607)
+ 1051 compressed objects within 11 object streams
+ 297 named destinations out of 1000 (max. 500000)
+ 659 words of extra memory for PDF output out of 10000 (max. 10000000)
 
