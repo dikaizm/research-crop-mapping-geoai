@@ -12,7 +12,7 @@ Area: ~2,038 km² (as covered by the S2 export grid)
 
 ## Tech Stack
 
-- **Python** with virtual environment at `.venv/` (local) or `crop_mapping_pipeline/venv/` (GPU server)
+- **Python** with virtual environment at `venv/` (local) or `crop_mapping_pipeline/venv/` (GPU server)
 - **geoai** (`geoai/`) — git submodule, a geospatial AI library (opengeos/geoai). Provides U-Net training, tiled inference, chip generation, and Sentinel-2 download via Planetary Computer STAC.
 - **segmentation-models-pytorch** — U-Net, DeepLabV3+, SegFormer architectures
 - **rasterio** — raster I/O
@@ -110,23 +110,23 @@ research-crop-mapping-geoai/
 
 ### CDL Class Setup (10 crops + background)
 ```python
-KEEP_CLASSES = [3, 6, 24, 36, 37, 54, 69, 75, 76, 220]   # Fallow/61 → background (0)
+KEEP_CLASSES = [3, 6, 24, 36, 37, 54, 69, 75, 76, 210]   # Fallow/61 → background (0)
 CLASS_REMAP  = {cls_id: i+1 for i, cls_id in enumerate(KEEP_CLASSES)}
 NUM_CLASSES  = 11   # 0=background + 1–10=crops
 ```
 
-| ID | Class | Coverage |
+| ID | Class | Coverage (GEE) |
 |---|---|---|
-| 75 | Almonds | 11.5% |
-| 76 | Walnuts | 9.1% |
-| 54 | Tomatoes | 7.4% |
-| 3 | Rice | 6.6% |
-| 24 | Winter Wheat | 4.7% |
-| 6 | Sunflower | 3.5% |
-| 36 | Alfalfa | 2.2% |
-| 220 | Plums | 2.1% |
-| 37 | Other Hay/Non Alfalfa | 1.4% |
-| 69 | Grapes | 1.3% |
+| 3 | Rice | 22.37% |
+| 75 | Almonds | 21.37% |
+| 76 | Walnuts | 19.57% |
+| 54 | Tomatoes | 7.33% |
+| 24 | Winter Wheat | 5.58% |
+| 37 | Other Hay/Non Alfalfa | 4.40% |
+| 36 | Alfalfa | 3.85% |
+| 6 | Sunflower | 3.11% |
+| 210 | Prunes | 1.52% |
+| 69 | Grapes | 1.45% |
 
 Note: Fallow/Idle Cropland (CDL id=61) is remapped to background (class 0), not a crop class.
 
