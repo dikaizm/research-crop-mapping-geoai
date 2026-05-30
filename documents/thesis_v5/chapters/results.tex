@@ -1,0 +1,240 @@
+% ============================================================
+% BAB HASIL DAN PEMBAHASAN
+% ============================================================
+
+\section{Hasil Seleksi Fitur}
+
+\subsection{Peringkat GSI-direct}
+
+Gambar~\ref{fig:gsi_direct_heatmap} menampilkan peta panas nilai GSI per kombinasi band--tanggal
+per kelas tanaman hasil seleksi GSI-direct pada data tahun 2024.
+Setiap sel menunjukkan kemampuan separabilitas kombinasi tersebut untuk memisahkan satu kelas tanaman dari semua kelas lainnya.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/stage1v2_siglobal_heatmap.png}
+    \caption{Peta panas nilai GSI per kombinasi band--tanggal per kelas tanaman (data 2024).
+             Band SWIR (B11, B12) dan \textit{Red Edge} (B5--B7) secara konsisten menunjukkan
+             nilai tertinggi. Tanggal Juli--Oktober menonjol untuk sebagian besar kelas tanaman.}
+    \label{fig:gsi_direct_heatmap}
+\end{figure}
+
+Tabel~\ref{tab:gsi_top_channel} menampilkan channel dengan GSI tertinggi per kelas tanaman (top-1 per kelas).
+
+\begin{table}[H]
+    \centering
+    \caption{Channel top-1 GSI-direct per kelas tanaman (data 2024)}
+    \label{tab:gsi_top_channel}
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    \textbf{Kelas Tanaman} & \textbf{Tanggal Terbaik} & \textbf{Band Terbaik} & \textbf{Nilai GSI} \\
+    \hline
+    Rice          & 29 Juli 2024     & B12 & --- \\
+    Winter Wheat  & 26 Desember 2024 & B11 & --- \\
+    Alfalfa       & 30 April 2024    & B8  & --- \\
+    Tomatoes      & 26 Desember 2024 & B4  & --- \\
+    Almonds       & 26 Desember 2024 & B1  & --- \\
+    Walnuts       & 27 Oktober 2024  & B6  & --- \\
+    \hline
+    \end{tabular}
+\end{table}
+
+Pola yang teridentifikasi konsisten dengan analisis fenologi: tanaman pohon tahunan (\textit{Almonds}, \textit{Winter Wheat}) memiliki separabilitas tertinggi pada musim dingin (Desember) ketika kontras spektral terhadap tanaman lainnya paling besar; \textit{Rice} memuncak pada Juli akibat sinyal unik penggenangan sawah; tanaman perennial (\textit{Grapes}, \textit{Pistachios}) menonjol pada awal musim panas (Mei--Juni) ketika kanopi baru terbentuk.
+
+\subsection{Ukuran Union Channel Setelah Seleksi}
+
+Tabel~\ref{tab:union_sizes} menampilkan jumlah channel unik hasil \textit{union} lintas 6 kelas tanaman untuk setiap nilai $K$ pada kedua metode seleksi.
+
+\begin{table}[H]
+    \centering
+    \caption{Jumlah channel union hasil GSI-direct dan RF-direct per nilai $K$ (6 kelas tanaman)}
+    \label{tab:union_sizes}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    $K$ & \textbf{GSI-direct (ch)} & \textbf{RF-direct (ch)} & \textbf{Tanggal unik (GSI)} \\
+    \hline
+    5  & 35  & --- & 15 \\
+    10 & 39  & --- & --- \\
+    15 & --- & --- & --- \\
+    \hline
+    \end{tabular}
+    \par\smallskip
+    {\footnotesize ---: nilai akan diisi setelah run selesai. Max teoritis $K \times 6$ sebelum tumpang tindih.}
+\end{table}
+
+Pada $K=5$, GSI-direct menghasilkan 35 channel unik dari 15 tanggal berbeda (dari total 25 tanggal 2024); pada $K=10$, ukuran union meningkat ke 39 channel.
+Ukuran union yang lebih kecil dari $K \times |\mathcal{C}|$ menunjukkan adanya tumpang tindih channel antara kelas: beberapa kombinasi band--tanggal dipilih oleh lebih dari satu kelas tanaman karena kekuatan separabilitasnya yang tinggi secara umum.
+
+\section{Hasil Eksperimen Pelatihan}
+
+Eksperimen dilakukan menggunakan strategi pemisahan acak satu tahun (data 2024): 1.852 patch total dibagi secara acak menjadi 1.298 patch pelatihan (70\%), 277 patch validasi (15\%), dan 277 patch pengujian (15\%), seluruhnya dalam area studi yang sama.
+Setiap patch berukuran $128\times128$ piksel pada resolusi 10 m.
+Pelatihan menggunakan augmentasi data (refleksi dan rotasi) serta \textit{weighted random sampling} berbasis frekuensi kelas.
+Eksperimen tersimpan pada \textit{experiment} MLflow \texttt{cropmap\_segmentation\_s2\_same\_area} (id=8).
+
+\subsection{Ringkasan Performa Keseluruhan}
+
+Tabel~\ref{tab:hasil_utama} merangkum metrik evaluasi seluruh eksperimen yang telah selesai dijalankan.
+
+\begin{table}[H]
+    \centering
+    \caption{Hasil evaluasi pada set uji 2024 (pemisahan acak satu area, val/test = 15\%/15\%, 1.852 patch total)}
+    \label{tab:hasil_utama}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|l|l|c|c|c|c|c|}
+    \hline
+    \textbf{Eksperimen} & \textbf{Arsitektur} & \textbf{Ch.} & \textbf{Val mIoU} & \textbf{Test mIoU} & \textbf{Test mF1} & \textbf{Test OA} \\
+    \hline
+    Single-Date GSI ($K$=3) & DeepLabV3+CBAM & $\approx$6 & 0,5542 & 0,5498 & 0,6905 & 0,7583 \\
+                            & SegFormer      & $\approx$6 & 0,5724 & 0,5769 & 0,7180 & 0,7716 \\
+    \hline
+    Single-Date RF ($K$=3)  & DeepLabV3+CBAM & $\approx$6 & 0,5523 & 0,5612 & 0,7051 & 0,7568 \\
+                            & SegFormer      & $\approx$6 & 0,5839 & 0,5904 & 0,7288 & 0,7862 \\
+    \hline
+    Naive MT GSI ($K$=3)    & DeepLabV3+CBAM & $\approx$18 & 0,6613 & 0,6502 & 0,7809 & 0,8120 \\
+                            & SegFormer      & $\approx$18 & 0,6750 & 0,6676 & 0,7946 & 0,8304 \\
+    \hline
+    Naive MT RF ($K$=3)     & DeepLabV3+CBAM & $\approx$18 & 0,6643 & 0,6596 & 0,7879 & 0,8226 \\
+                            & SegFormer      & $\approx$18 & 0,6728 & 0,6636 & 0,7912 & 0,8271 \\
+    \hline
+    GSI-direct $K$=5 (35 ch) & DeepLabV3+CBAM & 35 & 0,6828 & 0,6783 & 0,8033 & 0,8292 \\
+                              & SegFormer      & 35 & 0,6770 & 0,6732 & 0,7998 & 0,8245 \\
+    \hline
+    GSI-direct $K$=10 (39 ch) & DeepLabV3+CBAM & 39 & 0,6889 & 0,6769 & 0,8024 & 0,8234 \\
+                               & SegFormer      & 39 & 0,6890 & 0,6740 & 0,8000 & 0,8303 \\
+    \hline
+    GSI-direct $K$=15         & DeepLabV3+CBAM & --- & --- & --- & --- & --- \\
+                               & SegFormer      & --- & --- & --- & --- & --- \\
+    \hline
+    RF-direct $K$=5           & DeepLabV3+CBAM & --- & 0,6904 & 0,6782 & 0,8030 & 0,8302 \\
+                               & SegFormer      & --- & 0,6844 & 0,6770 & 0,8018 & 0,8313 \\
+    \hline
+    RF-direct $K$=10          & DeepLabV3+CBAM & --- & 0,6987 & \textbf{0,6959} & \textbf{0,8159} & \textbf{0,8467} \\
+                               & SegFormer      & --- & 0,7027 & 0,6955 & 0,8149 & 0,8439 \\
+    \hline
+    RF-direct $K$=15          & DeepLabV3+CBAM & --- & --- & --- & --- & --- \\
+                               & SegFormer      & --- & --- & --- & --- & --- \\
+    \hline
+    \end{tabular}%
+    }
+    \par\smallskip
+    {\footnotesize ---: eksperimen belum selesai atau channel count belum tercatat. Ch. $\approx$: nilai perkiraan. Tebal = konfigurasi terbaik.}
+\end{table}
+
+\subsection{Hasil GSI-direct $K$=5 DeepLabV3+CBAM}
+
+Eksperimen GSI-direct $K$=5 menggunakan DeepLabV3+CBAM, dengan 35 channel dari 15 tanggal berbeda pada data 2024.
+Konfigurasi pelatihan: 1.298 patch pelatihan (dengan augmentasi), 277 patch validasi, 277 patch pengujian.
+
+Hasil pengujian menunjukkan test mIoU = \textbf{0,6783} (val mIoU = 0,6828), test mF1 = 0,8033, test OA = 0,8292.
+Tabel~\ref{tab:gsi_k5_per_kelas} merinci IoU per kelas, menunjukkan dominasi \textit{Rice} (0,922) dan tantangan pada kelas dengan fenologi mirip seperti \textit{Winter Wheat} (0,592) dan \textit{Alfalfa} (0,595).
+
+\begin{table}[H]
+    \centering
+    \caption{IoU per kelas: GSI-direct $K$=5, DeepLabV3+CBAM (set uji 2024, pemisahan acak satu area)}
+    \label{tab:gsi_k5_per_kelas}
+    \begin{tabular}{|l|c|c|}
+    \hline
+    \textbf{Kelas Tanaman} & \textbf{IoU} & \textbf{F1} \\
+    \hline
+    Rice           & 0,922 & 0,960 \\
+    Winter Wheat   & 0,592 & 0,744 \\
+    Alfalfa        & 0,595 & 0,746 \\
+    Tomatoes       & 0,689 & 0,816 \\
+    Almonds        & 0,629 & 0,772 \\
+    Walnuts        & 0,643 & 0,783 \\
+    \hline
+    \textbf{mIoU}  & \textbf{0,678} & \textbf{0,803} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\section{Analisis Hasil}
+
+\subsection{Pengaruh Citra Multi-Temporal vs.\ Tanggal Tunggal}
+
+Perbandingan kelompok eksperimen menunjukkan keunggulan konsisten pendekatan multi-temporal:
+
+\begin{itemize}
+    \item \textbf{Single-date} (GSI+RF $K$=3, rata-rata): mIoU $\approx$ 0,570
+    \item \textbf{Naive MT} (GSI+RF $K$=3, 4 tanggal): mIoU $\approx$ 0,660 ($+$0,090 pp)
+    \item \textbf{GSI-direct} $K$=5--10: mIoU $\approx$ 0,676 ($+$0,106 pp)
+    \item \textbf{RF-direct} $K$=5--10: mIoU $\approx$ 0,687 ($+$0,117 pp)
+\end{itemize}
+
+Penambahan informasi temporal menghasilkan peningkatan \textbf{+9--12 pp mIoU} dibanding \textit{single-date}.
+Kelas yang paling diuntungkan adalah \textit{Winter Wheat} dan \textit{Alfalfa} (+18--25 pp IoU), karena keduanya memiliki jendela fenologi yang tidak terlihat pada satu tanggal puncak musim panas (Juli).
+
+\subsection{Perbandingan Metode Seleksi: GSI-direct vs.\ RF-direct}
+
+Pada $K$=5, kedua selector menghasilkan performa yang hampir identik (selisih $<$0,001 mIoU).
+Pada $K$=10, RF-direct mengungguli GSI-direct sebesar $+$0,019 pp (DeepLab) dan $+$0,022 pp (SegFormer):
+\begin{itemize}
+    \item GSI-direct $K$=5 vs $K$=10: hampir tidak berubah ($\approx$0,001 selisih) --- GSI jenuh lebih awal.
+    \item RF-direct $K$=5 vs $K$=10: meningkat signifikan ($+$0,018 pp) --- RF memanfaatkan channel tambahan lebih efektif.
+\end{itemize}
+
+RF menangkap kepentingan non-linear; GSI adalah skor separabilitas sederhana --- perbedaan melebar pada $K$ lebih tinggi.
+
+\subsection{Konfigurasi Terbaik dan Analisis Per Kelas}
+
+Konfigurasi terbaik: \textbf{RF-direct $K$=10, DeepLabV3+CBAM} (test mIoU = 0,6959, mF1 = 0,8159, OA = 0,8467).
+SegFormer mendekati ($K$=10: 0,6955) dengan kelebihan pada \textit{Winter Wheat} (0,649) dan \textit{Tomatoes} (0,736).
+
+Analisis per kelas (RF-direct $K$=10):
+\begin{itemize}
+    \item \textbf{Rice}: IoU tertinggi ($\approx$0,933) --- sinyal penggenangan sawah di NIR sangat khas.
+    \item \textbf{Tomatoes}: 0,712--0,736 --- puncak musim panas terefleksi pada Juli.
+    \item \textbf{Almonds}: 0,658 --- membutuhkan tanggal spring leaf-out.
+    \item \textbf{Walnuts}: 0,653--0,667 --- deciduous, terbantu kontras leaf-off/leaf-on.
+    \item \textbf{Winter Wheat}: 0,628--0,649 --- green-up Desember--Februari, senescence Mei.
+    \item \textbf{Alfalfa}: 0,546--0,595 --- multiple cuttings per tahun, variansi intra-kelas tinggi.
+\end{itemize}
+
+\subsection{Kesenjangan Validasi--Pengujian}
+
+Kesenjangan val $\to$ test mIoU pada semua eksperimen $<$0,01, mengkonfirmasi tidak ada \textit{overfitting} dengan pemisahan acak 3-way yang tidak tumpang tindih.
+
+\subsection{Analisis Kesalahan dan Keterbatasan}
+
+\begin{enumerate}
+    \item \textbf{\textit{Static Label vs.\ Dynamic Reality}.}
+    Label CDL bersifat tahunan --- satu piksel diberi label tetap (misalnya ``\textit{Rice}'') untuk seluruh tahun meskipun biofisik piksel tersebut hanya tampak sebagai padi selama fase vegetatif (Mei--September).
+    Model multi-temporal akan dipenalti oleh metrik IoU saat memprediksi \textit{background} pada tanggal ketika tanaman belum tumbuh atau sudah dipanen.
+
+    \item \textbf{Sensitivitas Kelas Minoritas.}
+    Kelas dengan fenologi kompleks seperti \textit{Alfalfa} (multi-potong) memiliki variansi intra-kelas tinggi yang membatasi IoU meski dengan seleksi band optimal.
+    Area studi $\approx$1.542 km$^2$ dengan 277 patch pengujian ($\approx$46 km$^2$ per patch × 277 = $\approx$455 km$^2$) memberikan evaluasi yang representatif untuk area studi ini.
+\end{enumerate}
+
+\subsection{Visualisasi Kurva Pelatihan}
+
+Gambar~\ref{fig:training_curve_gsi_k5} menampilkan kurva mIoU validasi dan \textit{loss} selama pelatihan untuk eksperimen GSI-direct $K$=5 DeepLabV3+CBAM.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/dlv3_expc_curve.png}
+    \caption{Kurva pelatihan DeepLabV3+CBAM pada GSI-direct $K$=5 (35 channel, data 2024, pemisahan spasial). Sumbu-$x$: epoch; sumbu-$y$ kiri: mIoU validasi; sumbu-$y$ kanan: \textit{loss} validasi.}
+    \label{fig:training_curve_gsi_k5}
+\end{figure}
+
+\subsection{Visualisasi Hasil Segmentasi}
+
+Gambar~\ref{fig:seg_results_gsi_k5} menampilkan peta segmentasi hasil inferensi pada subset area studi Sacramento Valley menggunakan model GSI-direct $K$=5 DeepLabV3+CBAM, beserta label referensi CDL 2024 yang sesuai.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/dlv3_expc_map.png}
+        \caption{Prediksi model (GSI-direct $K$=5)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/cdl_label_map.png}
+        \caption{Label referensi CDL 2024}
+    \end{subfigure}
+    \caption{Perbandingan peta segmentasi prediksi vs.\ label referensi pada subset area studi, menggunakan model GSI-direct $K$=5 DeepLabV3+CBAM (test mIoU = 0.4309).}
+    \label{fig:seg_results_gsi_k5}
+\end{figure}

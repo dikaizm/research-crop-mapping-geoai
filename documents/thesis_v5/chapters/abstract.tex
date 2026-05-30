@@ -1,0 +1,19 @@
+Pemetaan tanaman pertanian berperan penting dalam mendukung ketahanan pangan, perencanaan pola tanam, serta pengelolaan sumber daya agrikultur.
+Citra satelit Sentinel-2 dengan resolusi spasial dan temporal tinggi telah banyak dimanfaatkan dalam klasifikasi tutupan lahan, termasuk untuk identifikasi jenis tanaman.
+Penelitian ini mengadopsi pendekatan \textit{semantic segmentation} berbasis \textit{deep learning}, yaitu DeepLabV3+CBAM dan SegFormer, untuk mengklasifikasikan 6 jenis tanaman pertanian (\textit{Rice}, \textit{Winter Wheat}, \textit{Alfalfa}, \textit{Tomatoes}, \textit{Almonds}, \textit{Walnuts}) berdasarkan citra multi-temporal Sentinel-2 dan label dari \textit{Cropland Data Layer} (CDL) USDA di area Sacramento Valley, California.
+
+Pemanfaatan citra \textit{multi-temporal} secara penuh menghasilkan ruang fitur yang besar (275 kombinasi band--tanggal per tahun), sehingga diperlukan metode seleksi yang efisien sebelum pelatihan model.
+Penelitian ini mengusulkan dua pendekatan seleksi band berbasis statistik: \textbf{GSI-direct} (\textit{Global Separation Index} langsung) dan \textbf{RF-direct} (\textit{Random Forest} langsung).
+Keduanya mengevaluasi seluruh kombinasi band--tanggal secara per-kelas tanaman tanpa filter pendahuluan, memilih top-$K$ channel terbaik untuk setiap kelas, dan menggabungkannya ke dalam satu himpunan channel masukan (\textit{union}).
+Berbeda dari \textit{forward selection} berbasis CNN yang memerlukan ratusan iterasi pelatihan model \textit{oracle}, kedua metode ini bersifat efisien secara komputasi.
+Nilai $K$ optimal dipilih melalui \textit{k-sweep}: eksperimen pelatihan penuh untuk $K \in \{5, 10, 15\}$, menghasilkan kurva mIoU--$K$ untuk identifikasi titik jenuh secara empiris.
+
+Untuk mengeliminasi \textit{temporal domain shift} antar tahun, penelitian ini menerapkan strategi \textbf{pemisahan acak satu tahun}: seluruh data berasal dari tahun 2024 dan dibagi secara acak menjadi set pelatihan (70\%), validasi (15\%), dan pengujian (15\%) di tingkat patch dalam area studi yang sama.
+Selain itu, diterapkan augmentasi data (refleksi horizontal/vertikal dan rotasi 90°) serta \textit{weighted random sampling} berbasis frekuensi kelas untuk meningkatkan representasi kelas tanaman minoritas.
+
+Evaluasi dilakukan menggunakan metrik \textit{Mean Intersection over Union} (mIoU) dan IoU per kelas.
+Eksperimen mencakup empat skenario: (A) \textit{single-date baseline} dengan seleksi band GSI/RF ($K$=3, $\approx$3--9 channel), (B) \textit{multi-temporal} naif 4 tanggal dengan seleksi band GSI/RF ($K$=3, $\approx$12--24 channel), (GSI-direct) seleksi GSI dengan variasi $K \in \{5,10,15\}$, dan (RF-direct) seleksi RF dengan variasi $K \in \{5,10,15\}$.
+Hasil eksperimen diharapkan memberikan kontribusi terhadap pengembangan metode seleksi band yang efisien, dapat direproduksi, dan dapat menangkap informasi fenologi temporal untuk pemetaan tanaman pertanian skala regional.
+
+\vspace{0.5cm}
+\textbf{Kata Kunci:} Pemetaan Pertanian, Multi-temporal, Seleksi Band, \textit{Global Separation Index}, \textit{Random Forest}, \textit{Semantic Segmentation}, Pemisahan Spasial
